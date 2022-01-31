@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 .travis.yml
 README.md
 api/openapi.yaml
@@ -20,6 +19,8 @@ docs/AccountResponseAllOf.md
 docs/AccountsApi.md
 docs/Config.md
 docs/ConfigInfo.md
+docs/ConfigInfoResponse.md
+docs/ConfigInfoResponseAllOf.md
 docs/Contract.md
 docs/Cursor.md
 docs/CursorResponse.md
@@ -47,7 +48,6 @@ docs/TransactionListResponse.md
 docs/TransactionResponse.md
 docs/Transactions.md
 docs/TransactionsApi.md
-git_push.sh
 go.mod
 go.sum
 model_account.go
@@ -58,6 +58,8 @@ model_account_response.go
 model_account_response_all_of.go
 model_config.go
 model_config_info.go
+model_config_info_response.go
+model_config_info_response_all_of.go
 model_contract.go
 model_cursor.go
 model_cursor_response.go

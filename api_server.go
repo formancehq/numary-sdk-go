@@ -36,8 +36,8 @@ type ServerApi interface {
 	GetInfo(ctx _context.Context) ApiGetInfoRequest
 
 	// GetInfoExecute executes the request
-	//  @return ConfigInfo
-	GetInfoExecute(r ApiGetInfoRequest) (ConfigInfo, *_nethttp.Response, error)
+	//  @return ConfigInfoResponse
+	GetInfoExecute(r ApiGetInfoRequest) (ConfigInfoResponse, *_nethttp.Response, error)
 }
 
 // ServerApiService ServerApi service
@@ -49,7 +49,7 @@ type ApiGetInfoRequest struct {
 }
 
 
-func (r ApiGetInfoRequest) Execute() (ConfigInfo, *_nethttp.Response, error) {
+func (r ApiGetInfoRequest) Execute() (ConfigInfoResponse, *_nethttp.Response, error) {
 	return r.ApiService.GetInfoExecute(r)
 }
 
@@ -69,13 +69,13 @@ func (a *ServerApiService) GetInfo(ctx _context.Context) ApiGetInfoRequest {
 }
 
 // Execute executes the request
-//  @return ConfigInfo
-func (a *ServerApiService) GetInfoExecute(r ApiGetInfoRequest) (ConfigInfo, *_nethttp.Response, error) {
+//  @return ConfigInfoResponse
+func (a *ServerApiService) GetInfoExecute(r ApiGetInfoRequest) (ConfigInfoResponse, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  ConfigInfo
+		localVarReturnValue  ConfigInfoResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServerApiService.GetInfo")

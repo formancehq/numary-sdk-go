@@ -1,0 +1,22 @@
+version: '3'
+
+tasks:
+  vendor:
+    cmds:
+      - go mod vendor
+
+  test:
+    desc: Test client code
+    deps:
+      - vendor
+    cmds:
+      - >
+        docker run -d
+        --name ledger-{{.RANDOM}}
+        --rm
+        -e NUMARY_SERVER_HTTP_BIND_ADDRESS=0.0.0.0:3068
+        -p 3068:3068
+        ghcr.io/numary/ledger:v1.0.0-rc3
+      - defer: docker stop ledger-{{.RANDOM}}
+      - go mod vendor
+      - go test

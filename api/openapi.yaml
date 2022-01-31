@@ -15,7 +15,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ConfigInfo'
+                $ref: '#/components/schemas/ConfigInfoResponse'
           description: OK
       summary: Server Info
       tags:
@@ -435,12 +435,6 @@ paths:
 components:
   schemas:
     Config:
-      example:
-        storage:
-          driver: driver
-          ledgers:
-          - ledgers
-          - ledgers
       properties:
         storage:
           $ref: '#/components/schemas/LedgerStorage'
@@ -451,15 +445,6 @@ components:
       additionalProperties: {}
       type: object
     ConfigInfo:
-      example:
-        server: server
-        config:
-          storage:
-            driver: driver
-            ledgers:
-            - ledgers
-            - ledgers
-        version: version
       properties:
         config:
           $ref: '#/components/schemas/Config'
@@ -473,11 +458,6 @@ components:
       - version
       type: object
     LedgerStorage:
-      example:
-        driver: driver
-        ledgers:
-        - ledgers
-        - ledgers
       properties:
         driver:
           type: string
@@ -612,7 +592,7 @@ components:
           source: source
           asset: asset
         txid: 0
-        timestamp: timestamp
+        timestamp: 2000-01-23T04:56:07.000+00:00
       properties:
         metadata:
           additionalProperties: {}
@@ -624,6 +604,7 @@ components:
         reference:
           type: string
         timestamp:
+          format: date-time
           type: string
         txid:
           type: integer
@@ -771,7 +752,7 @@ components:
             source: source
             asset: asset
           txid: 0
-          timestamp: timestamp
+          timestamp: 2000-01-23T04:56:07.000+00:00
       properties:
         data:
           $ref: '#/components/schemas/Transaction'
@@ -786,6 +767,10 @@ components:
       allOf:
       - $ref: '#/components/schemas/SingleObjectResponse'
       - $ref: '#/components/schemas/MappingResponse_allOf'
+    ConfigInfoResponse:
+      allOf:
+      - $ref: '#/components/schemas/SingleObjectResponse'
+      - $ref: '#/components/schemas/ConfigInfoResponse_allOf'
     AccountCursor_allOf:
       properties:
         data:
@@ -822,6 +807,13 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/Mapping'
+      required:
+      - data
+      type: object
+    ConfigInfoResponse_allOf:
+      properties:
+        data:
+          $ref: '#/components/schemas/ConfigInfo'
       required:
       - data
       type: object

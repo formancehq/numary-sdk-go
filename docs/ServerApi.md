@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## GetInfo
 
-> ConfigInfo GetInfo(ctx).Execute()
+> ConfigInfoResponse GetInfo(ctx).Execute()
 
 Server Info
 
@@ -37,7 +37,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `ServerApi.GetInfo``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetInfo`: ConfigInfo
+    // response from `GetInfo`: ConfigInfoResponse
     fmt.Fprintf(os.Stdout, "Response from `ServerApi.GetInfo`: %v\n", resp)
 }
 ```
@@ -53,7 +53,7 @@ Other parameters are passed through a pointer to a apiGetInfoRequest struct via 
 
 ### Return type
 
-[**ConfigInfo**](ConfigInfo.md)
+[**ConfigInfoResponse**](ConfigInfoResponse.md)
 
 ### Authorization
 

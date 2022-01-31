@@ -102,6 +102,8 @@ Class | Method | HTTP request | Description
  - [AccountResponseAllOf](docs/AccountResponseAllOf.md)
  - [Config](docs/Config.md)
  - [ConfigInfo](docs/ConfigInfo.md)
+ - [ConfigInfoResponse](docs/ConfigInfoResponse.md)
+ - [ConfigInfoResponseAllOf](docs/ConfigInfoResponseAllOf.md)
  - [Contract](docs/Contract.md)
  - [Cursor](docs/Cursor.md)
  - [CursorResponse](docs/CursorResponse.md)

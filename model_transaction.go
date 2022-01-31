@@ -12,6 +12,7 @@ package ledgerclient
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // Transaction struct for Transaction
@@ -19,7 +20,7 @@ type Transaction struct {
 	Metadata *map[string]interface{} `json:"metadata,omitempty"`
 	Postings []Posting `json:"postings"`
 	Reference *string `json:"reference,omitempty"`
-	Timestamp string `json:"timestamp"`
+	Timestamp time.Time `json:"timestamp"`
 	Txid int32 `json:"txid"`
 }
 
@@ -27,7 +28,7 @@ type Transaction struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTransaction(postings []Posting, timestamp string, txid int32) *Transaction {
+func NewTransaction(postings []Posting, timestamp time.Time, txid int32) *Transaction {
 	this := Transaction{}
 	this.Postings = postings
 	this.Timestamp = timestamp
@@ -132,9 +133,9 @@ func (o *Transaction) SetReference(v string) {
 }
 
 // GetTimestamp returns the Timestamp field value
-func (o *Transaction) GetTimestamp() string {
+func (o *Transaction) GetTimestamp() time.Time {
 	if o == nil {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 
@@ -143,7 +144,7 @@ func (o *Transaction) GetTimestamp() string {
 
 // GetTimestampOk returns a tuple with the Timestamp field value
 // and a boolean to check if the value has been set.
-func (o *Transaction) GetTimestampOk() (*string, bool) {
+func (o *Transaction) GetTimestampOk() (*time.Time, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -151,7 +152,7 @@ func (o *Transaction) GetTimestampOk() (*string, bool) {
 }
 
 // SetTimestamp sets field value
-func (o *Transaction) SetTimestamp(v string) {
+func (o *Transaction) SetTimestamp(v time.Time) {
 	o.Timestamp = v
 }
 

@@ -7,14 +7,14 @@ Name | Type | Description | Notes
 **Metadata** | Pointer to **map[string]interface{}** |  | [optional] 
 **Postings** | [**[]Posting**](Posting.md) |  | 
 **Reference** | Pointer to **string** |  | [optional] 
-**Timestamp** | **string** |  | 
+**Timestamp** | **time.Time** |  | 
 **Txid** | **int32** |  | 
 
 ## Methods
 
 ### NewTransaction
 
-`func NewTransaction(postings []Posting, timestamp string, txid int32, ) *Transaction`
+`func NewTransaction(postings []Posting, timestamp time.Time, txid int32, ) *Transaction`
 
 NewTransaction instantiates a new Transaction object
 This constructor will assign default values to properties that have it defined,
@@ -101,20 +101,20 @@ HasReference returns a boolean if a field has been set.
 
 ### GetTimestamp
 
-`func (o *Transaction) GetTimestamp() string`
+`func (o *Transaction) GetTimestamp() time.Time`
 
 GetTimestamp returns the Timestamp field if non-nil, zero value otherwise.
 
 ### GetTimestampOk
 
-`func (o *Transaction) GetTimestampOk() (*string, bool)`
+`func (o *Transaction) GetTimestampOk() (*time.Time, bool)`
 
 GetTimestampOk returns a tuple with the Timestamp field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTimestamp
 
-`func (o *Transaction) SetTimestamp(v string)`
+`func (o *Transaction) SetTimestamp(v time.Time)`
 
 SetTimestamp sets Timestamp field to given value.
 
