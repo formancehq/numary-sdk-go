@@ -1,6 +1,7 @@
 .gitignore
 .travis.yml
 README.md
+Taskfile.yml
 api/openapi.yaml
 api_accounts.go
 api_mapping.go

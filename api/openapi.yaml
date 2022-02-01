@@ -748,7 +748,6 @@ components:
       required:
       - has_more
       - page_size
-      - page_size
       - remaining_results
       - total
       type: object
