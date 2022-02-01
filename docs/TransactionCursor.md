@@ -5,9 +5,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **HasMore** | **bool** |  | 
-**Next** | **string** |  | 
+**Next** | Pointer to **string** |  | [optional] 
 **PageSize** | **int32** |  | 
-**Previous** | **string** |  | 
+**Previous** | Pointer to **string** |  | [optional] 
 **RemainingResults** | **int32** |  | 
 **Total** | **int32** |  | 
 **Data** | [**[]Transaction**](Transaction.md) |  | 
@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 
 ### NewTransactionCursor
 
-`func NewTransactionCursor(hasMore bool, next string, pageSize int32, previous string, remainingResults int32, total int32, data []Transaction, ) *TransactionCursor`
+`func NewTransactionCursor(hasMore bool, pageSize int32, remainingResults int32, total int32, data []Transaction, ) *TransactionCursor`
 
 NewTransactionCursor instantiates a new TransactionCursor object
 This constructor will assign default values to properties that have it defined,
@@ -70,6 +70,11 @@ and a boolean to check if the value has been set.
 
 SetNext sets Next field to given value.
 
+### HasNext
+
+`func (o *TransactionCursor) HasNext() bool`
+
+HasNext returns a boolean if a field has been set.
 
 ### GetPageSize
 
@@ -110,6 +115,11 @@ and a boolean to check if the value has been set.
 
 SetPrevious sets Previous field to given value.
 
+### HasPrevious
+
+`func (o *TransactionCursor) HasPrevious() bool`
+
+HasPrevious returns a boolean if a field has been set.
 
 ### GetRemainingResults
 

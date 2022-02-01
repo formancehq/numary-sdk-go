@@ -88,7 +88,7 @@ No authorization required
 
 ## CreateTransaction
 
-> TransactionListResponse CreateTransaction(ctx, ledger).TransactionData(transactionData).Execute()
+> CreateTransactionResponse CreateTransaction(ctx, ledger).TransactionData(transactionData).Execute()
 
 Create Transaction
 
@@ -117,7 +117,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.CreateTransaction``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `CreateTransaction`: TransactionListResponse
+    // response from `CreateTransaction`: CreateTransactionResponse
     fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.CreateTransaction`: %v\n", resp)
 }
 ```
@@ -142,7 +142,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**TransactionListResponse**](TransactionListResponse.md)
+[**CreateTransactionResponse**](CreateTransactionResponse.md)
 
 ### Authorization
 

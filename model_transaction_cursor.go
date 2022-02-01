@@ -17,9 +17,9 @@ import (
 // TransactionCursor struct for TransactionCursor
 type TransactionCursor struct {
 	HasMore bool `json:"has_more"`
-	Next string `json:"next"`
+	Next *string `json:"next,omitempty"`
 	PageSize int32 `json:"page_size"`
-	Previous string `json:"previous"`
+	Previous *string `json:"previous,omitempty"`
 	RemainingResults int32 `json:"remaining_results"`
 	Total int32 `json:"total"`
 	Data []Transaction `json:"data"`
@@ -29,12 +29,10 @@ type TransactionCursor struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTransactionCursor(hasMore bool, next string, pageSize int32, previous string, remainingResults int32, total int32, data []Transaction) *TransactionCursor {
+func NewTransactionCursor(hasMore bool, pageSize int32, remainingResults int32, total int32, data []Transaction) *TransactionCursor {
 	this := TransactionCursor{}
 	this.HasMore = hasMore
-	this.Next = next
 	this.PageSize = pageSize
-	this.Previous = previous
 	this.RemainingResults = remainingResults
 	this.Total = total
 	this.Data = data
@@ -73,28 +71,36 @@ func (o *TransactionCursor) SetHasMore(v bool) {
 	o.HasMore = v
 }
 
-// GetNext returns the Next field value
+// GetNext returns the Next field value if set, zero value otherwise.
 func (o *TransactionCursor) GetNext() string {
-	if o == nil {
+	if o == nil || o.Next == nil {
 		var ret string
 		return ret
 	}
-
-	return o.Next
+	return *o.Next
 }
 
-// GetNextOk returns a tuple with the Next field value
+// GetNextOk returns a tuple with the Next field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TransactionCursor) GetNextOk() (*string, bool) {
-	if o == nil  {
+	if o == nil || o.Next == nil {
 		return nil, false
 	}
-	return &o.Next, true
+	return o.Next, true
 }
 
-// SetNext sets field value
+// HasNext returns a boolean if a field has been set.
+func (o *TransactionCursor) HasNext() bool {
+	if o != nil && o.Next != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetNext gets a reference to the given string and assigns it to the Next field.
 func (o *TransactionCursor) SetNext(v string) {
-	o.Next = v
+	o.Next = &v
 }
 
 // GetPageSize returns the PageSize field value
@@ -121,28 +127,36 @@ func (o *TransactionCursor) SetPageSize(v int32) {
 	o.PageSize = v
 }
 
-// GetPrevious returns the Previous field value
+// GetPrevious returns the Previous field value if set, zero value otherwise.
 func (o *TransactionCursor) GetPrevious() string {
-	if o == nil {
+	if o == nil || o.Previous == nil {
 		var ret string
 		return ret
 	}
-
-	return o.Previous
+	return *o.Previous
 }
 
-// GetPreviousOk returns a tuple with the Previous field value
+// GetPreviousOk returns a tuple with the Previous field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TransactionCursor) GetPreviousOk() (*string, bool) {
-	if o == nil  {
+	if o == nil || o.Previous == nil {
 		return nil, false
 	}
-	return &o.Previous, true
+	return o.Previous, true
 }
 
-// SetPrevious sets field value
+// HasPrevious returns a boolean if a field has been set.
+func (o *TransactionCursor) HasPrevious() bool {
+	if o != nil && o.Previous != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetPrevious gets a reference to the given string and assigns it to the Previous field.
 func (o *TransactionCursor) SetPrevious(v string) {
-	o.Previous = v
+	o.Previous = &v
 }
 
 // GetRemainingResults returns the RemainingResults field value
@@ -222,13 +236,13 @@ func (o TransactionCursor) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["has_more"] = o.HasMore
 	}
-	if true {
+	if o.Next != nil {
 		toSerialize["next"] = o.Next
 	}
 	if true {
 		toSerialize["page_size"] = o.PageSize
 	}
-	if true {
+	if o.Previous != nil {
 		toSerialize["previous"] = o.Previous
 	}
 	if true {

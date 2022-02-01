@@ -298,8 +298,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransactionListResponse'
+                $ref: '#/components/schemas/CreateTransactionResponse'
           description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Commit error
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Confict
       summary: Create Transaction
       tags:
       - transactions
@@ -332,6 +344,10 @@ paths:
                 $ref: '#/components/schemas/TransactionResponse'
           description: OK
         "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
           description: Not Found
       summary: Get Transaction
       tags:
@@ -428,13 +444,22 @@ paths:
                 $ref: '#/components/schemas/TransactionListResponse'
           description: OK
         "400":
-          content: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionCommitErrorResponse'
       summary: Create Transactions Batch
       tags:
       - transactions
 components:
   schemas:
     Config:
+      example:
+        storage:
+          driver: driver
+          ledgers:
+          - ledgers
+          - ledgers
       properties:
         storage:
           $ref: '#/components/schemas/LedgerStorage'
@@ -443,8 +468,18 @@ components:
       type: object
     Metadata:
       additionalProperties: {}
+      nullable: true
       type: object
     ConfigInfo:
+      example:
+        server: server
+        config:
+          storage:
+            driver: driver
+            ledgers:
+            - ledgers
+            - ledgers
+        version: version
       properties:
         config:
           $ref: '#/components/schemas/Config'
@@ -458,6 +493,11 @@ components:
       - version
       type: object
     LedgerStorage:
+      example:
+        driver: driver
+        ledgers:
+        - ledgers
+        - ledgers
       properties:
         driver:
           type: string
@@ -468,11 +508,6 @@ components:
       required:
       - driver
       - ledgers
-      type: object
-    SingleObjectResponse:
-      properties:
-        data:
-          type: object
       type: object
     CursorResponse:
       properties:
@@ -490,6 +525,15 @@ components:
           type: string
       type: object
     Account:
+      example:
+        balances:
+          COIN: 100
+        metadata: '{}'
+        address: users:001
+        volumes:
+          key:
+            key: 0
+        type: virtual
       properties:
         address:
           example: users:001
@@ -535,6 +579,7 @@ components:
           account: account
         - expr: '{}'
           account: account
+      nullable: true
       properties:
         contracts:
           items:
@@ -591,11 +636,12 @@ components:
           destination: destination
           source: source
           asset: asset
-        txid: 0
+        txid: 6
         timestamp: 2000-01-23T04:56:07.000+00:00
       properties:
         metadata:
           additionalProperties: {}
+          nullable: true
           type: object
         postings:
           items:
@@ -673,6 +719,9 @@ components:
       - transactions
       type: object
     Stats:
+      example:
+        accounts: 0
+        transactions: 6
       properties:
         accounts:
           type: integer
@@ -698,10 +747,8 @@ components:
           type: integer
       required:
       - has_more
-      - next
       - page_size
       - page_size
-      - previous
       - remaining_results
       - total
       type: object
@@ -732,10 +779,62 @@ components:
       allOf:
       - $ref: '#/components/schemas/CursorResponse'
       - $ref: '#/components/schemas/TransactionCursor_allOf'
+    CreateTransactionResponse:
+      example:
+        data:
+        - reference: reference
+          metadata:
+            key: ""
+          postings:
+          - amount: 0
+            destination: destination
+            source: source
+            asset: asset
+          - amount: 0
+            destination: destination
+            source: source
+            asset: asset
+          txid: 6
+          timestamp: 2000-01-23T04:56:07.000+00:00
+        - reference: reference
+          metadata:
+            key: ""
+          postings:
+          - amount: 0
+            destination: destination
+            source: source
+            asset: asset
+          - amount: 0
+            destination: destination
+            source: source
+            asset: asset
+          txid: 6
+          timestamp: 2000-01-23T04:56:07.000+00:00
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/Transaction'
+          type: array
+      required:
+      - data
+      type: object
     AccountResponse:
-      allOf:
-      - $ref: '#/components/schemas/SingleObjectResponse'
-      - $ref: '#/components/schemas/AccountResponse_allOf'
+      example:
+        data:
+          balances:
+            COIN: 100
+          metadata: '{}'
+          address: users:001
+          volumes:
+            key:
+              key: 0
+          type: virtual
+      properties:
+        data:
+          $ref: '#/components/schemas/Account'
+      required:
+      - data
+      type: object
     TransactionResponse:
       example:
         data:
@@ -751,7 +850,7 @@ components:
             destination: destination
             source: source
             asset: asset
-          txid: 0
+          txid: 6
           timestamp: 2000-01-23T04:56:07.000+00:00
       properties:
         data:
@@ -760,17 +859,75 @@ components:
       - data
       type: object
     StatsResponse:
-      allOf:
-      - $ref: '#/components/schemas/SingleObjectResponse'
-      - $ref: '#/components/schemas/StatsResponse_allOf'
+      example:
+        data:
+          accounts: 0
+          transactions: 6
+      properties:
+        data:
+          $ref: '#/components/schemas/Stats'
+      required:
+      - data
+      type: object
     MappingResponse:
-      allOf:
-      - $ref: '#/components/schemas/SingleObjectResponse'
-      - $ref: '#/components/schemas/MappingResponse_allOf'
+      example:
+        data:
+          contracts:
+          - expr: '{}'
+            account: account
+          - expr: '{}'
+            account: account
+      properties:
+        data:
+          $ref: '#/components/schemas/Mapping'
+      type: object
     ConfigInfoResponse:
+      example:
+        data:
+          server: server
+          config:
+            storage:
+              driver: driver
+              ledgers:
+              - ledgers
+              - ledgers
+          version: version
+      properties:
+        data:
+          $ref: '#/components/schemas/ConfigInfo'
+      required:
+      - data
+      type: object
+    ErrorCode:
+      enum:
+      - INTERNAL
+      - INSUFFICIENT_FUND
+      - VALIDATION
+      - CONFLICT
+      - NOT_FOUND
+      type: string
+    ErrorResponse:
+      properties:
+        error_code:
+          $ref: '#/components/schemas/ErrorCode'
+        error_message:
+          type: string
+      required:
+      - error_code
+      type: object
+    TransactionCommitError:
       allOf:
-      - $ref: '#/components/schemas/SingleObjectResponse'
-      - $ref: '#/components/schemas/ConfigInfoResponse_allOf'
+      - $ref: '#/components/schemas/Transaction'
+      - $ref: '#/components/schemas/TransactionCommitError_allOf'
+    TransactionCommitErrorResponse:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/TransactionCommitError'
+          type: array
+      required:
+      - data
+      type: object
     AccountCursor_allOf:
       properties:
         data:
@@ -789,31 +946,10 @@ components:
       required:
       - data
       type: object
-    AccountResponse_allOf:
+    TransactionCommitError_allOf:
       properties:
-        data:
-          $ref: '#/components/schemas/Account'
-      required:
-      - data
-      type: object
-    StatsResponse_allOf:
-      properties:
-        data:
-          $ref: '#/components/schemas/Stats'
-      required:
-      - data
-      type: object
-    MappingResponse_allOf:
-      properties:
-        data:
-          $ref: '#/components/schemas/Mapping'
-      required:
-      - data
-      type: object
-    ConfigInfoResponse_allOf:
-      properties:
-        data:
-          $ref: '#/components/schemas/ConfigInfo'
-      required:
-      - data
+        errorCode:
+          $ref: '#/components/schemas/ErrorCode'
+        errorMessage:
+          type: string
       type: object

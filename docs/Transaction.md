@@ -54,6 +54,16 @@ SetMetadata sets Metadata field to given value.
 
 HasMetadata returns a boolean if a field has been set.
 
+### SetMetadataNil
+
+`func (o *Transaction) SetMetadataNil(b bool)`
+
+ SetMetadataNil sets the value for Metadata to be an explicit nil
+
+### UnsetMetadata
+`func (o *Transaction) UnsetMetadata()`
+
+UnsetMetadata ensures that no value is present for Metadata, not even an explicit nil
 ### GetPostings
 
 `func (o *Transaction) GetPostings() []Posting`

@@ -16,16 +16,15 @@ import (
 
 // MappingResponse struct for MappingResponse
 type MappingResponse struct {
-	Data Mapping `json:"data"`
+	Data NullableMapping `json:"data,omitempty"`
 }
 
 // NewMappingResponse instantiates a new MappingResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewMappingResponse(data Mapping) *MappingResponse {
+func NewMappingResponse() *MappingResponse {
 	this := MappingResponse{}
-	this.Data = data
 	return &this
 }
 
@@ -37,34 +36,52 @@ func NewMappingResponseWithDefaults() *MappingResponse {
 	return &this
 }
 
-// GetData returns the Data field value
+// GetData returns the Data field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *MappingResponse) GetData() Mapping {
-	if o == nil {
+	if o == nil || o.Data.Get() == nil {
 		var ret Mapping
 		return ret
 	}
-
-	return o.Data
+	return *o.Data.Get()
 }
 
-// GetDataOk returns a tuple with the Data field value
+// GetDataOk returns a tuple with the Data field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *MappingResponse) GetDataOk() (*Mapping, bool) {
 	if o == nil  {
 		return nil, false
 	}
-	return &o.Data, true
+	return o.Data.Get(), o.Data.IsSet()
 }
 
-// SetData sets field value
+// HasData returns a boolean if a field has been set.
+func (o *MappingResponse) HasData() bool {
+	if o != nil && o.Data.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetData gets a reference to the given NullableMapping and assigns it to the Data field.
 func (o *MappingResponse) SetData(v Mapping) {
-	o.Data = v
+	o.Data.Set(&v)
+}
+// SetDataNil sets the value for Data to be an explicit nil
+func (o *MappingResponse) SetDataNil() {
+	o.Data.Set(nil)
+}
+
+// UnsetData ensures that no value is present for Data, not even an explicit nil
+func (o *MappingResponse) UnsetData() {
+	o.Data.Unset()
 }
 
 func (o MappingResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["data"] = o.Data
+	if o.Data.IsSet() {
+		toSerialize["data"] = o.Data.Get()
 	}
 	return json.Marshal(toSerialize)
 }

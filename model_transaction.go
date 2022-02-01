@@ -17,7 +17,7 @@ import (
 
 // Transaction struct for Transaction
 type Transaction struct {
-	Metadata *map[string]interface{} `json:"metadata,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	Postings []Posting `json:"postings"`
 	Reference *string `json:"reference,omitempty"`
 	Timestamp time.Time `json:"timestamp"`
@@ -44,22 +44,23 @@ func NewTransactionWithDefaults() *Transaction {
 	return &this
 }
 
-// GetMetadata returns the Metadata field value if set, zero value otherwise.
+// GetMetadata returns the Metadata field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Transaction) GetMetadata() map[string]interface{} {
-	if o == nil || o.Metadata == nil {
+	if o == nil  {
 		var ret map[string]interface{}
 		return ret
 	}
-	return *o.Metadata
+	return o.Metadata
 }
 
 // GetMetadataOk returns a tuple with the Metadata field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Transaction) GetMetadataOk() (*map[string]interface{}, bool) {
 	if o == nil || o.Metadata == nil {
 		return nil, false
 	}
-	return o.Metadata, true
+	return &o.Metadata, true
 }
 
 // HasMetadata returns a boolean if a field has been set.
@@ -73,7 +74,7 @@ func (o *Transaction) HasMetadata() bool {
 
 // SetMetadata gets a reference to the given map[string]interface{} and assigns it to the Metadata field.
 func (o *Transaction) SetMetadata(v map[string]interface{}) {
-	o.Metadata = &v
+	o.Metadata = v
 }
 
 // GetPostings returns the Postings field value

@@ -54,8 +54,8 @@ Commit a new transaction to the ledger
 	CreateTransaction(ctx _context.Context, ledger string) ApiCreateTransactionRequest
 
 	// CreateTransactionExecute executes the request
-	//  @return TransactionListResponse
-	CreateTransactionExecute(r ApiCreateTransactionRequest) (TransactionListResponse, *_nethttp.Response, error)
+	//  @return CreateTransactionResponse
+	CreateTransactionExecute(r ApiCreateTransactionRequest) (CreateTransactionResponse, *_nethttp.Response, error)
 
 	/*
 	CreateTransactions Create Transactions Batch
@@ -241,7 +241,7 @@ func (r ApiCreateTransactionRequest) TransactionData(transactionData Transaction
 	return r
 }
 
-func (r ApiCreateTransactionRequest) Execute() (TransactionListResponse, *_nethttp.Response, error) {
+func (r ApiCreateTransactionRequest) Execute() (CreateTransactionResponse, *_nethttp.Response, error) {
 	return r.ApiService.CreateTransactionExecute(r)
 }
 
@@ -264,13 +264,13 @@ func (a *TransactionsApiService) CreateTransaction(ctx _context.Context, ledger 
 }
 
 // Execute executes the request
-//  @return TransactionListResponse
-func (a *TransactionsApiService) CreateTransactionExecute(r ApiCreateTransactionRequest) (TransactionListResponse, *_nethttp.Response, error) {
+//  @return CreateTransactionResponse
+func (a *TransactionsApiService) CreateTransactionExecute(r ApiCreateTransactionRequest) (CreateTransactionResponse, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  TransactionListResponse
+		localVarReturnValue  CreateTransactionResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsApiService.CreateTransaction")
@@ -328,6 +328,25 @@ func (a *TransactionsApiService) CreateTransactionExecute(r ApiCreateTransaction
 		newErr := GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 409 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -445,6 +464,15 @@ func (a *TransactionsApiService) CreateTransactionsExecute(r ApiCreateTransactio
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v TransactionCommitErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -552,6 +580,15 @@ func (a *TransactionsApiService) GetTransactionExecute(r ApiGetTransactionReques
 		newErr := GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

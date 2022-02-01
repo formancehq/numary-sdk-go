@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	ledgerclient "github.com/numary/numary-sdk-go"
+	"github.com/pborman/uuid"
 	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"testing"
@@ -14,12 +15,16 @@ func init() {
 	rand.Seed(time.Now().Unix())
 }
 
-func TestClient(t *testing.T) {
+func newClient() *ledgerclient.APIClient {
 	config := ledgerclient.NewConfiguration()
 	config.Servers = ledgerclient.ServerConfigurations{{
 		URL: "http://localhost:3068",
 	}}
-	client := ledgerclient.NewAPIClient(config)
+	return ledgerclient.NewAPIClient(config)
+}
+
+func TestClient(t *testing.T) {
+	client := newClient()
 	createTransactionRequest := client.TransactionsApi.CreateTransaction(context.Background(), "quickstart")
 	createTransactionRequest = createTransactionRequest.TransactionData(ledgerclient.TransactionData{
 		Postings: []ledgerclient.Posting{
@@ -71,7 +76,7 @@ func TestClient(t *testing.T) {
 	m, _, err := client.MappingApi.GetMapping(context.Background(), "quickstart").Execute()
 	assert.NoError(t, err)
 
-	assert.Len(t, m.Data.Contracts, 0)
+	assert.Len(t, m.Data.Get().Contracts, 0)
 
 	_, _, err = client.ServerApi.GetInfo(context.Background()).Execute()
 	assert.NoError(t, err)
@@ -106,5 +111,167 @@ send [COIN 100] (
 )`,
 	}).Execute()
 	assert.NoError(t, err)
+}
 
+func TestCreateTransaction(t *testing.T) {
+	type testCase struct {
+		name          string
+		data          []ledgerclient.TransactionData
+		expectedError ledgerclient.ErrorCode
+	}
+
+	cases := []testCase{
+		{
+			name: "nominal",
+			data: []ledgerclient.TransactionData{
+				{
+					Postings: []ledgerclient.Posting{
+						{
+							Amount:      100,
+							Asset:       "USD",
+							Destination: "player1",
+							Source:      "world",
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "ref-conflict",
+			data: []ledgerclient.TransactionData{
+				{
+					Postings: []ledgerclient.Posting{
+						{
+							Amount:      100,
+							Asset:       "USD",
+							Destination: "player1",
+							Source:      "world",
+						},
+					},
+					Reference: ledgerclient.PtrString("ref"),
+				},
+				{
+					Postings: []ledgerclient.Posting{
+						{
+							Amount:      100,
+							Asset:       "USD",
+							Destination: "player1",
+							Source:      "world",
+						},
+					},
+					Reference: ledgerclient.PtrString("ref"),
+				},
+			},
+			expectedError: ledgerclient.CONFLICT,
+		},
+	}
+
+	client := newClient()
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			ledger := uuid.New()
+			for i := 0; i < len(c.data)-1; i++ {
+				_, _, err := client.TransactionsApi.
+					CreateTransaction(context.Background(), ledger).
+					TransactionData(c.data[i]).
+					Execute()
+				assert.NoError(t, err)
+			}
+
+			_, _, err := client.TransactionsApi.
+				CreateTransaction(context.Background(), ledger).
+				TransactionData(c.data[len(c.data)-1]).
+				Execute()
+			if c.expectedError != "" {
+				assert.Error(t, err)
+				assert.IsType(t, ledgerclient.GenericOpenAPIError{}, err)
+				assert.Equal(t, c.expectedError, err.(ledgerclient.GenericOpenAPIError).Model().(ledgerclient.ErrorResponse).ErrorCode)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestTransactionBatch(t *testing.T) {
+
+	type testCase struct {
+		name           string
+		batch          []ledgerclient.TransactionData
+		expectedErrors []ledgerclient.ErrorCode
+	}
+
+	cases := []testCase{
+		{
+			name: "nominal",
+			batch: []ledgerclient.TransactionData{
+				{
+					Postings: []ledgerclient.Posting{
+						{
+							Amount:      100,
+							Asset:       "USD",
+							Destination: "player1",
+							Source:      "world",
+						},
+					},
+				},
+				{
+					Postings: []ledgerclient.Posting{
+						{
+							Amount:      100,
+							Asset:       "USD",
+							Destination: "player2",
+							Source:      "world",
+						},
+					},
+				},
+			},
+		},
+		{
+			name: "conflict",
+			batch: []ledgerclient.TransactionData{
+				{
+					Postings: []ledgerclient.Posting{
+						{
+							Amount:      100,
+							Asset:       "USD",
+							Destination: "player1",
+							Source:      "world",
+						},
+					},
+					Reference: ledgerclient.PtrString("ref"),
+				},
+				{
+					Postings: []ledgerclient.Posting{
+						{
+							Amount:      100,
+							Asset:       "USD",
+							Destination: "player2",
+							Source:      "world",
+						},
+					},
+					Reference: ledgerclient.PtrString("ref"),
+				},
+			},
+			expectedErrors: []ledgerclient.ErrorCode{"", ledgerclient.CONFLICT},
+		},
+	}
+
+	client := newClient()
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			_, _, err := client.TransactionsApi.
+				CreateTransactions(context.Background(), uuid.New()).
+				Transactions(ledgerclient.Transactions{
+					Transactions: c.batch,
+				}).
+				Execute()
+
+			if len(c.expectedErrors) > 0 {
+				assert.IsType(t, ledgerclient.GenericOpenAPIError{}, err)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
 }
