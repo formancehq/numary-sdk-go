@@ -5,6 +5,9 @@ info:
   version: "1.0"
 servers:
 - url: /
+security:
+- basicAuth: []
+- cloudToken: []
 paths:
   /_info:
     get:
@@ -952,3 +955,10 @@ components:
         errorMessage:
           type: string
       type: object
+  securitySchemes:
+    basicAuth:
+      scheme: basic
+      type: http
+    cloudToken:
+      scheme: bearer
+      type: http

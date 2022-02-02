@@ -131,7 +131,47 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Authorization
 
- Endpoints do not require authorization.
+
+
+### basicAuth
+
+- **Type**: HTTP basic authentication
+
+Example
+
+```golang
+auth := context.WithValue(context.Background(), sw.ContextBasicAuth, sw.BasicAuth{
+    UserName: "username",
+    Password: "password",
+})
+r, err := client.Service.Operation(auth, args)
+```
+
+
+### cloudToken
+
+- **Type**: HTTP Bearer token authentication
+
+Example
+
+```golang
+auth := context.WithValue(context.Background(), sw.ContextAccessToken, "BEARERTOKENSTRING")
+r, err := client.Service.Operation(auth, args)
+```
+
+Library provide utility to fetch access token :
+```golang
+tok, err := sw.FetchToken(
+    http.DefaultClient,
+    "https://api.numary.cloud/auth/authenticate/tokens",
+    "API KEY",
+)
+if err != nil {
+    panic(err)
+}
+auth := context.WithValue(context.Background(), sw.ContextCloudToken, tok)
+r, err := client.Service.Operation(auth, args)
+```
 
 
 ## Documentation for Utility Methods

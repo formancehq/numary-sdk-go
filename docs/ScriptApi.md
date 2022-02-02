@@ -68,7 +68,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[basicAuth](../README.md#basicAuth), [cloudToken](../README.md#cloudToken)
 
 ### HTTP request headers
 
