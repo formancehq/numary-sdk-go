@@ -9,8 +9,7 @@ import (
 )
 
 const (
-	StagingAuthEndpoint = "https://api.staging.numary.cloud/auth/authenticate/tokens"
-	ProdAuthEndpoint    = "https://api.numary.cloud/auth/authenticate/tokens"
+	AuthEndpoint = "https://api.numary.cloud/auth/authenticate/tokens"
 )
 
 type cloudRoundTripper struct {

@@ -163,7 +163,7 @@ Library provide utility to fetch access token :
 ```golang
 tok, err := sw.FetchToken(
     http.DefaultClient,
-    "https://api.numary.cloud/auth/authenticate/tokens",
+    sw.AuthEndpoint,
     "API KEY",
 )
 if err != nil {

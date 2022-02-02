@@ -11,7 +11,7 @@ import (
 func TestCloudAuth(t *testing.T) {
 	tok, err := ledgerclient.FetchToken(
 		http.DefaultClient,
-		ledgerclient.StagingAuthEndpoint,
+		"https://api.staging.numary.cloud/auth/authenticate/tokens",
 		"YjgyY2ZjMDktNjZmYi.OWFhNWNjOGQtMTNlMS",
 	)
 	assert.NoError(t, err)
