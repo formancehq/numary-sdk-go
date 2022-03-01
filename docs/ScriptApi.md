@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## RunScript
 
-> ScriptResult RunScript(ctx, ledger).Script(script).Execute()
+> ScriptResult RunScript(ctx, ledger).Script(script).Preview(preview).Execute()
 
 Execute Numscript
 
@@ -31,10 +31,11 @@ import (
 func main() {
     ledger := "ledger_example" // string | ledger
     script := *client.NewScript("Plain_example") // Script | script
+    preview := true // bool | Preview mode (optional)
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.ScriptApi.RunScript(context.Background(), ledger).Script(script).Execute()
+    resp, r, err := api_client.ScriptApi.RunScript(context.Background(), ledger).Script(script).Preview(preview).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `ScriptApi.RunScript``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -61,6 +62,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **script** | [**Script**](Script.md) | script | 
+ **preview** | **bool** | Preview mode | 
 
 ### Return type
 

@@ -88,7 +88,7 @@ Name | Type | Description  | Notes
 
 ## CreateTransaction
 
-> CreateTransactionResponse CreateTransaction(ctx, ledger).TransactionData(transactionData).Execute()
+> CreateTransactionResponse CreateTransaction(ctx, ledger).TransactionData(transactionData).Preview(preview).Execute()
 
 Create Transaction
 
@@ -109,10 +109,11 @@ import (
 func main() {
     ledger := "ledger_example" // string | ledger
     transactionData := *client.NewTransactionData([]client.Posting{*client.NewPosting(int32(123), "Asset_example", "Destination_example", "Source_example")}) // TransactionData | transaction
+    preview := "preview_example" // string | Preview mode (optional)
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.TransactionsApi.CreateTransaction(context.Background(), ledger).TransactionData(transactionData).Execute()
+    resp, r, err := api_client.TransactionsApi.CreateTransaction(context.Background(), ledger).TransactionData(transactionData).Preview(preview).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.CreateTransaction``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -139,6 +140,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **transactionData** | [**TransactionData**](TransactionData.md) | transaction | 
+ **preview** | **string** | Preview mode | 
 
 ### Return type
 
@@ -381,7 +383,7 @@ Name | Type | Description  | Notes
 
 ## RevertTransaction
 
-> RevertTransaction(ctx, ledger, txid).Execute()
+> TransactionResponse RevertTransaction(ctx, ledger, txid).Execute()
 
 Revert Transaction
 
@@ -410,6 +412,8 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.RevertTransaction``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
+    // response from `RevertTransaction`: TransactionResponse
+    fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.RevertTransaction`: %v\n", resp)
 }
 ```
 
@@ -434,7 +438,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
- (empty response body)
+[**TransactionResponse**](TransactionResponse.md)
 
 ### Authorization
 
@@ -443,7 +447,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)

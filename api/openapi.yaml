@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   contact: {}
   title: Ledger API
-  version: "1.0"
+  version: 1.2.1
 servers:
 - url: /
 security:
@@ -35,8 +35,8 @@ paths:
         schema:
           type: string
         style: simple
-      - description: pagination cursor, will return accounts after given address (in
-          descending order)
+      - description: "pagination cursor, will return accounts after given address\
+          \ (in descending order)"
         explode: true
         in: query
         name: after
@@ -116,6 +116,7 @@ paths:
           description: Empty response
         "400":
           content: {}
+          description: ""
       summary: Add metadata to account
       tags:
       - accounts
@@ -184,6 +185,14 @@ paths:
         schema:
           type: string
         style: simple
+      - description: Preview mode
+        explode: true
+        in: query
+        name: preview
+        required: false
+        schema:
+          type: boolean
+        style: form
       requestBody:
         content:
           application/json:
@@ -239,8 +248,8 @@ paths:
         schema:
           type: string
         style: simple
-      - description: pagination cursor, will return transactions after given txid
-          (in descending order)
+      - description: "pagination cursor, will return transactions after given txid\
+          \ (in descending order)"
         explode: true
         in: query
         name: after
@@ -256,8 +265,8 @@ paths:
         schema:
           type: string
         style: form
-      - description: find transactions with postings involving given account, either
-          as source or destination
+      - description: "find transactions with postings involving given account, either\
+          \ as source or destination"
         explode: true
         in: query
         name: account
@@ -289,6 +298,14 @@ paths:
         schema:
           type: string
         style: simple
+      - description: Preview mode
+        explode: true
+        in: query
+        name: preview
+        required: false
+        schema:
+          type: string
+        style: form
       requestBody:
         content:
           application/json:
@@ -303,6 +320,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateTransactionResponse'
           description: OK
+        "304":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTransactionResponse'
+          description: Not modified (when preview is enabled)
         "400":
           content:
             application/json:
@@ -411,9 +434,12 @@ paths:
           type: integer
         style: simple
       responses:
-        "204":
-          content: {}
-          description: Empty response
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+          description: OK
       summary: Revert Transaction
       tags:
       - transactions
@@ -451,6 +477,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TransactionCommitErrorResponse'
+          description: ""
       summary: Create Transactions Batch
       tags:
       - transactions
@@ -519,19 +546,44 @@ components:
       type: object
     ScriptResult:
       example:
-        err: err
+        error_message: error_message
         details: details
+        error_code: INTERNAL
+        transaction:
+          reference: reference
+          metadata:
+            key: ""
+          postings:
+          - amount: 0
+            destination: destination
+            source: source
+            asset: asset
+          - amount: 0
+            destination: destination
+            source: source
+            asset: asset
+          txid: 6
+          timestamp: 2000-01-23T04:56:07.000+00:00
       properties:
         details:
           type: string
-        err:
+        error_code:
+          enum:
+          - INTERNAL
+          - INSUFFICIENT_FUND
+          - COMPILATION_FAILED
+          - NO_SCRIPT
           type: string
+        error_message:
+          type: string
+        transaction:
+          $ref: '#/components/schemas/Transaction'
       type: object
     Account:
       example:
         balances:
           COIN: 100
-        metadata: '{}'
+        metadata: "{}"
         address: users:001
         volumes:
           key:
@@ -564,7 +616,7 @@ components:
       type: object
     Contract:
       example:
-        expr: '{}'
+        expr: "{}"
         account: account
       properties:
         account:
@@ -578,9 +630,9 @@ components:
     Mapping:
       example:
         contracts:
-        - expr: '{}'
+        - expr: "{}"
           account: account
-        - expr: '{}'
+        - expr: "{}"
           account: account
       nullable: true
       properties:
@@ -615,7 +667,7 @@ components:
     Script:
       example:
         plain: plain
-        vars: '{}'
+        vars: "{}"
       properties:
         plain:
           type: string
@@ -665,7 +717,7 @@ components:
     TransactionData:
       example:
         reference: reference
-        metadata: '{}'
+        metadata: "{}"
         postings:
         - amount: 0
           destination: destination
@@ -692,7 +744,7 @@ components:
       example:
         transactions:
         - reference: reference
-          metadata: '{}'
+          metadata: "{}"
           postings:
           - amount: 0
             destination: destination
@@ -703,7 +755,7 @@ components:
             source: source
             asset: asset
         - reference: reference
-          metadata: '{}'
+          metadata: "{}"
           postings:
           - amount: 0
             destination: destination
@@ -759,7 +811,8 @@ components:
       - $ref: '#/components/schemas/Cursor'
       - $ref: '#/components/schemas/AccountCursor_allOf'
     AccountCursorResponse:
-      example: {}
+      example:
+        cursor: null
       properties:
         cursor:
           $ref: '#/components/schemas/AccountCursor'
@@ -770,7 +823,8 @@ components:
       - $ref: '#/components/schemas/Cursor'
       - $ref: '#/components/schemas/TransactionCursor_allOf'
     TransactionCursorResponse:
-      example: {}
+      example:
+        cursor: null
       properties:
         cursor:
           $ref: '#/components/schemas/TransactionCursor'
@@ -825,7 +879,7 @@ components:
         data:
           balances:
             COIN: 100
-          metadata: '{}'
+          metadata: "{}"
           address: users:001
           volumes:
             key:
@@ -875,9 +929,9 @@ components:
       example:
         data:
           contracts:
-          - expr: '{}'
+          - expr: "{}"
             account: account
-          - expr: '{}'
+          - expr: "{}"
             account: account
       properties:
         data:

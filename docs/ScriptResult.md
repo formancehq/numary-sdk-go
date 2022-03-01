@@ -5,7 +5,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Details** | Pointer to **string** |  | [optional] 
-**Err** | Pointer to **string** |  | [optional] 
+**ErrorCode** | Pointer to **string** |  | [optional] 
+**ErrorMessage** | Pointer to **string** |  | [optional] 
+**Transaction** | Pointer to [**Transaction**](Transaction.md) |  | [optional] 
 
 ## Methods
 
@@ -51,30 +53,80 @@ SetDetails sets Details field to given value.
 
 HasDetails returns a boolean if a field has been set.
 
-### GetErr
+### GetErrorCode
 
-`func (o *ScriptResult) GetErr() string`
+`func (o *ScriptResult) GetErrorCode() string`
 
-GetErr returns the Err field if non-nil, zero value otherwise.
+GetErrorCode returns the ErrorCode field if non-nil, zero value otherwise.
 
-### GetErrOk
+### GetErrorCodeOk
 
-`func (o *ScriptResult) GetErrOk() (*string, bool)`
+`func (o *ScriptResult) GetErrorCodeOk() (*string, bool)`
 
-GetErrOk returns a tuple with the Err field if it's non-nil, zero value otherwise
+GetErrorCodeOk returns a tuple with the ErrorCode field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetErr
+### SetErrorCode
 
-`func (o *ScriptResult) SetErr(v string)`
+`func (o *ScriptResult) SetErrorCode(v string)`
 
-SetErr sets Err field to given value.
+SetErrorCode sets ErrorCode field to given value.
 
-### HasErr
+### HasErrorCode
 
-`func (o *ScriptResult) HasErr() bool`
+`func (o *ScriptResult) HasErrorCode() bool`
 
-HasErr returns a boolean if a field has been set.
+HasErrorCode returns a boolean if a field has been set.
+
+### GetErrorMessage
+
+`func (o *ScriptResult) GetErrorMessage() string`
+
+GetErrorMessage returns the ErrorMessage field if non-nil, zero value otherwise.
+
+### GetErrorMessageOk
+
+`func (o *ScriptResult) GetErrorMessageOk() (*string, bool)`
+
+GetErrorMessageOk returns a tuple with the ErrorMessage field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetErrorMessage
+
+`func (o *ScriptResult) SetErrorMessage(v string)`
+
+SetErrorMessage sets ErrorMessage field to given value.
+
+### HasErrorMessage
+
+`func (o *ScriptResult) HasErrorMessage() bool`
+
+HasErrorMessage returns a boolean if a field has been set.
+
+### GetTransaction
+
+`func (o *ScriptResult) GetTransaction() Transaction`
+
+GetTransaction returns the Transaction field if non-nil, zero value otherwise.
+
+### GetTransactionOk
+
+`func (o *ScriptResult) GetTransactionOk() (*Transaction, bool)`
+
+GetTransactionOk returns a tuple with the Transaction field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTransaction
+
+`func (o *ScriptResult) SetTransaction(v Transaction)`
+
+SetTransaction sets Transaction field to given value.
+
+### HasTransaction
+
+`func (o *ScriptResult) HasTransaction() bool`
+
+HasTransaction returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
