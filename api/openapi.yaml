@@ -2,12 +2,11 @@ openapi: 3.0.1
 info:
   contact: {}
   title: Ledger API
-  version: 1.2.1
+  version: "1.0"
 servers:
 - url: /
 security:
 - basicAuth: []
-- cloudToken: []
 paths:
   /_info:
     get:
@@ -304,7 +303,7 @@ paths:
         name: preview
         required: false
         schema:
-          type: string
+          type: boolean
         style: form
       requestBody:
         content:
@@ -1012,7 +1011,4 @@ components:
   securitySchemes:
     basicAuth:
       scheme: basic
-      type: http
-    cloudToken:
-      scheme: bearer
       type: http

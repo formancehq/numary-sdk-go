@@ -74,7 +74,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth), [cloudToken](../README.md#cloudToken)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
@@ -109,7 +109,7 @@ import (
 func main() {
     ledger := "ledger_example" // string | ledger
     transactionData := *client.NewTransactionData([]client.Posting{*client.NewPosting(int32(123), "Asset_example", "Destination_example", "Source_example")}) // TransactionData | transaction
-    preview := "preview_example" // string | Preview mode (optional)
+    preview := true // bool | Preview mode (optional)
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
@@ -140,7 +140,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **transactionData** | [**TransactionData**](TransactionData.md) | transaction | 
- **preview** | **string** | Preview mode | 
+ **preview** | **bool** | Preview mode | 
 
 ### Return type
 
@@ -148,7 +148,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth), [cloudToken](../README.md#cloudToken)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
@@ -220,7 +220,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth), [cloudToken](../README.md#cloudToken)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
@@ -293,7 +293,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth), [cloudToken](../README.md#cloudToken)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
@@ -369,7 +369,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth), [cloudToken](../README.md#cloudToken)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
@@ -442,7 +442,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth), [cloudToken](../README.md#cloudToken)
+[basicAuth](../README.md#basicAuth)
 
 ### HTTP request headers
 
