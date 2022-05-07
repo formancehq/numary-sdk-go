@@ -40,6 +40,18 @@ type AccountsApi interface {
 	AddMetadataToAccountExecute(r ApiAddMetadataToAccountRequest) (*_nethttp.Response, error)
 
 	/*
+	CountAccounts Count accounts
+
+	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 @param ledger ledger
+	 @return ApiCountAccountsRequest
+	*/
+	CountAccounts(ctx _context.Context, ledger string) ApiCountAccountsRequest
+
+	// CountAccountsExecute executes the request
+	CountAccountsExecute(r ApiCountAccountsRequest) (*_nethttp.Response, error)
+
+	/*
 	GetAccount Get account by address
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
@@ -148,6 +160,124 @@ func (a *AccountsApiService) AddMetadataToAccountExecute(r ApiAddMetadataToAccou
 	}
 	// body params
 	localVarPostBody = r.requestBody
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, nil
+}
+
+type ApiCountAccountsRequest struct {
+	ctx _context.Context
+	ApiService AccountsApi
+	ledger string
+	after *string
+	address *string
+	metadata *map[string]string
+}
+
+// pagination cursor, will return accounts after given address (in descending order)
+func (r ApiCountAccountsRequest) After(after string) ApiCountAccountsRequest {
+	r.after = &after
+	return r
+}
+// account address
+func (r ApiCountAccountsRequest) Address(address string) ApiCountAccountsRequest {
+	r.address = &address
+	return r
+}
+// metadata
+func (r ApiCountAccountsRequest) Metadata(metadata map[string]string) ApiCountAccountsRequest {
+	r.metadata = &metadata
+	return r
+}
+
+func (r ApiCountAccountsRequest) Execute() (*_nethttp.Response, error) {
+	return r.ApiService.CountAccountsExecute(r)
+}
+
+/*
+CountAccounts Count accounts
+
+ @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ledger ledger
+ @return ApiCountAccountsRequest
+*/
+func (a *AccountsApiService) CountAccounts(ctx _context.Context, ledger string) ApiCountAccountsRequest {
+	return ApiCountAccountsRequest{
+		ApiService: a,
+		ctx: ctx,
+		ledger: ledger,
+	}
+}
+
+// Execute executes the request
+func (a *AccountsApiService) CountAccountsExecute(r ApiCountAccountsRequest) (*_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodHead
+		localVarPostBody     interface{}
+		formFiles            []formFile
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountsApiService.CountAccounts")
+	if err != nil {
+		return nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/{ledger}/accounts"
+	localVarPath = strings.Replace(localVarPath, "{"+"ledger"+"}", _neturl.PathEscape(parameterToString(r.ledger, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	if r.after != nil {
+		localVarQueryParams.Add("after", parameterToString(*r.after, ""))
+	}
+	if r.address != nil {
+		localVarQueryParams.Add("address", parameterToString(*r.address, ""))
+	}
+	if r.metadata != nil {
+		localVarQueryParams.Add("metadata", parameterToString(*r.metadata, ""))
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
@@ -287,11 +417,23 @@ type ApiListAccountsRequest struct {
 	ApiService AccountsApi
 	ledger string
 	after *string
+	address *string
+	metadata *map[string]string
 }
 
 // pagination cursor, will return accounts after given address (in descending order)
 func (r ApiListAccountsRequest) After(after string) ApiListAccountsRequest {
 	r.after = &after
+	return r
+}
+// account address
+func (r ApiListAccountsRequest) Address(address string) ApiListAccountsRequest {
+	r.address = &address
+	return r
+}
+// account address
+func (r ApiListAccountsRequest) Metadata(metadata map[string]string) ApiListAccountsRequest {
+	r.metadata = &metadata
 	return r
 }
 
@@ -338,6 +480,12 @@ func (a *AccountsApiService) ListAccountsExecute(r ApiListAccountsRequest) (Acco
 
 	if r.after != nil {
 		localVarQueryParams.Add("after", parameterToString(*r.after, ""))
+	}
+	if r.address != nil {
+		localVarQueryParams.Add("address", parameterToString(*r.address, ""))
+	}
+	if r.metadata != nil {
+		localVarQueryParams.Add("metadata", parameterToString(*r.metadata, ""))
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

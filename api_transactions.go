@@ -42,6 +42,20 @@ type TransactionsApi interface {
 	AddMetadataOnTransactionExecute(r ApiAddMetadataOnTransactionRequest) (*_nethttp.Response, error)
 
 	/*
+	CountTransactions Count transactions
+
+	Count transactions mathing given criteria
+
+	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 @param ledger ledger
+	 @return ApiCountTransactionsRequest
+	*/
+	CountTransactions(ctx _context.Context, ledger string) ApiCountTransactionsRequest
+
+	// CountTransactionsExecute executes the request
+	CountTransactionsExecute(r ApiCountTransactionsRequest) (*_nethttp.Response, error)
+
+	/*
 	CreateTransaction Create Transaction
 
 	Create a new ledger transaction
@@ -201,6 +215,144 @@ func (a *TransactionsApiService) AddMetadataOnTransactionExecute(r ApiAddMetadat
 	}
 	// body params
 	localVarPostBody = r.requestBody
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, nil
+}
+
+type ApiCountTransactionsRequest struct {
+	ctx _context.Context
+	ApiService TransactionsApi
+	ledger string
+	after *string
+	reference *string
+	account *string
+	source *string
+	destination *string
+}
+
+// pagination cursor, will return transactions after given txid (in descending order)
+func (r ApiCountTransactionsRequest) After(after string) ApiCountTransactionsRequest {
+	r.after = &after
+	return r
+}
+// find transactions by reference field
+func (r ApiCountTransactionsRequest) Reference(reference string) ApiCountTransactionsRequest {
+	r.reference = &reference
+	return r
+}
+// find transactions with postings involving given account, either as source or destination
+func (r ApiCountTransactionsRequest) Account(account string) ApiCountTransactionsRequest {
+	r.account = &account
+	return r
+}
+// find transactions with postings involving given account at source
+func (r ApiCountTransactionsRequest) Source(source string) ApiCountTransactionsRequest {
+	r.source = &source
+	return r
+}
+// find transactions with postings involving given account at destination
+func (r ApiCountTransactionsRequest) Destination(destination string) ApiCountTransactionsRequest {
+	r.destination = &destination
+	return r
+}
+
+func (r ApiCountTransactionsRequest) Execute() (*_nethttp.Response, error) {
+	return r.ApiService.CountTransactionsExecute(r)
+}
+
+/*
+CountTransactions Count transactions
+
+Count transactions mathing given criteria
+
+ @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ledger ledger
+ @return ApiCountTransactionsRequest
+*/
+func (a *TransactionsApiService) CountTransactions(ctx _context.Context, ledger string) ApiCountTransactionsRequest {
+	return ApiCountTransactionsRequest{
+		ApiService: a,
+		ctx: ctx,
+		ledger: ledger,
+	}
+}
+
+// Execute executes the request
+func (a *TransactionsApiService) CountTransactionsExecute(r ApiCountTransactionsRequest) (*_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodHead
+		localVarPostBody     interface{}
+		formFiles            []formFile
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsApiService.CountTransactions")
+	if err != nil {
+		return nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/{ledger}/transactions"
+	localVarPath = strings.Replace(localVarPath, "{"+"ledger"+"}", _neturl.PathEscape(parameterToString(r.ledger, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	if r.after != nil {
+		localVarQueryParams.Add("after", parameterToString(*r.after, ""))
+	}
+	if r.reference != nil {
+		localVarQueryParams.Add("reference", parameterToString(*r.reference, ""))
+	}
+	if r.account != nil {
+		localVarQueryParams.Add("account", parameterToString(*r.account, ""))
+	}
+	if r.source != nil {
+		localVarQueryParams.Add("source", parameterToString(*r.source, ""))
+	}
+	if r.destination != nil {
+		localVarQueryParams.Add("destination", parameterToString(*r.destination, ""))
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
@@ -485,7 +637,17 @@ func (a *TransactionsApiService) CreateTransactionsExecute(r ApiCreateTransactio
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
-			var v TransactionCommitErrorResponse
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 409 {
+			var v ErrorResponse
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -632,6 +794,8 @@ type ApiListTransactionsRequest struct {
 	after *string
 	reference *string
 	account *string
+	source *string
+	destination *string
 }
 
 // pagination cursor, will return transactions after given txid (in descending order)
@@ -647,6 +811,16 @@ func (r ApiListTransactionsRequest) Reference(reference string) ApiListTransacti
 // find transactions with postings involving given account, either as source or destination
 func (r ApiListTransactionsRequest) Account(account string) ApiListTransactionsRequest {
 	r.account = &account
+	return r
+}
+// find transactions with postings involving given account at source
+func (r ApiListTransactionsRequest) Source(source string) ApiListTransactionsRequest {
+	r.source = &source
+	return r
+}
+// find transactions with postings involving given account at destination
+func (r ApiListTransactionsRequest) Destination(destination string) ApiListTransactionsRequest {
+	r.destination = &destination
 	return r
 }
 
@@ -701,6 +875,12 @@ func (a *TransactionsApiService) ListTransactionsExecute(r ApiListTransactionsRe
 	}
 	if r.account != nil {
 		localVarQueryParams.Add("account", parameterToString(*r.account, ""))
+	}
+	if r.source != nil {
+		localVarQueryParams.Add("source", parameterToString(*r.source, ""))
+	}
+	if r.destination != nil {
+		localVarQueryParams.Add("destination", parameterToString(*r.destination, ""))
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**AddMetadataOnTransaction**](TransactionsApi.md#AddMetadataOnTransaction) | **Post** /{ledger}/transactions/{txid}/metadata | Set Transaction Metadata
+[**CountTransactions**](TransactionsApi.md#CountTransactions) | **Head** /{ledger}/transactions | Count transactions
 [**CreateTransaction**](TransactionsApi.md#CreateTransaction) | **Post** /{ledger}/transactions | Create Transaction
 [**CreateTransactions**](TransactionsApi.md#CreateTransactions) | **Post** /{ledger}/transactions/batch | Create Transactions Batch
 [**GetTransaction**](TransactionsApi.md#GetTransaction) | **Get** /{ledger}/transactions/{txid} | Get Transaction
@@ -79,6 +80,84 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
+- **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CountTransactions
+
+> CountTransactions(ctx, ledger).After(after).Reference(reference).Account(account).Source(source).Destination(destination).Execute()
+
+Count transactions
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    client "github.com/numary/numary-go"
+)
+
+func main() {
+    ledger := "ledger_example" // string | ledger
+    after := "after_example" // string | pagination cursor, will return transactions after given txid (in descending order) (optional)
+    reference := "reference_example" // string | find transactions by reference field (optional)
+    account := "account_example" // string | find transactions with postings involving given account, either as source or destination (optional)
+    source := "source_example" // string | find transactions with postings involving given account at source (optional)
+    destination := "destination_example" // string | find transactions with postings involving given account at destination (optional)
+
+    configuration := client.NewConfiguration()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.TransactionsApi.CountTransactions(context.Background(), ledger).After(after).Reference(reference).Account(account).Source(source).Destination(destination).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.CountTransactions``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**ledger** | **string** | ledger | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCountTransactionsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **after** | **string** | pagination cursor, will return transactions after given txid (in descending order) | 
+ **reference** | **string** | find transactions by reference field | 
+ **account** | **string** | find transactions with postings involving given account, either as source or destination | 
+ **source** | **string** | find transactions with postings involving given account at source | 
+ **destination** | **string** | find transactions with postings involving given account at destination | 
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[basicAuth](../README.md#basicAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -307,7 +386,7 @@ Name | Type | Description  | Notes
 
 ## ListTransactions
 
-> TransactionCursorResponse ListTransactions(ctx, ledger).After(after).Reference(reference).Account(account).Execute()
+> TransactionCursorResponse ListTransactions(ctx, ledger).After(after).Reference(reference).Account(account).Source(source).Destination(destination).Execute()
 
 Get all Transactions
 
@@ -330,10 +409,12 @@ func main() {
     after := "after_example" // string | pagination cursor, will return transactions after given txid (in descending order) (optional)
     reference := "reference_example" // string | find transactions by reference field (optional)
     account := "account_example" // string | find transactions with postings involving given account, either as source or destination (optional)
+    source := "source_example" // string | find transactions with postings involving given account at source (optional)
+    destination := "destination_example" // string | find transactions with postings involving given account at destination (optional)
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.TransactionsApi.ListTransactions(context.Background(), ledger).After(after).Reference(reference).Account(account).Execute()
+    resp, r, err := api_client.TransactionsApi.ListTransactions(context.Background(), ledger).After(after).Reference(reference).Account(account).Source(source).Destination(destination).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.ListTransactions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -362,6 +443,8 @@ Name | Type | Description  | Notes
  **after** | **string** | pagination cursor, will return transactions after given txid (in descending order) | 
  **reference** | **string** | find transactions by reference field | 
  **account** | **string** | find transactions with postings involving given account, either as source or destination | 
+ **source** | **string** | find transactions with postings involving given account at source | 
+ **destination** | **string** | find transactions with postings involving given account at destination | 
 
 ### Return type
 

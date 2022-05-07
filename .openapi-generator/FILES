@@ -39,9 +39,6 @@ docs/Stats.md
 docs/StatsApi.md
 docs/StatsResponse.md
 docs/Transaction.md
-docs/TransactionCommitError.md
-docs/TransactionCommitErrorAllOf.md
-docs/TransactionCommitErrorResponse.md
 docs/TransactionCursor.md
 docs/TransactionCursorAllOf.md
 docs/TransactionCursorResponse.md
@@ -75,9 +72,6 @@ model_script_result.go
 model_stats.go
 model_stats_response.go
 model_transaction.go
-model_transaction_commit_error.go
-model_transaction_commit_error_all_of.go
-model_transaction_commit_error_response.go
 model_transaction_cursor.go
 model_transaction_cursor_all_of.go
 model_transaction_cursor_response.go

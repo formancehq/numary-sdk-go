@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**AddMetadataToAccount**](AccountsApi.md#AddMetadataToAccount) | **Post** /{ledger}/accounts/{accountId}/metadata | Add metadata to account
+[**CountAccounts**](AccountsApi.md#CountAccounts) | **Head** /{ledger}/accounts | Count accounts
 [**GetAccount**](AccountsApi.md#GetAccount) | **Get** /{ledger}/accounts/{accountId} | Get account by address
 [**ListAccounts**](AccountsApi.md#ListAccounts) | **Get** /{ledger}/accounts | List all accounts
 
@@ -74,6 +75,78 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
+- **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CountAccounts
+
+> CountAccounts(ctx, ledger).After(after).Address(address).Metadata(metadata).Execute()
+
+Count accounts
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    client "github.com/numary/numary-go"
+)
+
+func main() {
+    ledger := "ledger_example" // string | ledger
+    after := "after_example" // string | pagination cursor, will return accounts after given address (in descending order) (optional)
+    address := "address_example" // string | account address (optional)
+    metadata := map[string]string{"key": map[string]string{"key": "Inner_example"}} // map[string]string | metadata (optional)
+
+    configuration := client.NewConfiguration()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.AccountsApi.CountAccounts(context.Background(), ledger).After(after).Address(address).Metadata(metadata).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.CountAccounts``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**ledger** | **string** | ledger | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCountAccountsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **after** | **string** | pagination cursor, will return accounts after given address (in descending order) | 
+ **address** | **string** | account address | 
+ **metadata** | **map[string]map[string]string** | metadata | 
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[basicAuth](../README.md#basicAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -154,7 +227,7 @@ Name | Type | Description  | Notes
 
 ## ListAccounts
 
-> AccountCursorResponse ListAccounts(ctx, ledger).After(after).Execute()
+> AccountCursorResponse ListAccounts(ctx, ledger).After(after).Address(address).Metadata(metadata).Execute()
 
 List all accounts
 
@@ -173,10 +246,12 @@ import (
 func main() {
     ledger := "ledger_example" // string | ledger
     after := "after_example" // string | pagination cursor, will return accounts after given address (in descending order) (optional)
+    address := "address_example" // string | account address (optional)
+    metadata := map[string]string{"key": map[string]string{"key": "Inner_example"}} // map[string]string | account address (optional)
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.AccountsApi.ListAccounts(context.Background(), ledger).After(after).Execute()
+    resp, r, err := api_client.AccountsApi.ListAccounts(context.Background(), ledger).After(after).Address(address).Metadata(metadata).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.ListAccounts``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -203,6 +278,8 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **after** | **string** | pagination cursor, will return accounts after given address (in descending order) | 
+ **address** | **string** | account address | 
+ **metadata** | **map[string]map[string]string** | account address | 
 
 ### Return type
 
