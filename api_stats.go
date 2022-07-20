@@ -33,7 +33,7 @@ type StatsApi interface {
 The stats for account
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger ledger
+	 @param ledger name of the ledger
 	 @return ApiReadStatsRequest
 	*/
 	ReadStats(ctx _context.Context, ledger string) ApiReadStatsRequest
@@ -64,7 +64,7 @@ Get ledger stats (aggregate metrics on accounts and transactions)
 The stats for account
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param ledger ledger
+ @param ledger name of the ledger
  @return ApiReadStatsRequest
 */
 func (a *StatsApiService) ReadStats(ctx _context.Context, ledger string) ApiReadStatsRequest {

@@ -27,13 +27,11 @@ var (
 type TransactionsApi interface {
 
 	/*
-	AddMetadataOnTransaction Set Transaction Metadata
-
-	Set a new metadata to a ledger transaction by transaction id
+	AddMetadataOnTransaction Set the metadata of a transaction by its ID.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger ledger
-	 @param txid txid
+	 @param ledger Name of the ledger.
+	 @param txid Transaction ID.
 	 @return ApiAddMetadataOnTransactionRequest
 	*/
 	AddMetadataOnTransaction(ctx _context.Context, ledger string, txid int32) ApiAddMetadataOnTransactionRequest
@@ -42,12 +40,10 @@ type TransactionsApi interface {
 	AddMetadataOnTransactionExecute(r ApiAddMetadataOnTransactionRequest) (*_nethttp.Response, error)
 
 	/*
-	CountTransactions Count transactions
-
-	Count transactions mathing given criteria
+	CountTransactions Count the transactions from a ledger.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger ledger
+	 @param ledger Name of the ledger.
 	 @return ApiCountTransactionsRequest
 	*/
 	CountTransactions(ctx _context.Context, ledger string) ApiCountTransactionsRequest
@@ -56,13 +52,10 @@ type TransactionsApi interface {
 	CountTransactionsExecute(r ApiCountTransactionsRequest) (*_nethttp.Response, error)
 
 	/*
-	CreateTransaction Create Transaction
-
-	Create a new ledger transaction
-Commit a new transaction to the ledger
+	CreateTransaction Create a new transaction to a ledger.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger ledger
+	 @param ledger Name of the ledger.
 	 @return ApiCreateTransactionRequest
 	*/
 	CreateTransaction(ctx _context.Context, ledger string) ApiCreateTransactionRequest
@@ -72,29 +65,24 @@ Commit a new transaction to the ledger
 	CreateTransactionExecute(r ApiCreateTransactionRequest) (CreateTransactionResponse, *_nethttp.Response, error)
 
 	/*
-	CreateTransactions Create Transactions Batch
-
-	Create a new ledger transactions batch
-Commit a batch of new transactions to the ledger
+	CreateTransactions Create a new batch of transactions to a ledger.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger ledger
+	 @param ledger Name of the ledger.
 	 @return ApiCreateTransactionsRequest
 	*/
 	CreateTransactions(ctx _context.Context, ledger string) ApiCreateTransactionsRequest
 
 	// CreateTransactionsExecute executes the request
-	//  @return TransactionListResponse
-	CreateTransactionsExecute(r ApiCreateTransactionsRequest) (TransactionListResponse, *_nethttp.Response, error)
+	//  @return CreateTransactions200Response
+	CreateTransactionsExecute(r ApiCreateTransactionsRequest) (CreateTransactions200Response, *_nethttp.Response, error)
 
 	/*
-	GetTransaction Get Transaction
-
-	Get transaction by transaction id
+	GetTransaction Get transaction from a ledger by its ID.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger ledger
-	 @param txid txid
+	 @param ledger Name of the ledger.
+	 @param txid Transaction ID.
 	 @return ApiGetTransactionRequest
 	*/
 	GetTransaction(ctx _context.Context, ledger string, txid int32) ApiGetTransactionRequest
@@ -104,28 +92,26 @@ Commit a batch of new transactions to the ledger
 	GetTransactionExecute(r ApiGetTransactionRequest) (TransactionResponse, *_nethttp.Response, error)
 
 	/*
-	ListTransactions Get all Transactions
+	ListTransactions List transactions from a ledger.
 
-	Get all ledger transactions
+	List transactions from a ledger, sorted by txid in descending order.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger ledger
+	 @param ledger Name of the ledger.
 	 @return ApiListTransactionsRequest
 	*/
 	ListTransactions(ctx _context.Context, ledger string) ApiListTransactionsRequest
 
 	// ListTransactionsExecute executes the request
-	//  @return TransactionCursorResponse
-	ListTransactionsExecute(r ApiListTransactionsRequest) (TransactionCursorResponse, *_nethttp.Response, error)
+	//  @return ListTransactions200Response
+	ListTransactionsExecute(r ApiListTransactionsRequest) (ListTransactions200Response, *_nethttp.Response, error)
 
 	/*
-	RevertTransaction Revert Transaction
-
-	Revert a ledger transaction by transaction id
+	RevertTransaction Revert a ledger transaction by its ID.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger ledger
-	 @param txid txid
+	 @param ledger Name of the ledger.
+	 @param txid Transaction ID.
 	 @return ApiRevertTransactionRequest
 	*/
 	RevertTransaction(ctx _context.Context, ledger string, txid int32) ApiRevertTransactionRequest
@@ -157,13 +143,11 @@ func (r ApiAddMetadataOnTransactionRequest) Execute() (*_nethttp.Response, error
 }
 
 /*
-AddMetadataOnTransaction Set Transaction Metadata
-
-Set a new metadata to a ledger transaction by transaction id
+AddMetadataOnTransaction Set the metadata of a transaction by its ID.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param ledger ledger
- @param txid txid
+ @param ledger Name of the ledger.
+ @param txid Transaction ID.
  @return ApiAddMetadataOnTransactionRequest
 */
 func (a *TransactionsApiService) AddMetadataOnTransaction(ctx _context.Context, ledger string, txid int32) ApiAddMetadataOnTransactionRequest {
@@ -247,34 +231,28 @@ type ApiCountTransactionsRequest struct {
 	ctx _context.Context
 	ApiService TransactionsApi
 	ledger string
-	after *string
 	reference *string
 	account *string
 	source *string
 	destination *string
 }
 
-// pagination cursor, will return transactions after given txid (in descending order)
-func (r ApiCountTransactionsRequest) After(after string) ApiCountTransactionsRequest {
-	r.after = &after
-	return r
-}
-// find transactions by reference field
+// Filter transactions by reference field.
 func (r ApiCountTransactionsRequest) Reference(reference string) ApiCountTransactionsRequest {
 	r.reference = &reference
 	return r
 }
-// find transactions with postings involving given account, either as source or destination
+// Filter transactions with postings involving given account, either as source or destination.
 func (r ApiCountTransactionsRequest) Account(account string) ApiCountTransactionsRequest {
 	r.account = &account
 	return r
 }
-// find transactions with postings involving given account at source
+// Filter transactions with postings involving given account at source.
 func (r ApiCountTransactionsRequest) Source(source string) ApiCountTransactionsRequest {
 	r.source = &source
 	return r
 }
-// find transactions with postings involving given account at destination
+// Filter transactions with postings involving given account at destination.
 func (r ApiCountTransactionsRequest) Destination(destination string) ApiCountTransactionsRequest {
 	r.destination = &destination
 	return r
@@ -285,12 +263,10 @@ func (r ApiCountTransactionsRequest) Execute() (*_nethttp.Response, error) {
 }
 
 /*
-CountTransactions Count transactions
-
-Count transactions mathing given criteria
+CountTransactions Count the transactions from a ledger.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param ledger ledger
+ @param ledger Name of the ledger.
  @return ApiCountTransactionsRequest
 */
 func (a *TransactionsApiService) CountTransactions(ctx _context.Context, ledger string) ApiCountTransactionsRequest {
@@ -321,9 +297,6 @@ func (a *TransactionsApiService) CountTransactionsExecute(r ApiCountTransactions
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 
-	if r.after != nil {
-		localVarQueryParams.Add("after", parameterToString(*r.after, ""))
-	}
 	if r.reference != nil {
 		localVarQueryParams.Add("reference", parameterToString(*r.reference, ""))
 	}
@@ -389,12 +362,11 @@ type ApiCreateTransactionRequest struct {
 	preview *bool
 }
 
-// transaction
 func (r ApiCreateTransactionRequest) TransactionData(transactionData TransactionData) ApiCreateTransactionRequest {
 	r.transactionData = &transactionData
 	return r
 }
-// Preview mode
+// Set the preview mode. Preview mode doesn&#39;t add the logs to the database or publish a message to the message broker.
 func (r ApiCreateTransactionRequest) Preview(preview bool) ApiCreateTransactionRequest {
 	r.preview = &preview
 	return r
@@ -405,13 +377,10 @@ func (r ApiCreateTransactionRequest) Execute() (CreateTransactionResponse, *_net
 }
 
 /*
-CreateTransaction Create Transaction
-
-Create a new ledger transaction
-Commit a new transaction to the ledger
+CreateTransaction Create a new transaction to a ledger.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param ledger ledger
+ @param ledger Name of the ledger.
  @return ApiCreateTransactionRequest
 */
 func (a *TransactionsApiService) CreateTransaction(ctx _context.Context, ledger string) ApiCreateTransactionRequest {
@@ -542,24 +511,20 @@ type ApiCreateTransactionsRequest struct {
 	transactions *Transactions
 }
 
-// transactions
 func (r ApiCreateTransactionsRequest) Transactions(transactions Transactions) ApiCreateTransactionsRequest {
 	r.transactions = &transactions
 	return r
 }
 
-func (r ApiCreateTransactionsRequest) Execute() (TransactionListResponse, *_nethttp.Response, error) {
+func (r ApiCreateTransactionsRequest) Execute() (CreateTransactions200Response, *_nethttp.Response, error) {
 	return r.ApiService.CreateTransactionsExecute(r)
 }
 
 /*
-CreateTransactions Create Transactions Batch
-
-Create a new ledger transactions batch
-Commit a batch of new transactions to the ledger
+CreateTransactions Create a new batch of transactions to a ledger.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param ledger ledger
+ @param ledger Name of the ledger.
  @return ApiCreateTransactionsRequest
 */
 func (a *TransactionsApiService) CreateTransactions(ctx _context.Context, ledger string) ApiCreateTransactionsRequest {
@@ -571,13 +536,13 @@ func (a *TransactionsApiService) CreateTransactions(ctx _context.Context, ledger
 }
 
 // Execute executes the request
-//  @return TransactionListResponse
-func (a *TransactionsApiService) CreateTransactionsExecute(r ApiCreateTransactionsRequest) (TransactionListResponse, *_nethttp.Response, error) {
+//  @return CreateTransactions200Response
+func (a *TransactionsApiService) CreateTransactionsExecute(r ApiCreateTransactionsRequest) (CreateTransactions200Response, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  TransactionListResponse
+		localVarReturnValue  CreateTransactions200Response
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsApiService.CreateTransactions")
@@ -683,13 +648,11 @@ func (r ApiGetTransactionRequest) Execute() (TransactionResponse, *_nethttp.Resp
 }
 
 /*
-GetTransaction Get Transaction
-
-Get transaction by transaction id
+GetTransaction Get transaction from a ledger by its ID.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param ledger ledger
- @param txid txid
+ @param ledger Name of the ledger.
+ @param txid Transaction ID.
  @return ApiGetTransactionRequest
 */
 func (a *TransactionsApiService) GetTransaction(ctx _context.Context, ledger string, txid int32) ApiGetTransactionRequest {
@@ -796,45 +759,57 @@ type ApiListTransactionsRequest struct {
 	account *string
 	source *string
 	destination *string
+	startTime *string
+	endTime *string
 }
 
-// pagination cursor, will return transactions after given txid (in descending order)
+// Pagination cursor, will return transactions after given txid (in descending order).
 func (r ApiListTransactionsRequest) After(after string) ApiListTransactionsRequest {
 	r.after = &after
 	return r
 }
-// find transactions by reference field
+// Find transactions by reference field.
 func (r ApiListTransactionsRequest) Reference(reference string) ApiListTransactionsRequest {
 	r.reference = &reference
 	return r
 }
-// find transactions with postings involving given account, either as source or destination
+// Find transactions with postings involving given account, either as source or destination.
 func (r ApiListTransactionsRequest) Account(account string) ApiListTransactionsRequest {
 	r.account = &account
 	return r
 }
-// find transactions with postings involving given account at source
+// Find transactions with postings involving given account at source.
 func (r ApiListTransactionsRequest) Source(source string) ApiListTransactionsRequest {
 	r.source = &source
 	return r
 }
-// find transactions with postings involving given account at destination
+// Find transactions with postings involving given account at destination.
 func (r ApiListTransactionsRequest) Destination(destination string) ApiListTransactionsRequest {
 	r.destination = &destination
 	return r
 }
+// Filter transactions that occurred after this timestamp. The format is RFC3339 and is inclusive (for example, 12:00:01 includes the first second of the minute).
+func (r ApiListTransactionsRequest) StartTime(startTime string) ApiListTransactionsRequest {
+	r.startTime = &startTime
+	return r
+}
+// Filter transactions that occurred before this timestamp. The format is RFC3339 and is exclusive (for example, 12:00:01 excludes the first second of the minute).
+func (r ApiListTransactionsRequest) EndTime(endTime string) ApiListTransactionsRequest {
+	r.endTime = &endTime
+	return r
+}
 
-func (r ApiListTransactionsRequest) Execute() (TransactionCursorResponse, *_nethttp.Response, error) {
+func (r ApiListTransactionsRequest) Execute() (ListTransactions200Response, *_nethttp.Response, error) {
 	return r.ApiService.ListTransactionsExecute(r)
 }
 
 /*
-ListTransactions Get all Transactions
+ListTransactions List transactions from a ledger.
 
-Get all ledger transactions
+List transactions from a ledger, sorted by txid in descending order.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param ledger ledger
+ @param ledger Name of the ledger.
  @return ApiListTransactionsRequest
 */
 func (a *TransactionsApiService) ListTransactions(ctx _context.Context, ledger string) ApiListTransactionsRequest {
@@ -846,13 +821,13 @@ func (a *TransactionsApiService) ListTransactions(ctx _context.Context, ledger s
 }
 
 // Execute executes the request
-//  @return TransactionCursorResponse
-func (a *TransactionsApiService) ListTransactionsExecute(r ApiListTransactionsRequest) (TransactionCursorResponse, *_nethttp.Response, error) {
+//  @return ListTransactions200Response
+func (a *TransactionsApiService) ListTransactionsExecute(r ApiListTransactionsRequest) (ListTransactions200Response, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  TransactionCursorResponse
+		localVarReturnValue  ListTransactions200Response
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsApiService.ListTransactions")
@@ -881,6 +856,12 @@ func (a *TransactionsApiService) ListTransactionsExecute(r ApiListTransactionsRe
 	}
 	if r.destination != nil {
 		localVarQueryParams.Add("destination", parameterToString(*r.destination, ""))
+	}
+	if r.startTime != nil {
+		localVarQueryParams.Add("start_time", parameterToString(*r.startTime, ""))
+	}
+	if r.endTime != nil {
+		localVarQueryParams.Add("end_time", parameterToString(*r.endTime, ""))
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -949,13 +930,11 @@ func (r ApiRevertTransactionRequest) Execute() (TransactionResponse, *_nethttp.R
 }
 
 /*
-RevertTransaction Revert Transaction
-
-Revert a ledger transaction by transaction id
+RevertTransaction Revert a ledger transaction by its ID.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param ledger ledger
- @param txid txid
+ @param ledger Name of the ledger.
+ @param txid Transaction ID.
  @return ApiRevertTransactionRequest
 */
 func (a *TransactionsApiService) RevertTransaction(ctx _context.Context, ledger string, txid int32) ApiRevertTransactionRequest {

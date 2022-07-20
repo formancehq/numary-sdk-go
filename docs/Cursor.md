@@ -4,18 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**HasMore** | **bool** |  | 
-**Next** | Pointer to **string** |  | [optional] 
 **PageSize** | **int32** |  | 
-**Previous** | Pointer to **string** |  | [optional] 
-**RemainingResults** | **int32** |  | 
-**Total** | **int32** |  | 
+**HasMore** | **bool** |  | 
 
 ## Methods
 
 ### NewCursor
 
-`func NewCursor(hasMore bool, pageSize int32, remainingResults int32, total int32, ) *Cursor`
+`func NewCursor(pageSize int32, hasMore bool, ) *Cursor`
 
 NewCursor instantiates a new Cursor object
 This constructor will assign default values to properties that have it defined,
@@ -29,51 +25,6 @@ will change when the set of required properties is changed
 NewCursorWithDefaults instantiates a new Cursor object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
-
-### GetHasMore
-
-`func (o *Cursor) GetHasMore() bool`
-
-GetHasMore returns the HasMore field if non-nil, zero value otherwise.
-
-### GetHasMoreOk
-
-`func (o *Cursor) GetHasMoreOk() (*bool, bool)`
-
-GetHasMoreOk returns a tuple with the HasMore field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetHasMore
-
-`func (o *Cursor) SetHasMore(v bool)`
-
-SetHasMore sets HasMore field to given value.
-
-
-### GetNext
-
-`func (o *Cursor) GetNext() string`
-
-GetNext returns the Next field if non-nil, zero value otherwise.
-
-### GetNextOk
-
-`func (o *Cursor) GetNextOk() (*string, bool)`
-
-GetNextOk returns a tuple with the Next field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetNext
-
-`func (o *Cursor) SetNext(v string)`
-
-SetNext sets Next field to given value.
-
-### HasNext
-
-`func (o *Cursor) HasNext() bool`
-
-HasNext returns a boolean if a field has been set.
 
 ### GetPageSize
 
@@ -95,69 +46,24 @@ and a boolean to check if the value has been set.
 SetPageSize sets PageSize field to given value.
 
 
-### GetPrevious
+### GetHasMore
 
-`func (o *Cursor) GetPrevious() string`
+`func (o *Cursor) GetHasMore() bool`
 
-GetPrevious returns the Previous field if non-nil, zero value otherwise.
+GetHasMore returns the HasMore field if non-nil, zero value otherwise.
 
-### GetPreviousOk
+### GetHasMoreOk
 
-`func (o *Cursor) GetPreviousOk() (*string, bool)`
+`func (o *Cursor) GetHasMoreOk() (*bool, bool)`
 
-GetPreviousOk returns a tuple with the Previous field if it's non-nil, zero value otherwise
+GetHasMoreOk returns a tuple with the HasMore field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetPrevious
+### SetHasMore
 
-`func (o *Cursor) SetPrevious(v string)`
+`func (o *Cursor) SetHasMore(v bool)`
 
-SetPrevious sets Previous field to given value.
-
-### HasPrevious
-
-`func (o *Cursor) HasPrevious() bool`
-
-HasPrevious returns a boolean if a field has been set.
-
-### GetRemainingResults
-
-`func (o *Cursor) GetRemainingResults() int32`
-
-GetRemainingResults returns the RemainingResults field if non-nil, zero value otherwise.
-
-### GetRemainingResultsOk
-
-`func (o *Cursor) GetRemainingResultsOk() (*int32, bool)`
-
-GetRemainingResultsOk returns a tuple with the RemainingResults field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetRemainingResults
-
-`func (o *Cursor) SetRemainingResults(v int32)`
-
-SetRemainingResults sets RemainingResults field to given value.
-
-
-### GetTotal
-
-`func (o *Cursor) GetTotal() int32`
-
-GetTotal returns the Total field if non-nil, zero value otherwise.
-
-### GetTotalOk
-
-`func (o *Cursor) GetTotalOk() (*int32, bool)`
-
-GetTotalOk returns a tuple with the Total field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetTotal
-
-`func (o *Cursor) SetTotal(v int32)`
-
-SetTotal sets Total field to given value.
+SetHasMore sets HasMore field to given value.
 
 
 

@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.0.3
 info:
   contact: {}
   title: Ledger API
@@ -10,7 +10,6 @@ security:
 paths:
   /_info:
     get:
-      description: Show server informations
       operationId: getInfo
       responses:
         "200":
@@ -19,46 +18,51 @@ paths:
               schema:
                 $ref: '#/components/schemas/ConfigInfoResponse'
           description: OK
-      summary: Server Info
+      summary: Show server information.
       tags:
       - server
   /{ledger}/accounts:
     get:
+      description: "List accounts from a ledger, sorted by address in descending order."
       operationId: listAccounts
       parameters:
-      - description: ledger
+      - description: Name of the ledger.
         explode: false
         in: path
         name: ledger
         required: true
         schema:
+          example: ledger001
           type: string
         style: simple
-      - description: "pagination cursor, will return accounts after given address\
-          \ (in descending order)"
+      - description: "Pagination cursor, will return accounts after given address,\
+          \ in descending order."
         explode: true
         in: query
         name: after
         required: false
         schema:
+          example: users:003
           type: string
         style: form
-      - description: account address
+      - description: Filter accounts by address pattern (regular expression placed
+          between ^ and $).
         explode: true
         in: query
         name: address
         required: false
         schema:
+          example: users:.+
           type: string
         style: form
-      - description: account address
-        explode: false
+      - description: Filter accounts by metadata key value pairs. Nested objects can
+          be used as seen in the example below.
+        example: "metadata[key]=value1&metadata[a.nested.key]=value2"
+        explode: true
         in: query
         name: metadata
         required: false
         schema:
-          additionalProperties:
-            type: string
           properties: {}
           type: object
         style: deepObject
@@ -67,47 +71,41 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AccountCursorResponse'
+                $ref: '#/components/schemas/listAccounts_200_response'
           description: OK
-      summary: List all accounts
+      summary: List accounts from a ledger.
       tags:
       - accounts
     head:
       operationId: countAccounts
       parameters:
-      - description: ledger
+      - description: Name of the ledger.
         explode: false
         in: path
         name: ledger
         required: true
         schema:
+          example: ledger001
           type: string
         style: simple
-      - description: "pagination cursor, will return accounts after given address\
-          \ (in descending order)"
-        explode: true
-        in: query
-        name: after
-        required: false
-        schema:
-          type: string
-        style: form
-      - description: account address
+      - description: Filter accounts by address pattern (regular expression placed
+          between ^ and $).
         explode: true
         in: query
         name: address
         required: false
         schema:
+          example: users:.+
           type: string
         style: form
-      - description: metadata
-        explode: false
+      - description: Filter accounts by metadata key value pairs. Nested objects can
+          be used as seen in the example below.
+        example: "metadata[key]=value1&metadata[a.nested.key]=value2"
+        explode: true
         in: query
         name: metadata
         required: false
         schema:
-          additionalProperties:
-            type: string
           properties: {}
           type: object
         style: deepObject
@@ -120,27 +118,29 @@ paths:
               schema:
                 type: integer
               style: simple
-      summary: Count accounts
+      summary: Count the accounts from a ledger.
       tags:
       - accounts
-  /{ledger}/accounts/{accountId}:
+  /{ledger}/accounts/{address}:
     get:
       operationId: getAccount
       parameters:
-      - description: ledger
+      - description: Name of the ledger.
         explode: false
         in: path
         name: ledger
         required: true
         schema:
+          example: ledger001
           type: string
         style: simple
-      - description: accountId
+      - description: Exact address of the account.
         explode: false
         in: path
-        name: accountId
+        name: address
         required: true
         schema:
+          example: users:001
           type: string
         style: simple
       responses:
@@ -148,29 +148,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AccountResponse'
+                $ref: '#/components/schemas/getAccount_200_response'
           description: OK
-      summary: Get account by address
+      summary: Get account by its address.
       tags:
       - accounts
-  /{ledger}/accounts/{accountId}/metadata:
+  /{ledger}/accounts/{address}/metadata:
     post:
       operationId: addMetadataToAccount
       parameters:
-      - description: ledger
+      - description: Name of the ledger.
         explode: false
         in: path
         name: ledger
         required: true
         schema:
+          example: ledger001
           type: string
         style: simple
-      - description: accountId
+      - description: Exact address of the account.
         explode: false
         in: path
-        name: accountId
+        name: address
         required: true
         schema:
+          example: users:001
           type: string
         style: simple
       requestBody:
@@ -186,20 +188,20 @@ paths:
         "400":
           content: {}
           description: ""
-      summary: Add metadata to account
+      summary: Add metadata to an account.
       tags:
       - accounts
   /{ledger}/mapping:
     get:
-      description: Get ledger mapping
       operationId: getMapping
       parameters:
-      - description: ledger
+      - description: Name of the ledger.
         explode: false
         in: path
         name: ledger
         required: true
         schema:
+          example: ledger001
           type: string
         style: simple
       responses:
@@ -209,19 +211,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/MappingResponse'
           description: OK
-      summary: Get mapping
+      summary: Get the mapping of a ledger.
       tags:
       - mapping
     put:
-      description: Update ledger mapping
       operationId: updateMapping
       parameters:
-      - description: ledger
+      - description: Name of the ledger.
         explode: false
         in: path
         name: ledger
         required: true
         schema:
+          example: ledger001
           type: string
         style: simple
       requestBody:
@@ -229,7 +231,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Mapping'
-        description: mapping
         required: true
       responses:
         "200":
@@ -238,28 +239,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/MappingResponse'
           description: OK
-      summary: Put mapping
+      summary: Update the mapping of a ledger.
       tags:
       - mapping
   /{ledger}/script:
     post:
-      description: Execute a Numscript and create the transaction if any
       operationId: runScript
       parameters:
-      - description: ledger
+      - description: Name of the ledger.
         explode: false
         in: path
         name: ledger
         required: true
         schema:
+          example: ledger001
           type: string
         style: simple
-      - description: Preview mode
+      - description: Set the preview mode. Preview mode doesn't add the logs to the
+          database or publish a message to the message broker.
         explode: true
         in: query
         name: preview
         required: false
         schema:
+          example: true
           type: boolean
         style: form
       requestBody:
@@ -267,7 +270,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Script'
-        description: script
         required: true
       responses:
         "200":
@@ -276,7 +278,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ScriptResult'
           description: OK
-      summary: Execute Numscript
+      summary: Execute a Numscript.
       tags:
       - script
   /{ledger}/stats:
@@ -286,12 +288,13 @@ paths:
         The stats for account
       operationId: readStats
       parameters:
-      - description: ledger
+      - description: name of the ledger
         explode: false
         in: path
         name: ledger
         required: true
         schema:
+          example: ledger001
           type: string
         style: simple
       responses:
@@ -306,55 +309,82 @@ paths:
       - stats
   /{ledger}/transactions:
     get:
-      description: Get all ledger transactions
+      description: "List transactions from a ledger, sorted by txid in descending\
+        \ order."
       operationId: listTransactions
       parameters:
-      - description: ledger
+      - description: Name of the ledger.
         explode: false
         in: path
         name: ledger
         required: true
         schema:
+          example: ledger001
           type: string
         style: simple
-      - description: "pagination cursor, will return transactions after given txid\
-          \ (in descending order)"
+      - description: "Pagination cursor, will return transactions after given txid\
+          \ (in descending order)."
         explode: true
         in: query
         name: after
         required: false
         schema:
+          example: "1234"
           type: string
         style: form
-      - description: find transactions by reference field
+      - description: Find transactions by reference field.
         explode: true
         in: query
         name: reference
         required: false
         schema:
+          example: ref:001
           type: string
         style: form
-      - description: "find transactions with postings involving given account, either\
-          \ as source or destination"
+      - description: "Find transactions with postings involving given account, either\
+          \ as source or destination."
         explode: true
         in: query
         name: account
         required: false
         schema:
+          example: users:001
           type: string
         style: form
-      - description: find transactions with postings involving given account at source
+      - description: Find transactions with postings involving given account at source.
         explode: true
         in: query
         name: source
         required: false
         schema:
+          example: users:001
           type: string
         style: form
-      - description: find transactions with postings involving given account at destination
+      - description: Find transactions with postings involving given account at destination.
         explode: true
         in: query
         name: destination
+        required: false
+        schema:
+          example: users:001
+          type: string
+        style: form
+      - description: "Filter transactions that occurred after this timestamp.\nThe\
+          \ format is RFC3339 and is inclusive (for example, 12:00:01 includes the\
+          \ first second of the minute)."
+        explode: true
+        in: query
+        name: start_time
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "Filter transactions that occurred before this timestamp.\nThe\
+          \ format is RFC3339 and is exclusive (for example, 12:00:01 excludes the\
+          \ first second of the minute)."
+        explode: true
+        in: query
+        name: end_time
         required: false
         schema:
           type: string
@@ -364,63 +394,60 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransactionCursorResponse'
+                $ref: '#/components/schemas/listTransactions_200_response'
           description: OK
-      summary: Get all Transactions
+      summary: List transactions from a ledger.
       tags:
       - transactions
     head:
-      description: Count transactions mathing given criteria
       operationId: countTransactions
       parameters:
-      - description: ledger
+      - description: Name of the ledger.
         explode: false
         in: path
         name: ledger
         required: true
         schema:
+          example: ledger001
           type: string
         style: simple
-      - description: "pagination cursor, will return transactions after given txid\
-          \ (in descending order)"
-        explode: true
-        in: query
-        name: after
-        required: false
-        schema:
-          type: string
-        style: form
-      - description: find transactions by reference field
+      - description: Filter transactions by reference field.
         explode: true
         in: query
         name: reference
         required: false
         schema:
+          example: ref:001
           type: string
         style: form
-      - description: "find transactions with postings involving given account, either\
-          \ as source or destination"
+      - description: "Filter transactions with postings involving given account, either\
+          \ as source or destination."
         explode: true
         in: query
         name: account
         required: false
         schema:
+          example: users:001
           type: string
         style: form
-      - description: find transactions with postings involving given account at source
+      - description: Filter transactions with postings involving given account at
+          source.
         explode: true
         in: query
         name: source
         required: false
         schema:
+          example: users:001
           type: string
         style: form
-      - description: find transactions with postings involving given account at destination
+      - description: Filter transactions with postings involving given account at
+          destination.
         explode: true
         in: query
         name: destination
         required: false
         schema:
+          example: users:001
           type: string
         style: form
       responses:
@@ -432,29 +459,29 @@ paths:
               schema:
                 type: integer
               style: simple
-      summary: Count transactions
+      summary: Count the transactions from a ledger.
       tags:
       - transactions
     post:
-      description: |-
-        Create a new ledger transaction
-        Commit a new transaction to the ledger
       operationId: createTransaction
       parameters:
-      - description: ledger
+      - description: Name of the ledger.
         explode: false
         in: path
         name: ledger
         required: true
         schema:
+          example: ledger001
           type: string
         style: simple
-      - description: Preview mode
+      - description: Set the preview mode. Preview mode doesn't add the logs to the
+          database or publish a message to the message broker.
         explode: true
         in: query
         name: preview
         required: false
         schema:
+          example: true
           type: boolean
         style: form
       requestBody:
@@ -462,7 +489,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TransactionData'
-        description: transaction
         required: true
       responses:
         "200":
@@ -489,28 +515,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Confict
-      summary: Create Transaction
+      summary: Create a new transaction to a ledger.
       tags:
       - transactions
   /{ledger}/transactions/{txid}:
     get:
-      description: Get transaction by transaction id
       operationId: getTransaction
       parameters:
-      - description: ledger
+      - description: Name of the ledger.
         explode: false
         in: path
         name: ledger
         required: true
         schema:
+          example: ledger001
           type: string
         style: simple
-      - description: txid
+      - description: Transaction ID.
         explode: false
         in: path
         name: txid
         required: true
         schema:
+          example: 1234
           type: integer
         style: simple
       responses:
@@ -526,28 +553,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Not Found
-      summary: Get Transaction
+      summary: Get transaction from a ledger by its ID.
       tags:
       - transactions
   /{ledger}/transactions/{txid}/metadata:
     post:
-      description: Set a new metadata to a ledger transaction by transaction id
       operationId: addMetadataOnTransaction
       parameters:
-      - description: ledger
+      - description: Name of the ledger.
         explode: false
         in: path
         name: ledger
         required: true
         schema:
+          example: ledger001
           type: string
         style: simple
-      - description: txid
+      - description: Transaction ID.
         explode: false
         in: path
         name: txid
         required: true
         schema:
+          example: 1234
           type: integer
         style: simple
       requestBody:
@@ -560,28 +588,29 @@ paths:
         "204":
           content: {}
           description: Empty response
-      summary: Set Transaction Metadata
+      summary: Set the metadata of a transaction by its ID.
       tags:
       - transactions
   /{ledger}/transactions/{txid}/revert:
     post:
-      description: Revert a ledger transaction by transaction id
       operationId: revertTransaction
       parameters:
-      - description: ledger
+      - description: Name of the ledger.
         explode: false
         in: path
         name: ledger
         required: true
         schema:
+          example: ledger001
           type: string
         style: simple
-      - description: txid
+      - description: Transaction ID.
         explode: false
         in: path
         name: txid
         required: true
         schema:
+          example: 1234
           type: integer
         style: simple
       responses:
@@ -591,22 +620,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/TransactionResponse'
           description: OK
-      summary: Revert Transaction
+      summary: Revert a ledger transaction by its ID.
       tags:
       - transactions
   /{ledger}/transactions/batch:
     post:
-      description: |-
-        Create a new ledger transactions batch
-        Commit a batch of new transactions to the ledger
       operationId: CreateTransactions
       parameters:
-      - description: ledger
+      - description: Name of the ledger.
         explode: false
         in: path
         name: ledger
         required: true
         schema:
+          example: ledger001
           type: string
         style: simple
       requestBody:
@@ -614,14 +641,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Transactions'
-        description: transactions
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransactionListResponse'
+                $ref: '#/components/schemas/CreateTransactions_200_response'
           description: OK
         "400":
           content:
@@ -634,8 +660,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-          description: Confict
-      summary: Create Transactions Batch
+          description: Conflict
+      summary: Create a new batch of transactions to a ledger.
       tags:
       - transactions
 components:
@@ -655,6 +681,11 @@ components:
       type: object
     Metadata:
       additionalProperties: {}
+      example:
+        admin: true
+        a:
+          nested:
+            key: value
       nullable: true
       type: object
     ConfigInfo:
@@ -696,30 +727,28 @@ components:
       - driver
       - ledgers
       type: object
-    CursorResponse:
-      properties:
-        cursor:
-          $ref: '#/components/schemas/Cursor'
-      type: object
     ScriptResult:
       example:
         error_message: error_message
         details: details
         error_code: INTERNAL
         transaction:
-          reference: reference
+          reference: ref:001
           metadata:
-            key: ""
+            admin: true
+            a:
+              nested:
+                key: value
           postings:
-          - amount: 0
-            destination: destination
-            source: source
-            asset: asset
-          - amount: 0
-            destination: destination
-            source: source
-            asset: asset
-          txid: 6
+          - amount: 100
+            destination: users:002
+            source: users:001
+            asset: COIN
+          - amount: 100
+            destination: users:002
+            source: users:001
+            asset: COIN
+          txid: 0
           timestamp: 2000-01-23T04:56:07.000+00:00
       properties:
         details:
@@ -737,36 +766,69 @@ components:
           $ref: '#/components/schemas/Transaction'
       type: object
     Account:
+      properties:
+        address:
+          example: users:001
+          type: string
+        type:
+          example: virtual
+          type: string
+        metadata:
+          example:
+            admin: true
+            a:
+              nested:
+                key: value
+          properties: {}
+          type: object
+      required:
+      - address
+      type: object
+    AccountWithVolumesAndBalances:
       example:
+        metadata:
+          admin: true
+          a:
+            nested:
+              key: value
         balances:
           COIN: 100
-        metadata: "{}"
         address: users:001
         volumes:
-          key:
-            key: 0
+          COIN:
+            input: 100
+            output: 0
         type: virtual
       properties:
         address:
           example: users:001
           type: string
-        balances:
-          additionalProperties:
-            type: integer
-          example:
-            COIN: 100
-          type: object
-        metadata:
-          properties: {}
-          type: object
         type:
           example: virtual
           type: string
+        metadata:
+          example:
+            admin: true
+            a:
+              nested:
+                key: value
+          properties: {}
+          type: object
         volumes:
           additionalProperties:
             additionalProperties:
               type: integer
             type: object
+          example:
+            COIN:
+              input: 100
+              output: 0
+          type: object
+        balances:
+          additionalProperties:
+            type: integer
+          example:
+            COIN: 100
           type: object
       required:
       - address
@@ -774,9 +836,10 @@ components:
     Contract:
       example:
         expr: "{}"
-        account: account
+        account: users:001
       properties:
         account:
+          example: users:001
           type: string
         expr:
           type: object
@@ -788,9 +851,9 @@ components:
       example:
         contracts:
         - expr: "{}"
-          account: account
+          account: users:001
         - expr: "{}"
-          account: account
+          account: users:001
       nullable: true
       properties:
         contracts:
@@ -802,18 +865,22 @@ components:
       type: object
     Posting:
       example:
-        amount: 0
-        destination: destination
-        source: source
-        asset: asset
+        amount: 100
+        destination: users:002
+        source: users:001
+        asset: COIN
       properties:
         amount:
+          example: 100
           type: integer
         asset:
+          example: COIN
           type: string
         destination:
+          example: users:002
           type: string
         source:
+          example: users:001
           type: string
       required:
       - amount
@@ -823,12 +890,20 @@ components:
       type: object
     Script:
       example:
-        plain: plain
-        vars: "{}"
+        plain: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\t\
+          destination = $user\n)\n"
+        vars:
+          vars:
+            user: users:042
       properties:
         plain:
+          example: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\
+            \tdestination = $user\n)\n"
           type: string
         vars:
+          example:
+            vars:
+              user: users:042
           properties: {}
           type: object
       required:
@@ -836,31 +911,40 @@ components:
       type: object
     Transaction:
       example:
-        reference: reference
+        reference: ref:001
         metadata:
-          key: ""
+          admin: true
+          a:
+            nested:
+              key: value
         postings:
-        - amount: 0
-          destination: destination
-          source: source
-          asset: asset
-        - amount: 0
-          destination: destination
-          source: source
-          asset: asset
-        txid: 6
+        - amount: 100
+          destination: users:002
+          source: users:001
+          asset: COIN
+        - amount: 100
+          destination: users:002
+          source: users:001
+          asset: COIN
+        txid: 0
         timestamp: 2000-01-23T04:56:07.000+00:00
       properties:
-        metadata:
-          additionalProperties: {}
-          nullable: true
-          type: object
         postings:
           items:
             $ref: '#/components/schemas/Posting'
           type: array
         reference:
+          example: ref:001
           type: string
+        metadata:
+          additionalProperties: {}
+          example:
+            admin: true
+            a:
+              nested:
+                key: value
+          nullable: true
+          type: object
         timestamp:
           format: date-time
           type: string
@@ -873,55 +957,74 @@ components:
       type: object
     TransactionData:
       example:
-        reference: reference
-        metadata: "{}"
-        postings:
-        - amount: 0
-          destination: destination
-          source: source
-          asset: asset
-        - amount: 0
-          destination: destination
-          source: source
-          asset: asset
-      properties:
+        reference: ref:001
         metadata:
-          properties: {}
-          type: object
+          admin: true
+          a:
+            nested:
+              key: value
+        postings:
+        - amount: 100
+          destination: users:002
+          source: users:001
+          asset: COIN
+        - amount: 100
+          destination: users:002
+          source: users:001
+          asset: COIN
+      properties:
         postings:
           items:
             $ref: '#/components/schemas/Posting'
           type: array
         reference:
+          example: ref:001
           type: string
+        metadata:
+          additionalProperties: {}
+          example:
+            admin: true
+            a:
+              nested:
+                key: value
+          nullable: true
+          type: object
       required:
       - postings
       type: object
     Transactions:
       example:
         transactions:
-        - reference: reference
-          metadata: "{}"
+        - reference: ref:001
+          metadata:
+            admin: true
+            a:
+              nested:
+                key: value
           postings:
-          - amount: 0
-            destination: destination
-            source: source
-            asset: asset
-          - amount: 0
-            destination: destination
-            source: source
-            asset: asset
-        - reference: reference
-          metadata: "{}"
+          - amount: 100
+            destination: users:002
+            source: users:001
+            asset: COIN
+          - amount: 100
+            destination: users:002
+            source: users:001
+            asset: COIN
+        - reference: ref:001
+          metadata:
+            admin: true
+            a:
+              nested:
+                key: value
           postings:
-          - amount: 0
-            destination: destination
-            source: source
-            asset: asset
-          - amount: 0
-            destination: destination
-            source: source
-            asset: asset
+          - amount: 100
+            destination: users:002
+            source: users:001
+            asset: COIN
+          - amount: 100
+            destination: users:002
+            source: users:001
+            asset: COIN
       properties:
         transactions:
           items:
@@ -945,83 +1048,52 @@ components:
       type: object
     Cursor:
       properties:
-        has_more:
-          type: boolean
-        next:
-          type: string
         page_size:
+          example: 1
           type: integer
-        previous:
-          type: string
-        remaining_results:
-          type: integer
-        total:
-          type: integer
+        has_more:
+          example: false
+          type: boolean
       required:
       - has_more
       - page_size
-      - remaining_results
-      - total
       type: object
-    AccountCursor:
-      allOf:
-      - $ref: '#/components/schemas/Cursor'
-      - $ref: '#/components/schemas/AccountCursor_allOf'
-    AccountCursorResponse:
-      example:
-        cursor: null
-      properties:
-        cursor:
-          $ref: '#/components/schemas/AccountCursor'
-      required:
-      - cursor
-    TransactionCursor:
-      allOf:
-      - $ref: '#/components/schemas/Cursor'
-      - $ref: '#/components/schemas/TransactionCursor_allOf'
-    TransactionCursorResponse:
-      example:
-        cursor: null
-      properties:
-        cursor:
-          $ref: '#/components/schemas/TransactionCursor'
-      required:
-      - cursor
-      type: object
-    TransactionListResponse:
-      allOf:
-      - $ref: '#/components/schemas/CursorResponse'
-      - $ref: '#/components/schemas/TransactionCursor_allOf'
     CreateTransactionResponse:
       example:
         data:
-        - reference: reference
+        - reference: ref:001
           metadata:
-            key: ""
+            admin: true
+            a:
+              nested:
+                key: value
           postings:
-          - amount: 0
-            destination: destination
-            source: source
-            asset: asset
-          - amount: 0
-            destination: destination
-            source: source
-            asset: asset
-          txid: 6
+          - amount: 100
+            destination: users:002
+            source: users:001
+            asset: COIN
+          - amount: 100
+            destination: users:002
+            source: users:001
+            asset: COIN
+          txid: 0
           timestamp: 2000-01-23T04:56:07.000+00:00
-        - reference: reference
+        - reference: ref:001
           metadata:
-            key: ""
+            admin: true
+            a:
+              nested:
+                key: value
           postings:
-          - amount: 0
-            destination: destination
-            source: source
-            asset: asset
-          - amount: 0
-            destination: destination
-            source: source
-            asset: asset
-          txid: 6
+          - amount: 100
+            destination: users:002
+            source: users:001
+            asset: COIN
+          - amount: 100
+            destination: users:002
+            source: users:001
+            asset: COIN
+          txid: 0
           timestamp: 2000-01-23T04:56:07.000+00:00
       properties:
         data:
@@ -1031,39 +1103,25 @@ components:
       required:
       - data
       type: object
-    AccountResponse:
-      example:
-        data:
-          balances:
-            COIN: 100
-          metadata: "{}"
-          address: users:001
-          volumes:
-            key:
-              key: 0
-          type: virtual
-      properties:
-        data:
-          $ref: '#/components/schemas/Account'
-      required:
-      - data
-      type: object
     TransactionResponse:
       example:
         data:
-          reference: reference
+          reference: ref:001
           metadata:
-            key: ""
+            admin: true
+            a:
+              nested:
+                key: value
           postings:
-          - amount: 0
-            destination: destination
-            source: source
-            asset: asset
-          - amount: 0
-            destination: destination
-            source: source
-            asset: asset
-          txid: 6
+          - amount: 100
+            destination: users:002
+            source: users:001
+            asset: COIN
+          - amount: 100
+            destination: users:002
+            source: users:001
+            asset: COIN
+          txid: 0
           timestamp: 2000-01-23T04:56:07.000+00:00
       properties:
         data:
@@ -1087,9 +1145,9 @@ components:
         data:
           contracts:
           - expr: "{}"
-            account: account
+            account: users:001
           - expr: "{}"
-            account: account
+            account: users:001
       properties:
         data:
           $ref: '#/components/schemas/Mapping'
@@ -1124,11 +1182,12 @@ components:
         error_code:
           $ref: '#/components/schemas/ErrorCode'
         error_message:
+          example: internal error
           type: string
       required:
       - error_code
       type: object
-    AccountCursor_allOf:
+    listAccounts_200_response_cursor_allOf:
       properties:
         data:
           items:
@@ -1137,7 +1196,41 @@ components:
       required:
       - data
       type: object
-    TransactionCursor_allOf:
+    listAccounts_200_response_cursor:
+      allOf:
+      - $ref: '#/components/schemas/Cursor'
+      - $ref: '#/components/schemas/listAccounts_200_response_cursor_allOf'
+    listAccounts_200_response:
+      example:
+        cursor: null
+      properties:
+        cursor:
+          $ref: '#/components/schemas/listAccounts_200_response_cursor'
+      required:
+      - cursor
+    getAccount_200_response:
+      example:
+        data:
+          metadata:
+            admin: true
+            a:
+              nested:
+                key: value
+          balances:
+            COIN: 100
+          address: users:001
+          volumes:
+            COIN:
+              input: 100
+              output: 0
+          type: virtual
+      properties:
+        data:
+          $ref: '#/components/schemas/AccountWithVolumesAndBalances'
+      required:
+      - data
+      type: object
+    listTransactions_200_response_cursor_allOf:
       properties:
         data:
           items:
@@ -1146,6 +1239,28 @@ components:
       required:
       - data
       type: object
+    listTransactions_200_response_cursor:
+      allOf:
+      - $ref: '#/components/schemas/Cursor'
+      - $ref: '#/components/schemas/listTransactions_200_response_cursor_allOf'
+    listTransactions_200_response:
+      example:
+        cursor: null
+      properties:
+        cursor:
+          $ref: '#/components/schemas/listTransactions_200_response_cursor'
+      required:
+      - cursor
+      type: object
+    CreateTransactions_200_response_allOf:
+      properties:
+        cursor:
+          $ref: '#/components/schemas/Cursor'
+      type: object
+    CreateTransactions_200_response:
+      allOf:
+      - $ref: '#/components/schemas/CreateTransactions_200_response_allOf'
+      - $ref: '#/components/schemas/listTransactions_200_response_cursor_allOf'
   securitySchemes:
     basicAuth:
       scheme: basic

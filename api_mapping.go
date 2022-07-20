@@ -27,12 +27,10 @@ var (
 type MappingApi interface {
 
 	/*
-	GetMapping Get mapping
-
-	Get ledger mapping
+	GetMapping Get the mapping of a ledger.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger ledger
+	 @param ledger Name of the ledger.
 	 @return ApiGetMappingRequest
 	*/
 	GetMapping(ctx _context.Context, ledger string) ApiGetMappingRequest
@@ -42,12 +40,10 @@ type MappingApi interface {
 	GetMappingExecute(r ApiGetMappingRequest) (MappingResponse, *_nethttp.Response, error)
 
 	/*
-	UpdateMapping Put mapping
-
-	Update ledger mapping
+	UpdateMapping Update the mapping of a ledger.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger ledger
+	 @param ledger Name of the ledger.
 	 @return ApiUpdateMappingRequest
 	*/
 	UpdateMapping(ctx _context.Context, ledger string) ApiUpdateMappingRequest
@@ -72,12 +68,10 @@ func (r ApiGetMappingRequest) Execute() (MappingResponse, *_nethttp.Response, er
 }
 
 /*
-GetMapping Get mapping
-
-Get ledger mapping
+GetMapping Get the mapping of a ledger.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param ledger ledger
+ @param ledger Name of the ledger.
  @return ApiGetMappingRequest
 */
 func (a *MappingApiService) GetMapping(ctx _context.Context, ledger string) ApiGetMappingRequest {
@@ -171,7 +165,6 @@ type ApiUpdateMappingRequest struct {
 	mapping *Mapping
 }
 
-// mapping
 func (r ApiUpdateMappingRequest) Mapping(mapping Mapping) ApiUpdateMappingRequest {
 	r.mapping = &mapping
 	return r
@@ -182,12 +175,10 @@ func (r ApiUpdateMappingRequest) Execute() (MappingResponse, *_nethttp.Response,
 }
 
 /*
-UpdateMapping Put mapping
-
-Update ledger mapping
+UpdateMapping Update the mapping of a ledger.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param ledger ledger
+ @param ledger Name of the ledger.
  @return ApiUpdateMappingRequest
 */
 func (a *MappingApiService) UpdateMapping(ctx _context.Context, ledger string) ApiUpdateMappingRequest {

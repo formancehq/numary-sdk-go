@@ -27,12 +27,10 @@ var (
 type ScriptApi interface {
 
 	/*
-	RunScript Execute Numscript
-
-	Execute a Numscript and create the transaction if any
+	RunScript Execute a Numscript.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger ledger
+	 @param ledger Name of the ledger.
 	 @return ApiRunScriptRequest
 	*/
 	RunScript(ctx _context.Context, ledger string) ApiRunScriptRequest
@@ -53,12 +51,11 @@ type ApiRunScriptRequest struct {
 	preview *bool
 }
 
-// script
 func (r ApiRunScriptRequest) Script(script Script) ApiRunScriptRequest {
 	r.script = &script
 	return r
 }
-// Preview mode
+// Set the preview mode. Preview mode doesn&#39;t add the logs to the database or publish a message to the message broker.
 func (r ApiRunScriptRequest) Preview(preview bool) ApiRunScriptRequest {
 	r.preview = &preview
 	return r
@@ -69,12 +66,10 @@ func (r ApiRunScriptRequest) Execute() (ScriptResult, *_nethttp.Response, error)
 }
 
 /*
-RunScript Execute Numscript
-
-Execute a Numscript and create the transaction if any
+RunScript Execute a Numscript.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param ledger ledger
+ @param ledger Name of the ledger.
  @return ApiRunScriptRequest
 */
 func (a *ScriptApiService) RunScript(ctx _context.Context, ledger string) ApiRunScriptRequest {

@@ -26,9 +26,7 @@ var (
 type ServerApi interface {
 
 	/*
-	GetInfo Server Info
-
-	Show server informations
+	GetInfo Show server information.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	 @return ApiGetInfoRequest
@@ -54,9 +52,7 @@ func (r ApiGetInfoRequest) Execute() (ConfigInfoResponse, *_nethttp.Response, er
 }
 
 /*
-GetInfo Server Info
-
-Show server informations
+GetInfo Show server information.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetInfoRequest

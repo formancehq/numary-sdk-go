@@ -4,7 +4,7 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**GetInfo**](ServerApi.md#GetInfo) | **Get** /_info | Server Info
+[**GetInfo**](ServerApi.md#GetInfo) | **Get** /_info | Show server information.
 
 
 
@@ -12,9 +12,7 @@ Method | HTTP request | Description
 
 > ConfigInfoResponse GetInfo(ctx).Execute()
 
-Server Info
-
-
+Show server information.
 
 ### Example
 

@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**AddMetadataOnTransaction**](TransactionsApi.md#AddMetadataOnTransaction) | **Post** /{ledger}/transactions/{txid}/metadata | Set Transaction Metadata
-[**CountTransactions**](TransactionsApi.md#CountTransactions) | **Head** /{ledger}/transactions | Count transactions
-[**CreateTransaction**](TransactionsApi.md#CreateTransaction) | **Post** /{ledger}/transactions | Create Transaction
-[**CreateTransactions**](TransactionsApi.md#CreateTransactions) | **Post** /{ledger}/transactions/batch | Create Transactions Batch
-[**GetTransaction**](TransactionsApi.md#GetTransaction) | **Get** /{ledger}/transactions/{txid} | Get Transaction
-[**ListTransactions**](TransactionsApi.md#ListTransactions) | **Get** /{ledger}/transactions | Get all Transactions
-[**RevertTransaction**](TransactionsApi.md#RevertTransaction) | **Post** /{ledger}/transactions/{txid}/revert | Revert Transaction
+[**AddMetadataOnTransaction**](TransactionsApi.md#AddMetadataOnTransaction) | **Post** /{ledger}/transactions/{txid}/metadata | Set the metadata of a transaction by its ID.
+[**CountTransactions**](TransactionsApi.md#CountTransactions) | **Head** /{ledger}/transactions | Count the transactions from a ledger.
+[**CreateTransaction**](TransactionsApi.md#CreateTransaction) | **Post** /{ledger}/transactions | Create a new transaction to a ledger.
+[**CreateTransactions**](TransactionsApi.md#CreateTransactions) | **Post** /{ledger}/transactions/batch | Create a new batch of transactions to a ledger.
+[**GetTransaction**](TransactionsApi.md#GetTransaction) | **Get** /{ledger}/transactions/{txid} | Get transaction from a ledger by its ID.
+[**ListTransactions**](TransactionsApi.md#ListTransactions) | **Get** /{ledger}/transactions | List transactions from a ledger.
+[**RevertTransaction**](TransactionsApi.md#RevertTransaction) | **Post** /{ledger}/transactions/{txid}/revert | Revert a ledger transaction by its ID.
 
 
 
@@ -18,9 +18,7 @@ Method | HTTP request | Description
 
 > AddMetadataOnTransaction(ctx, ledger, txid).RequestBody(requestBody).Execute()
 
-Set Transaction Metadata
-
-
+Set the metadata of a transaction by its ID.
 
 ### Example
 
@@ -35,8 +33,8 @@ import (
 )
 
 func main() {
-    ledger := "ledger_example" // string | ledger
-    txid := int32(56) // int32 | txid
+    ledger := "ledger001" // string | Name of the ledger.
+    txid := int32(1234) // int32 | Transaction ID.
     requestBody := map[string]interface{}{"key": interface{}(123)} // map[string]interface{} | metadata (optional)
 
     configuration := client.NewConfiguration()
@@ -55,8 +53,8 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**ledger** | **string** | ledger | 
-**txid** | **int32** | txid | 
+**ledger** | **string** | Name of the ledger. | 
+**txid** | **int32** | Transaction ID. | 
 
 ### Other Parameters
 
@@ -89,11 +87,9 @@ Name | Type | Description  | Notes
 
 ## CountTransactions
 
-> CountTransactions(ctx, ledger).After(after).Reference(reference).Account(account).Source(source).Destination(destination).Execute()
+> CountTransactions(ctx, ledger).Reference(reference).Account(account).Source(source).Destination(destination).Execute()
 
-Count transactions
-
-
+Count the transactions from a ledger.
 
 ### Example
 
@@ -108,16 +104,15 @@ import (
 )
 
 func main() {
-    ledger := "ledger_example" // string | ledger
-    after := "after_example" // string | pagination cursor, will return transactions after given txid (in descending order) (optional)
-    reference := "reference_example" // string | find transactions by reference field (optional)
-    account := "account_example" // string | find transactions with postings involving given account, either as source or destination (optional)
-    source := "source_example" // string | find transactions with postings involving given account at source (optional)
-    destination := "destination_example" // string | find transactions with postings involving given account at destination (optional)
+    ledger := "ledger001" // string | Name of the ledger.
+    reference := "ref:001" // string | Filter transactions by reference field. (optional)
+    account := "users:001" // string | Filter transactions with postings involving given account, either as source or destination. (optional)
+    source := "users:001" // string | Filter transactions with postings involving given account at source. (optional)
+    destination := "users:001" // string | Filter transactions with postings involving given account at destination. (optional)
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.TransactionsApi.CountTransactions(context.Background(), ledger).After(after).Reference(reference).Account(account).Source(source).Destination(destination).Execute()
+    resp, r, err := api_client.TransactionsApi.CountTransactions(context.Background(), ledger).Reference(reference).Account(account).Source(source).Destination(destination).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.CountTransactions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -131,7 +126,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**ledger** | **string** | ledger | 
+**ledger** | **string** | Name of the ledger. | 
 
 ### Other Parameters
 
@@ -141,11 +136,10 @@ Other parameters are passed through a pointer to a apiCountTransactionsRequest s
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **after** | **string** | pagination cursor, will return transactions after given txid (in descending order) | 
- **reference** | **string** | find transactions by reference field | 
- **account** | **string** | find transactions with postings involving given account, either as source or destination | 
- **source** | **string** | find transactions with postings involving given account at source | 
- **destination** | **string** | find transactions with postings involving given account at destination | 
+ **reference** | **string** | Filter transactions by reference field. | 
+ **account** | **string** | Filter transactions with postings involving given account, either as source or destination. | 
+ **source** | **string** | Filter transactions with postings involving given account at source. | 
+ **destination** | **string** | Filter transactions with postings involving given account at destination. | 
 
 ### Return type
 
@@ -169,9 +163,7 @@ Name | Type | Description  | Notes
 
 > CreateTransactionResponse CreateTransaction(ctx, ledger).TransactionData(transactionData).Preview(preview).Execute()
 
-Create Transaction
-
-
+Create a new transaction to a ledger.
 
 ### Example
 
@@ -186,9 +178,9 @@ import (
 )
 
 func main() {
-    ledger := "ledger_example" // string | ledger
-    transactionData := *client.NewTransactionData([]client.Posting{*client.NewPosting(int32(123), "Asset_example", "Destination_example", "Source_example")}) // TransactionData | transaction
-    preview := true // bool | Preview mode (optional)
+    ledger := "ledger001" // string | Name of the ledger.
+    transactionData := *client.NewTransactionData([]client.Posting{*client.NewPosting(int32(100), "COIN", "users:002", "users:001")}) // TransactionData | 
+    preview := true // bool | Set the preview mode. Preview mode doesn't add the logs to the database or publish a message to the message broker. (optional)
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
@@ -208,7 +200,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**ledger** | **string** | ledger | 
+**ledger** | **string** | Name of the ledger. | 
 
 ### Other Parameters
 
@@ -218,8 +210,8 @@ Other parameters are passed through a pointer to a apiCreateTransactionRequest s
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **transactionData** | [**TransactionData**](TransactionData.md) | transaction | 
- **preview** | **bool** | Preview mode | 
+ **transactionData** | [**TransactionData**](TransactionData.md) |  | 
+ **preview** | **bool** | Set the preview mode. Preview mode doesn&#39;t add the logs to the database or publish a message to the message broker. | 
 
 ### Return type
 
@@ -241,11 +233,9 @@ Name | Type | Description  | Notes
 
 ## CreateTransactions
 
-> TransactionListResponse CreateTransactions(ctx, ledger).Transactions(transactions).Execute()
+> CreateTransactions200Response CreateTransactions(ctx, ledger).Transactions(transactions).Execute()
 
-Create Transactions Batch
-
-
+Create a new batch of transactions to a ledger.
 
 ### Example
 
@@ -260,8 +250,8 @@ import (
 )
 
 func main() {
-    ledger := "ledger_example" // string | ledger
-    transactions := *client.NewTransactions([]client.TransactionData{*client.NewTransactionData([]client.Posting{*client.NewPosting(int32(123), "Asset_example", "Destination_example", "Source_example")})}) // Transactions | transactions
+    ledger := "ledger001" // string | Name of the ledger.
+    transactions := *client.NewTransactions([]client.TransactionData{*client.NewTransactionData([]client.Posting{*client.NewPosting(int32(100), "COIN", "users:002", "users:001")})}) // Transactions | 
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
@@ -270,7 +260,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.CreateTransactions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `CreateTransactions`: TransactionListResponse
+    // response from `CreateTransactions`: CreateTransactions200Response
     fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.CreateTransactions`: %v\n", resp)
 }
 ```
@@ -281,7 +271,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**ledger** | **string** | ledger | 
+**ledger** | **string** | Name of the ledger. | 
 
 ### Other Parameters
 
@@ -291,11 +281,11 @@ Other parameters are passed through a pointer to a apiCreateTransactionsRequest 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **transactions** | [**Transactions**](Transactions.md) | transactions | 
+ **transactions** | [**Transactions**](Transactions.md) |  | 
 
 ### Return type
 
-[**TransactionListResponse**](TransactionListResponse.md)
+[**CreateTransactions200Response**](CreateTransactions200Response.md)
 
 ### Authorization
 
@@ -315,9 +305,7 @@ Name | Type | Description  | Notes
 
 > TransactionResponse GetTransaction(ctx, ledger, txid).Execute()
 
-Get Transaction
-
-
+Get transaction from a ledger by its ID.
 
 ### Example
 
@@ -332,8 +320,8 @@ import (
 )
 
 func main() {
-    ledger := "ledger_example" // string | ledger
-    txid := int32(56) // int32 | txid
+    ledger := "ledger001" // string | Name of the ledger.
+    txid := int32(1234) // int32 | Transaction ID.
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
@@ -353,8 +341,8 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**ledger** | **string** | ledger | 
-**txid** | **int32** | txid | 
+**ledger** | **string** | Name of the ledger. | 
+**txid** | **int32** | Transaction ID. | 
 
 ### Other Parameters
 
@@ -386,9 +374,9 @@ Name | Type | Description  | Notes
 
 ## ListTransactions
 
-> TransactionCursorResponse ListTransactions(ctx, ledger).After(after).Reference(reference).Account(account).Source(source).Destination(destination).Execute()
+> ListTransactions200Response ListTransactions(ctx, ledger).After(after).Reference(reference).Account(account).Source(source).Destination(destination).StartTime(startTime).EndTime(endTime).Execute()
 
-Get all Transactions
+List transactions from a ledger.
 
 
 
@@ -405,21 +393,23 @@ import (
 )
 
 func main() {
-    ledger := "ledger_example" // string | ledger
-    after := "after_example" // string | pagination cursor, will return transactions after given txid (in descending order) (optional)
-    reference := "reference_example" // string | find transactions by reference field (optional)
-    account := "account_example" // string | find transactions with postings involving given account, either as source or destination (optional)
-    source := "source_example" // string | find transactions with postings involving given account at source (optional)
-    destination := "destination_example" // string | find transactions with postings involving given account at destination (optional)
+    ledger := "ledger001" // string | Name of the ledger.
+    after := "1234" // string | Pagination cursor, will return transactions after given txid (in descending order). (optional)
+    reference := "ref:001" // string | Find transactions by reference field. (optional)
+    account := "users:001" // string | Find transactions with postings involving given account, either as source or destination. (optional)
+    source := "users:001" // string | Find transactions with postings involving given account at source. (optional)
+    destination := "users:001" // string | Find transactions with postings involving given account at destination. (optional)
+    startTime := "startTime_example" // string | Filter transactions that occurred after this timestamp. The format is RFC3339 and is inclusive (for example, 12:00:01 includes the first second of the minute). (optional)
+    endTime := "endTime_example" // string | Filter transactions that occurred before this timestamp. The format is RFC3339 and is exclusive (for example, 12:00:01 excludes the first second of the minute). (optional)
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.TransactionsApi.ListTransactions(context.Background(), ledger).After(after).Reference(reference).Account(account).Source(source).Destination(destination).Execute()
+    resp, r, err := api_client.TransactionsApi.ListTransactions(context.Background(), ledger).After(after).Reference(reference).Account(account).Source(source).Destination(destination).StartTime(startTime).EndTime(endTime).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.ListTransactions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ListTransactions`: TransactionCursorResponse
+    // response from `ListTransactions`: ListTransactions200Response
     fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.ListTransactions`: %v\n", resp)
 }
 ```
@@ -430,7 +420,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**ledger** | **string** | ledger | 
+**ledger** | **string** | Name of the ledger. | 
 
 ### Other Parameters
 
@@ -440,15 +430,17 @@ Other parameters are passed through a pointer to a apiListTransactionsRequest st
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **after** | **string** | pagination cursor, will return transactions after given txid (in descending order) | 
- **reference** | **string** | find transactions by reference field | 
- **account** | **string** | find transactions with postings involving given account, either as source or destination | 
- **source** | **string** | find transactions with postings involving given account at source | 
- **destination** | **string** | find transactions with postings involving given account at destination | 
+ **after** | **string** | Pagination cursor, will return transactions after given txid (in descending order). | 
+ **reference** | **string** | Find transactions by reference field. | 
+ **account** | **string** | Find transactions with postings involving given account, either as source or destination. | 
+ **source** | **string** | Find transactions with postings involving given account at source. | 
+ **destination** | **string** | Find transactions with postings involving given account at destination. | 
+ **startTime** | **string** | Filter transactions that occurred after this timestamp. The format is RFC3339 and is inclusive (for example, 12:00:01 includes the first second of the minute). | 
+ **endTime** | **string** | Filter transactions that occurred before this timestamp. The format is RFC3339 and is exclusive (for example, 12:00:01 excludes the first second of the minute). | 
 
 ### Return type
 
-[**TransactionCursorResponse**](TransactionCursorResponse.md)
+[**ListTransactions200Response**](ListTransactions200Response.md)
 
 ### Authorization
 
@@ -468,9 +460,7 @@ Name | Type | Description  | Notes
 
 > TransactionResponse RevertTransaction(ctx, ledger, txid).Execute()
 
-Revert Transaction
-
-
+Revert a ledger transaction by its ID.
 
 ### Example
 
@@ -485,8 +475,8 @@ import (
 )
 
 func main() {
-    ledger := "ledger_example" // string | ledger
-    txid := int32(56) // int32 | txid
+    ledger := "ledger001" // string | Name of the ledger.
+    txid := int32(1234) // int32 | Transaction ID.
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
@@ -506,8 +496,8 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**ledger** | **string** | ledger | 
-**txid** | **int32** | txid | 
+**ledger** | **string** | Name of the ledger. | 
+**txid** | **int32** | Transaction ID. | 
 
 ### Other Parameters
 

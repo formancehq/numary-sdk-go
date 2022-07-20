@@ -27,23 +27,23 @@ var (
 type AccountsApi interface {
 
 	/*
-	AddMetadataToAccount Add metadata to account
+	AddMetadataToAccount Add metadata to an account.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger ledger
-	 @param accountId accountId
+	 @param ledger Name of the ledger.
+	 @param address Exact address of the account.
 	 @return ApiAddMetadataToAccountRequest
 	*/
-	AddMetadataToAccount(ctx _context.Context, ledger string, accountId string) ApiAddMetadataToAccountRequest
+	AddMetadataToAccount(ctx _context.Context, ledger string, address string) ApiAddMetadataToAccountRequest
 
 	// AddMetadataToAccountExecute executes the request
 	AddMetadataToAccountExecute(r ApiAddMetadataToAccountRequest) (*_nethttp.Response, error)
 
 	/*
-	CountAccounts Count accounts
+	CountAccounts Count the accounts from a ledger.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger ledger
+	 @param ledger Name of the ledger.
 	 @return ApiCountAccountsRequest
 	*/
 	CountAccounts(ctx _context.Context, ledger string) ApiCountAccountsRequest
@@ -52,31 +52,33 @@ type AccountsApi interface {
 	CountAccountsExecute(r ApiCountAccountsRequest) (*_nethttp.Response, error)
 
 	/*
-	GetAccount Get account by address
+	GetAccount Get account by its address.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger ledger
-	 @param accountId accountId
+	 @param ledger Name of the ledger.
+	 @param address Exact address of the account.
 	 @return ApiGetAccountRequest
 	*/
-	GetAccount(ctx _context.Context, ledger string, accountId string) ApiGetAccountRequest
+	GetAccount(ctx _context.Context, ledger string, address string) ApiGetAccountRequest
 
 	// GetAccountExecute executes the request
-	//  @return AccountResponse
-	GetAccountExecute(r ApiGetAccountRequest) (AccountResponse, *_nethttp.Response, error)
+	//  @return GetAccount200Response
+	GetAccountExecute(r ApiGetAccountRequest) (GetAccount200Response, *_nethttp.Response, error)
 
 	/*
-	ListAccounts List all accounts
+	ListAccounts List accounts from a ledger.
+
+	List accounts from a ledger, sorted by address in descending order.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger ledger
+	 @param ledger Name of the ledger.
 	 @return ApiListAccountsRequest
 	*/
 	ListAccounts(ctx _context.Context, ledger string) ApiListAccountsRequest
 
 	// ListAccountsExecute executes the request
-	//  @return AccountCursorResponse
-	ListAccountsExecute(r ApiListAccountsRequest) (AccountCursorResponse, *_nethttp.Response, error)
+	//  @return ListAccounts200Response
+	ListAccountsExecute(r ApiListAccountsRequest) (ListAccounts200Response, *_nethttp.Response, error)
 }
 
 // AccountsApiService AccountsApi service
@@ -86,7 +88,7 @@ type ApiAddMetadataToAccountRequest struct {
 	ctx _context.Context
 	ApiService AccountsApi
 	ledger string
-	accountId string
+	address string
 	requestBody *map[string]interface{}
 }
 
@@ -101,19 +103,19 @@ func (r ApiAddMetadataToAccountRequest) Execute() (*_nethttp.Response, error) {
 }
 
 /*
-AddMetadataToAccount Add metadata to account
+AddMetadataToAccount Add metadata to an account.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param ledger ledger
- @param accountId accountId
+ @param ledger Name of the ledger.
+ @param address Exact address of the account.
  @return ApiAddMetadataToAccountRequest
 */
-func (a *AccountsApiService) AddMetadataToAccount(ctx _context.Context, ledger string, accountId string) ApiAddMetadataToAccountRequest {
+func (a *AccountsApiService) AddMetadataToAccount(ctx _context.Context, ledger string, address string) ApiAddMetadataToAccountRequest {
 	return ApiAddMetadataToAccountRequest{
 		ApiService: a,
 		ctx: ctx,
 		ledger: ledger,
-		accountId: accountId,
+		address: address,
 	}
 }
 
@@ -130,9 +132,9 @@ func (a *AccountsApiService) AddMetadataToAccountExecute(r ApiAddMetadataToAccou
 		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/{ledger}/accounts/{accountId}/metadata"
+	localVarPath := localBasePath + "/{ledger}/accounts/{address}/metadata"
 	localVarPath = strings.Replace(localVarPath, "{"+"ledger"+"}", _neturl.PathEscape(parameterToString(r.ledger, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"accountId"+"}", _neturl.PathEscape(parameterToString(r.accountId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"address"+"}", _neturl.PathEscape(parameterToString(r.address, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -192,23 +194,17 @@ type ApiCountAccountsRequest struct {
 	ctx _context.Context
 	ApiService AccountsApi
 	ledger string
-	after *string
 	address *string
-	metadata *map[string]string
+	metadata *map[string]interface{}
 }
 
-// pagination cursor, will return accounts after given address (in descending order)
-func (r ApiCountAccountsRequest) After(after string) ApiCountAccountsRequest {
-	r.after = &after
-	return r
-}
-// account address
+// Filter accounts by address pattern (regular expression placed between ^ and $).
 func (r ApiCountAccountsRequest) Address(address string) ApiCountAccountsRequest {
 	r.address = &address
 	return r
 }
-// metadata
-func (r ApiCountAccountsRequest) Metadata(metadata map[string]string) ApiCountAccountsRequest {
+// Filter accounts by metadata key value pairs. Nested objects can be used as seen in the example below.
+func (r ApiCountAccountsRequest) Metadata(metadata map[string]interface{}) ApiCountAccountsRequest {
 	r.metadata = &metadata
 	return r
 }
@@ -218,10 +214,10 @@ func (r ApiCountAccountsRequest) Execute() (*_nethttp.Response, error) {
 }
 
 /*
-CountAccounts Count accounts
+CountAccounts Count the accounts from a ledger.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param ledger ledger
+ @param ledger Name of the ledger.
  @return ApiCountAccountsRequest
 */
 func (a *AccountsApiService) CountAccounts(ctx _context.Context, ledger string) ApiCountAccountsRequest {
@@ -252,9 +248,6 @@ func (a *AccountsApiService) CountAccountsExecute(r ApiCountAccountsRequest) (*_
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 
-	if r.after != nil {
-		localVarQueryParams.Add("after", parameterToString(*r.after, ""))
-	}
 	if r.address != nil {
 		localVarQueryParams.Add("address", parameterToString(*r.address, ""))
 	}
@@ -310,39 +303,39 @@ type ApiGetAccountRequest struct {
 	ctx _context.Context
 	ApiService AccountsApi
 	ledger string
-	accountId string
+	address string
 }
 
 
-func (r ApiGetAccountRequest) Execute() (AccountResponse, *_nethttp.Response, error) {
+func (r ApiGetAccountRequest) Execute() (GetAccount200Response, *_nethttp.Response, error) {
 	return r.ApiService.GetAccountExecute(r)
 }
 
 /*
-GetAccount Get account by address
+GetAccount Get account by its address.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param ledger ledger
- @param accountId accountId
+ @param ledger Name of the ledger.
+ @param address Exact address of the account.
  @return ApiGetAccountRequest
 */
-func (a *AccountsApiService) GetAccount(ctx _context.Context, ledger string, accountId string) ApiGetAccountRequest {
+func (a *AccountsApiService) GetAccount(ctx _context.Context, ledger string, address string) ApiGetAccountRequest {
 	return ApiGetAccountRequest{
 		ApiService: a,
 		ctx: ctx,
 		ledger: ledger,
-		accountId: accountId,
+		address: address,
 	}
 }
 
 // Execute executes the request
-//  @return AccountResponse
-func (a *AccountsApiService) GetAccountExecute(r ApiGetAccountRequest) (AccountResponse, *_nethttp.Response, error) {
+//  @return GetAccount200Response
+func (a *AccountsApiService) GetAccountExecute(r ApiGetAccountRequest) (GetAccount200Response, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  AccountResponse
+		localVarReturnValue  GetAccount200Response
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountsApiService.GetAccount")
@@ -350,9 +343,9 @@ func (a *AccountsApiService) GetAccountExecute(r ApiGetAccountRequest) (AccountR
 		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/{ledger}/accounts/{accountId}"
+	localVarPath := localBasePath + "/{ledger}/accounts/{address}"
 	localVarPath = strings.Replace(localVarPath, "{"+"ledger"+"}", _neturl.PathEscape(parameterToString(r.ledger, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"accountId"+"}", _neturl.PathEscape(parameterToString(r.accountId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"address"+"}", _neturl.PathEscape(parameterToString(r.address, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -418,34 +411,36 @@ type ApiListAccountsRequest struct {
 	ledger string
 	after *string
 	address *string
-	metadata *map[string]string
+	metadata *map[string]interface{}
 }
 
-// pagination cursor, will return accounts after given address (in descending order)
+// Pagination cursor, will return accounts after given address, in descending order.
 func (r ApiListAccountsRequest) After(after string) ApiListAccountsRequest {
 	r.after = &after
 	return r
 }
-// account address
+// Filter accounts by address pattern (regular expression placed between ^ and $).
 func (r ApiListAccountsRequest) Address(address string) ApiListAccountsRequest {
 	r.address = &address
 	return r
 }
-// account address
-func (r ApiListAccountsRequest) Metadata(metadata map[string]string) ApiListAccountsRequest {
+// Filter accounts by metadata key value pairs. Nested objects can be used as seen in the example below.
+func (r ApiListAccountsRequest) Metadata(metadata map[string]interface{}) ApiListAccountsRequest {
 	r.metadata = &metadata
 	return r
 }
 
-func (r ApiListAccountsRequest) Execute() (AccountCursorResponse, *_nethttp.Response, error) {
+func (r ApiListAccountsRequest) Execute() (ListAccounts200Response, *_nethttp.Response, error) {
 	return r.ApiService.ListAccountsExecute(r)
 }
 
 /*
-ListAccounts List all accounts
+ListAccounts List accounts from a ledger.
+
+List accounts from a ledger, sorted by address in descending order.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param ledger ledger
+ @param ledger Name of the ledger.
  @return ApiListAccountsRequest
 */
 func (a *AccountsApiService) ListAccounts(ctx _context.Context, ledger string) ApiListAccountsRequest {
@@ -457,13 +452,13 @@ func (a *AccountsApiService) ListAccounts(ctx _context.Context, ledger string) A
 }
 
 // Execute executes the request
-//  @return AccountCursorResponse
-func (a *AccountsApiService) ListAccountsExecute(r ApiListAccountsRequest) (AccountCursorResponse, *_nethttp.Response, error) {
+//  @return ListAccounts200Response
+func (a *AccountsApiService) ListAccountsExecute(r ApiListAccountsRequest) (ListAccounts200Response, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  AccountCursorResponse
+		localVarReturnValue  ListAccounts200Response
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountsApiService.ListAccounts")

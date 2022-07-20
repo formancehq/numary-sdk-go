@@ -17,10 +17,8 @@ import (
 // Account struct for Account
 type Account struct {
 	Address string `json:"address"`
-	Balances *map[string]int32 `json:"balances,omitempty"`
-	Metadata *map[string]interface{} `json:"metadata,omitempty"`
 	Type *string `json:"type,omitempty"`
-	Volumes *map[string]map[string]int32 `json:"volumes,omitempty"`
+	Metadata *map[string]interface{} `json:"metadata,omitempty"`
 }
 
 // NewAccount instantiates a new Account object
@@ -65,36 +63,36 @@ func (o *Account) SetAddress(v string) {
 	o.Address = v
 }
 
-// GetBalances returns the Balances field value if set, zero value otherwise.
-func (o *Account) GetBalances() map[string]int32 {
-	if o == nil || o.Balances == nil {
-		var ret map[string]int32
+// GetType returns the Type field value if set, zero value otherwise.
+func (o *Account) GetType() string {
+	if o == nil || o.Type == nil {
+		var ret string
 		return ret
 	}
-	return *o.Balances
+	return *o.Type
 }
 
-// GetBalancesOk returns a tuple with the Balances field value if set, nil otherwise
+// GetTypeOk returns a tuple with the Type field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Account) GetBalancesOk() (*map[string]int32, bool) {
-	if o == nil || o.Balances == nil {
+func (o *Account) GetTypeOk() (*string, bool) {
+	if o == nil || o.Type == nil {
 		return nil, false
 	}
-	return o.Balances, true
+	return o.Type, true
 }
 
-// HasBalances returns a boolean if a field has been set.
-func (o *Account) HasBalances() bool {
-	if o != nil && o.Balances != nil {
+// HasType returns a boolean if a field has been set.
+func (o *Account) HasType() bool {
+	if o != nil && o.Type != nil {
 		return true
 	}
 
 	return false
 }
 
-// SetBalances gets a reference to the given map[string]int32 and assigns it to the Balances field.
-func (o *Account) SetBalances(v map[string]int32) {
-	o.Balances = &v
+// SetType gets a reference to the given string and assigns it to the Type field.
+func (o *Account) SetType(v string) {
+	o.Type = &v
 }
 
 // GetMetadata returns the Metadata field value if set, zero value otherwise.
@@ -129,86 +127,16 @@ func (o *Account) SetMetadata(v map[string]interface{}) {
 	o.Metadata = &v
 }
 
-// GetType returns the Type field value if set, zero value otherwise.
-func (o *Account) GetType() string {
-	if o == nil || o.Type == nil {
-		var ret string
-		return ret
-	}
-	return *o.Type
-}
-
-// GetTypeOk returns a tuple with the Type field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *Account) GetTypeOk() (*string, bool) {
-	if o == nil || o.Type == nil {
-		return nil, false
-	}
-	return o.Type, true
-}
-
-// HasType returns a boolean if a field has been set.
-func (o *Account) HasType() bool {
-	if o != nil && o.Type != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetType gets a reference to the given string and assigns it to the Type field.
-func (o *Account) SetType(v string) {
-	o.Type = &v
-}
-
-// GetVolumes returns the Volumes field value if set, zero value otherwise.
-func (o *Account) GetVolumes() map[string]map[string]int32 {
-	if o == nil || o.Volumes == nil {
-		var ret map[string]map[string]int32
-		return ret
-	}
-	return *o.Volumes
-}
-
-// GetVolumesOk returns a tuple with the Volumes field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *Account) GetVolumesOk() (*map[string]map[string]int32, bool) {
-	if o == nil || o.Volumes == nil {
-		return nil, false
-	}
-	return o.Volumes, true
-}
-
-// HasVolumes returns a boolean if a field has been set.
-func (o *Account) HasVolumes() bool {
-	if o != nil && o.Volumes != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetVolumes gets a reference to the given map[string]map[string]int32 and assigns it to the Volumes field.
-func (o *Account) SetVolumes(v map[string]map[string]int32) {
-	o.Volumes = &v
-}
-
 func (o Account) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
 		toSerialize["address"] = o.Address
 	}
-	if o.Balances != nil {
-		toSerialize["balances"] = o.Balances
-	}
-	if o.Metadata != nil {
-		toSerialize["metadata"] = o.Metadata
-	}
 	if o.Type != nil {
 		toSerialize["type"] = o.Type
 	}
-	if o.Volumes != nil {
-		toSerialize["volumes"] = o.Volumes
+	if o.Metadata != nil {
+		toSerialize["metadata"] = o.Metadata
 	}
 	return json.Marshal(toSerialize)
 }

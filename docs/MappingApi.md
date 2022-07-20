@@ -4,8 +4,8 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**GetMapping**](MappingApi.md#GetMapping) | **Get** /{ledger}/mapping | Get mapping
-[**UpdateMapping**](MappingApi.md#UpdateMapping) | **Put** /{ledger}/mapping | Put mapping
+[**GetMapping**](MappingApi.md#GetMapping) | **Get** /{ledger}/mapping | Get the mapping of a ledger.
+[**UpdateMapping**](MappingApi.md#UpdateMapping) | **Put** /{ledger}/mapping | Update the mapping of a ledger.
 
 
 
@@ -13,9 +13,7 @@ Method | HTTP request | Description
 
 > MappingResponse GetMapping(ctx, ledger).Execute()
 
-Get mapping
-
-
+Get the mapping of a ledger.
 
 ### Example
 
@@ -30,7 +28,7 @@ import (
 )
 
 func main() {
-    ledger := "ledger_example" // string | ledger
+    ledger := "ledger001" // string | Name of the ledger.
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
@@ -50,7 +48,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**ledger** | **string** | ledger | 
+**ledger** | **string** | Name of the ledger. | 
 
 ### Other Parameters
 
@@ -83,9 +81,7 @@ Name | Type | Description  | Notes
 
 > MappingResponse UpdateMapping(ctx, ledger).Mapping(mapping).Execute()
 
-Put mapping
-
-
+Update the mapping of a ledger.
 
 ### Example
 
@@ -100,8 +96,8 @@ import (
 )
 
 func main() {
-    ledger := "ledger_example" // string | ledger
-    mapping := *client.NewMapping([]client.Contract{*client.NewContract(map[string]interface{}(123))}) // Mapping | mapping
+    ledger := "ledger001" // string | Name of the ledger.
+    mapping := *client.NewMapping([]client.Contract{*client.NewContract(map[string]interface{}(123))}) // Mapping | 
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
@@ -121,7 +117,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**ledger** | **string** | ledger | 
+**ledger** | **string** | Name of the ledger. | 
 
 ### Other Parameters
 
@@ -131,7 +127,7 @@ Other parameters are passed through a pointer to a apiUpdateMappingRequest struc
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **mapping** | [**Mapping**](Mapping.md) | mapping | 
+ **mapping** | [**Mapping**](Mapping.md) |  | 
 
 ### Return type
 

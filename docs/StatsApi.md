@@ -29,7 +29,7 @@ import (
 )
 
 func main() {
-    ledger := "ledger_example" // string | ledger
+    ledger := "ledger001" // string | name of the ledger
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
@@ -49,7 +49,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**ledger** | **string** | ledger | 
+**ledger** | **string** | name of the ledger | 
 
 ### Other Parameters
 
