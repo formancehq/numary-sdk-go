@@ -31,7 +31,7 @@ import (
 
 func main() {
     ledger := "ledger001" // string | Name of the ledger.
-    address := "users:001" // string | Exact address of the account.
+    address := "users:001" // string | Exact address of the account. It must match the following regular expressions pattern: ``` ^\\w+(:\\w+)*$ ``` 
     requestBody := map[string]interface{}{"key": interface{}(123)} // map[string]interface{} | metadata
 
     configuration := client.NewConfiguration()
@@ -51,7 +51,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
 **ledger** | **string** | Name of the ledger. | 
-**address** | **string** | Exact address of the account. | 
+**address** | **string** | Exact address of the account. It must match the following regular expressions pattern: &#x60;&#x60;&#x60; ^\\w+(:\\w+)*$ &#x60;&#x60;&#x60;  | 
 
 ### Other Parameters
 
@@ -75,7 +75,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -172,7 +172,7 @@ import (
 
 func main() {
     ledger := "ledger001" // string | Name of the ledger.
-    address := "users:001" // string | Exact address of the account.
+    address := "users:001" // string | Exact address of the account. It must match the following regular expressions pattern: ``` ^\\w+(:\\w+)*$ ``` 
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
@@ -193,7 +193,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
 **ledger** | **string** | Name of the ledger. | 
-**address** | **string** | Exact address of the account. | 
+**address** | **string** | Exact address of the account. It must match the following regular expressions pattern: &#x60;&#x60;&#x60; ^\\w+(:\\w+)*$ &#x60;&#x60;&#x60;  | 
 
 ### Other Parameters
 
@@ -225,7 +225,7 @@ Name | Type | Description  | Notes
 
 ## ListAccounts
 
-> ListAccounts200Response ListAccounts(ctx, ledger).After(after).Address(address).Metadata(metadata).Execute()
+> ListAccounts200Response ListAccounts(ctx, ledger).PageSize(pageSize).After(after).Address(address).Metadata(metadata).Balance(balance).BalanceOperator(balanceOperator).PaginationToken(paginationToken).Execute()
 
 List accounts from a ledger.
 
@@ -245,13 +245,17 @@ import (
 
 func main() {
     ledger := "ledger001" // string | Name of the ledger.
+    pageSize := int32(100) // int32 | The maximum number of results to return per page (optional) (default to 15)
     after := "users:003" // string | Pagination cursor, will return accounts after given address, in descending order. (optional)
     address := "users:.+" // string | Filter accounts by address pattern (regular expression placed between ^ and $). (optional)
     metadata := map[string]interface{}{"key": map[string]interface{}(123)} // map[string]interface{} | Filter accounts by metadata key value pairs. Nested objects can be used as seen in the example below. (optional)
+    balance := int64(2400) // int64 | Filter accounts by their balance (default operator is gte) (optional)
+    balanceOperator := "gte" // string | Operator used for the filtering of balances can be greater than/equal, less than/equal, greater than, less than, or equal (optional)
+    paginationToken := "aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==" // string | Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results.  Set to the value of previous for the previous page of results. No other parameters can be set when the pagination token is set.  (optional)
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.AccountsApi.ListAccounts(context.Background(), ledger).After(after).Address(address).Metadata(metadata).Execute()
+    resp, r, err := api_client.AccountsApi.ListAccounts(context.Background(), ledger).PageSize(pageSize).After(after).Address(address).Metadata(metadata).Balance(balance).BalanceOperator(balanceOperator).PaginationToken(paginationToken).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.ListAccounts``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -277,9 +281,13 @@ Other parameters are passed through a pointer to a apiListAccountsRequest struct
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **pageSize** | **int32** | The maximum number of results to return per page | [default to 15]
  **after** | **string** | Pagination cursor, will return accounts after given address, in descending order. | 
  **address** | **string** | Filter accounts by address pattern (regular expression placed between ^ and $). | 
  **metadata** | [**map[string]interface{}**](map[string]interface{}.md) | Filter accounts by metadata key value pairs. Nested objects can be used as seen in the example below. | 
+ **balance** | **int64** | Filter accounts by their balance (default operator is gte) | 
+ **balanceOperator** | **string** | Operator used for the filtering of balances can be greater than/equal, less than/equal, greater than, less than, or equal | 
+ **paginationToken** | **string** | Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results.  Set to the value of previous for the previous page of results. No other parameters can be set when the pagination token is set.  | 
 
 ### Return type
 

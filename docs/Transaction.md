@@ -9,6 +9,8 @@ Name | Type | Description | Notes
 **Metadata** | Pointer to **map[string]interface{}** |  | [optional] 
 **Timestamp** | **time.Time** |  | 
 **Txid** | **int32** |  | 
+**PreCommitVolumes** | Pointer to [**map[string]map[string]Volume**](map.md) |  | [optional] 
+**PostCommitVolumes** | Pointer to [**map[string]map[string]Volume**](map.md) |  | [optional] 
 
 ## Methods
 
@@ -148,6 +150,56 @@ and a boolean to check if the value has been set.
 
 SetTxid sets Txid field to given value.
 
+
+### GetPreCommitVolumes
+
+`func (o *Transaction) GetPreCommitVolumes() map[string]map[string]Volume`
+
+GetPreCommitVolumes returns the PreCommitVolumes field if non-nil, zero value otherwise.
+
+### GetPreCommitVolumesOk
+
+`func (o *Transaction) GetPreCommitVolumesOk() (*map[string]map[string]Volume, bool)`
+
+GetPreCommitVolumesOk returns a tuple with the PreCommitVolumes field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPreCommitVolumes
+
+`func (o *Transaction) SetPreCommitVolumes(v map[string]map[string]Volume)`
+
+SetPreCommitVolumes sets PreCommitVolumes field to given value.
+
+### HasPreCommitVolumes
+
+`func (o *Transaction) HasPreCommitVolumes() bool`
+
+HasPreCommitVolumes returns a boolean if a field has been set.
+
+### GetPostCommitVolumes
+
+`func (o *Transaction) GetPostCommitVolumes() map[string]map[string]Volume`
+
+GetPostCommitVolumes returns the PostCommitVolumes field if non-nil, zero value otherwise.
+
+### GetPostCommitVolumesOk
+
+`func (o *Transaction) GetPostCommitVolumesOk() (*map[string]map[string]Volume, bool)`
+
+GetPostCommitVolumesOk returns a tuple with the PostCommitVolumes field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPostCommitVolumes
+
+`func (o *Transaction) SetPostCommitVolumes(v map[string]map[string]Volume)`
+
+SetPostCommitVolumes sets PostCommitVolumes field to given value.
+
+### HasPostCommitVolumes
+
+`func (o *Transaction) HasPostCommitVolumes() bool`
+
+HasPostCommitVolumes returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

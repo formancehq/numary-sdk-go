@@ -78,7 +78,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -87,7 +87,7 @@ Name | Type | Description  | Notes
 
 ## CountTransactions
 
-> CountTransactions(ctx, ledger).Reference(reference).Account(account).Source(source).Destination(destination).Execute()
+> CountTransactions(ctx, ledger).Reference(reference).Account(account).Source(source).Destination(destination).Metadata(metadata).Execute()
 
 Count the transactions from a ledger.
 
@@ -109,10 +109,11 @@ func main() {
     account := "users:001" // string | Filter transactions with postings involving given account, either as source or destination. (optional)
     source := "users:001" // string | Filter transactions with postings involving given account at source. (optional)
     destination := "users:001" // string | Filter transactions with postings involving given account at destination. (optional)
+    metadata := map[string]interface{}{"key": map[string]interface{}(123)} // map[string]interface{} | Filter transactions by metadata key value pairs. Nested objects can be used as seen in the example below. (optional)
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.TransactionsApi.CountTransactions(context.Background(), ledger).Reference(reference).Account(account).Source(source).Destination(destination).Execute()
+    resp, r, err := api_client.TransactionsApi.CountTransactions(context.Background(), ledger).Reference(reference).Account(account).Source(source).Destination(destination).Metadata(metadata).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.CountTransactions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -140,6 +141,7 @@ Name | Type | Description  | Notes
  **account** | **string** | Filter transactions with postings involving given account, either as source or destination. | 
  **source** | **string** | Filter transactions with postings involving given account at source. | 
  **destination** | **string** | Filter transactions with postings involving given account at destination. | 
+ **metadata** | [**map[string]interface{}**](map[string]interface{}.md) | Filter transactions by metadata key value pairs. Nested objects can be used as seen in the example below. | 
 
 ### Return type
 
@@ -161,7 +163,7 @@ Name | Type | Description  | Notes
 
 ## CreateTransaction
 
-> CreateTransactionResponse CreateTransaction(ctx, ledger).TransactionData(transactionData).Preview(preview).Execute()
+> TransactionsResponse CreateTransaction(ctx, ledger).TransactionData(transactionData).Preview(preview).Execute()
 
 Create a new transaction to a ledger.
 
@@ -189,7 +191,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.CreateTransaction``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `CreateTransaction`: CreateTransactionResponse
+    // response from `CreateTransaction`: TransactionsResponse
     fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.CreateTransaction`: %v\n", resp)
 }
 ```
@@ -215,7 +217,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateTransactionResponse**](CreateTransactionResponse.md)
+[**TransactionsResponse**](TransactionsResponse.md)
 
 ### Authorization
 
@@ -233,7 +235,7 @@ Name | Type | Description  | Notes
 
 ## CreateTransactions
 
-> CreateTransactions200Response CreateTransactions(ctx, ledger).Transactions(transactions).Execute()
+> TransactionsResponse CreateTransactions(ctx, ledger).Transactions(transactions).Execute()
 
 Create a new batch of transactions to a ledger.
 
@@ -260,7 +262,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.CreateTransactions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `CreateTransactions`: CreateTransactions200Response
+    // response from `CreateTransactions`: TransactionsResponse
     fmt.Fprintf(os.Stdout, "Response from `TransactionsApi.CreateTransactions`: %v\n", resp)
 }
 ```
@@ -285,7 +287,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateTransactions200Response**](CreateTransactions200Response.md)
+[**TransactionsResponse**](TransactionsResponse.md)
 
 ### Authorization
 
@@ -374,7 +376,7 @@ Name | Type | Description  | Notes
 
 ## ListTransactions
 
-> ListTransactions200Response ListTransactions(ctx, ledger).After(after).Reference(reference).Account(account).Source(source).Destination(destination).StartTime(startTime).EndTime(endTime).Execute()
+> ListTransactions200Response ListTransactions(ctx, ledger).PageSize(pageSize).After(after).Reference(reference).Account(account).Source(source).Destination(destination).StartTime(startTime).EndTime(endTime).PaginationToken(paginationToken).Metadata(metadata).Execute()
 
 List transactions from a ledger.
 
@@ -394,17 +396,20 @@ import (
 
 func main() {
     ledger := "ledger001" // string | Name of the ledger.
+    pageSize := int32(100) // int32 | The maximum number of results to return per page (optional) (default to 15)
     after := "1234" // string | Pagination cursor, will return transactions after given txid (in descending order). (optional)
     reference := "ref:001" // string | Find transactions by reference field. (optional)
     account := "users:001" // string | Find transactions with postings involving given account, either as source or destination. (optional)
     source := "users:001" // string | Find transactions with postings involving given account at source. (optional)
     destination := "users:001" // string | Find transactions with postings involving given account at destination. (optional)
-    startTime := "startTime_example" // string | Filter transactions that occurred after this timestamp. The format is RFC3339 and is inclusive (for example, 12:00:01 includes the first second of the minute). (optional)
-    endTime := "endTime_example" // string | Filter transactions that occurred before this timestamp. The format is RFC3339 and is exclusive (for example, 12:00:01 excludes the first second of the minute). (optional)
+    startTime := "startTime_example" // string | Filter transactions that occurred after this timestamp. The format is RFC3339 and is inclusive (for example, 12:00:01 includes the first second of the minute).  (optional)
+    endTime := "endTime_example" // string | Filter transactions that occurred before this timestamp. The format is RFC3339 and is exclusive (for example, 12:00:01 excludes the first second of the minute).  (optional)
+    paginationToken := "aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==" // string | Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results.  Set to the value of previous for the previous page of results. No other parameters can be set when the pagination token is set.  (optional)
+    metadata := map[string]interface{}{"key": map[string]interface{}(123)} // map[string]interface{} | Filter transactions by metadata key value pairs. Nested objects can be used as seen in the example below. (optional)
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.TransactionsApi.ListTransactions(context.Background(), ledger).After(after).Reference(reference).Account(account).Source(source).Destination(destination).StartTime(startTime).EndTime(endTime).Execute()
+    resp, r, err := api_client.TransactionsApi.ListTransactions(context.Background(), ledger).PageSize(pageSize).After(after).Reference(reference).Account(account).Source(source).Destination(destination).StartTime(startTime).EndTime(endTime).PaginationToken(paginationToken).Metadata(metadata).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.ListTransactions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -430,13 +435,16 @@ Other parameters are passed through a pointer to a apiListTransactionsRequest st
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **pageSize** | **int32** | The maximum number of results to return per page | [default to 15]
  **after** | **string** | Pagination cursor, will return transactions after given txid (in descending order). | 
  **reference** | **string** | Find transactions by reference field. | 
  **account** | **string** | Find transactions with postings involving given account, either as source or destination. | 
  **source** | **string** | Find transactions with postings involving given account at source. | 
  **destination** | **string** | Find transactions with postings involving given account at destination. | 
- **startTime** | **string** | Filter transactions that occurred after this timestamp. The format is RFC3339 and is inclusive (for example, 12:00:01 includes the first second of the minute). | 
- **endTime** | **string** | Filter transactions that occurred before this timestamp. The format is RFC3339 and is exclusive (for example, 12:00:01 excludes the first second of the minute). | 
+ **startTime** | **string** | Filter transactions that occurred after this timestamp. The format is RFC3339 and is inclusive (for example, 12:00:01 includes the first second of the minute).  | 
+ **endTime** | **string** | Filter transactions that occurred before this timestamp. The format is RFC3339 and is exclusive (for example, 12:00:01 excludes the first second of the minute).  | 
+ **paginationToken** | **string** | Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results.  Set to the value of previous for the previous page of results. No other parameters can be set when the pagination token is set.  | 
+ **metadata** | [**map[string]interface{}**](map[string]interface{}.md) | Filter transactions by metadata key value pairs. Nested objects can be used as seen in the example below. | 
 
 ### Return type
 
