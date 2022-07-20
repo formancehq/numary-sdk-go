@@ -4,16 +4,18 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**PageSize** | **int32** |  | 
-**HasMore** | Pointer to **bool** |  | [optional] 
-**Previous** | Pointer to **string** |  | [optional] 
+**HasMore** | **bool** |  | 
 **Next** | Pointer to **string** |  | [optional] 
+**PageSize** | **int32** |  | 
+**Previous** | Pointer to **string** |  | [optional] 
+**RemainingResults** | **int32** |  | 
+**Total** | **int32** |  | 
 
 ## Methods
 
 ### NewCursor
 
-`func NewCursor(pageSize int32, ) *Cursor`
+`func NewCursor(hasMore bool, pageSize int32, remainingResults int32, total int32, ) *Cursor`
 
 NewCursor instantiates a new Cursor object
 This constructor will assign default values to properties that have it defined,
@@ -27,26 +29,6 @@ will change when the set of required properties is changed
 NewCursorWithDefaults instantiates a new Cursor object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
-
-### GetPageSize
-
-`func (o *Cursor) GetPageSize() int32`
-
-GetPageSize returns the PageSize field if non-nil, zero value otherwise.
-
-### GetPageSizeOk
-
-`func (o *Cursor) GetPageSizeOk() (*int32, bool)`
-
-GetPageSizeOk returns a tuple with the PageSize field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetPageSize
-
-`func (o *Cursor) SetPageSize(v int32)`
-
-SetPageSize sets PageSize field to given value.
-
 
 ### GetHasMore
 
@@ -67,11 +49,51 @@ and a boolean to check if the value has been set.
 
 SetHasMore sets HasMore field to given value.
 
-### HasHasMore
 
-`func (o *Cursor) HasHasMore() bool`
+### GetNext
 
-HasHasMore returns a boolean if a field has been set.
+`func (o *Cursor) GetNext() string`
+
+GetNext returns the Next field if non-nil, zero value otherwise.
+
+### GetNextOk
+
+`func (o *Cursor) GetNextOk() (*string, bool)`
+
+GetNextOk returns a tuple with the Next field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNext
+
+`func (o *Cursor) SetNext(v string)`
+
+SetNext sets Next field to given value.
+
+### HasNext
+
+`func (o *Cursor) HasNext() bool`
+
+HasNext returns a boolean if a field has been set.
+
+### GetPageSize
+
+`func (o *Cursor) GetPageSize() int32`
+
+GetPageSize returns the PageSize field if non-nil, zero value otherwise.
+
+### GetPageSizeOk
+
+`func (o *Cursor) GetPageSizeOk() (*int32, bool)`
+
+GetPageSizeOk returns a tuple with the PageSize field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPageSize
+
+`func (o *Cursor) SetPageSize(v int32)`
+
+SetPageSize sets PageSize field to given value.
+
 
 ### GetPrevious
 
@@ -98,30 +120,45 @@ SetPrevious sets Previous field to given value.
 
 HasPrevious returns a boolean if a field has been set.
 
-### GetNext
+### GetRemainingResults
 
-`func (o *Cursor) GetNext() string`
+`func (o *Cursor) GetRemainingResults() int32`
 
-GetNext returns the Next field if non-nil, zero value otherwise.
+GetRemainingResults returns the RemainingResults field if non-nil, zero value otherwise.
 
-### GetNextOk
+### GetRemainingResultsOk
 
-`func (o *Cursor) GetNextOk() (*string, bool)`
+`func (o *Cursor) GetRemainingResultsOk() (*int32, bool)`
 
-GetNextOk returns a tuple with the Next field if it's non-nil, zero value otherwise
+GetRemainingResultsOk returns a tuple with the RemainingResults field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetNext
+### SetRemainingResults
 
-`func (o *Cursor) SetNext(v string)`
+`func (o *Cursor) SetRemainingResults(v int32)`
 
-SetNext sets Next field to given value.
+SetRemainingResults sets RemainingResults field to given value.
 
-### HasNext
 
-`func (o *Cursor) HasNext() bool`
+### GetTotal
 
-HasNext returns a boolean if a field has been set.
+`func (o *Cursor) GetTotal() int32`
+
+GetTotal returns the Total field if non-nil, zero value otherwise.
+
+### GetTotalOk
+
+`func (o *Cursor) GetTotalOk() (*int32, bool)`
+
+GetTotalOk returns a tuple with the Total field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTotal
+
+`func (o *Cursor) SetTotal(v int32)`
+
+SetTotal sets Total field to given value.
+
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -4,7 +4,7 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**RunScript**](ScriptApi.md#RunScript) | **Post** /{ledger}/script | Execute a Numscript.
+[**RunScript**](ScriptApi.md#RunScript) | **Post** /{ledger}/script | Execute Numscript
 
 
 
@@ -12,7 +12,9 @@ Method | HTTP request | Description
 
 > ScriptResult RunScript(ctx, ledger).Script(script).Preview(preview).Execute()
 
-Execute a Numscript.
+Execute Numscript
+
+
 
 ### Example
 
@@ -27,16 +29,9 @@ import (
 )
 
 func main() {
-    ledger := "ledger001" // string | Name of the ledger.
-    script := *client.NewScript("vars {
-account $user
-}
-send [COIN 10] (
-	source = @world
-	destination = $user
-)
-") // Script | 
-    preview := true // bool | Set the preview mode. Preview mode doesn't add the logs to the database or publish a message to the message broker. (optional)
+    ledger := "ledger_example" // string | ledger
+    script := *client.NewScript("Plain_example") // Script | script
+    preview := true // bool | Preview mode (optional)
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
@@ -56,7 +51,7 @@ send [COIN 10] (
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**ledger** | **string** | Name of the ledger. | 
+**ledger** | **string** | ledger | 
 
 ### Other Parameters
 
@@ -66,8 +61,8 @@ Other parameters are passed through a pointer to a apiRunScriptRequest struct vi
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **script** | [**Script**](Script.md) |  | 
- **preview** | **bool** | Set the preview mode. Preview mode doesn&#39;t add the logs to the database or publish a message to the message broker. | 
+ **script** | [**Script**](Script.md) | script | 
+ **preview** | **bool** | Preview mode | 
 
 ### Return type
 

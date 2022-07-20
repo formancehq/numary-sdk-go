@@ -5,8 +5,10 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Address** | **string** |  | 
-**Type** | Pointer to **string** |  | [optional] 
+**Balances** | Pointer to **map[string]int32** |  | [optional] 
 **Metadata** | Pointer to **map[string]interface{}** |  | [optional] 
+**Type** | Pointer to **string** |  | [optional] 
+**Volumes** | Pointer to **map[string]map[string]int32** |  | [optional] 
 
 ## Methods
 
@@ -47,30 +49,30 @@ and a boolean to check if the value has been set.
 SetAddress sets Address field to given value.
 
 
-### GetType
+### GetBalances
 
-`func (o *Account) GetType() string`
+`func (o *Account) GetBalances() map[string]int32`
 
-GetType returns the Type field if non-nil, zero value otherwise.
+GetBalances returns the Balances field if non-nil, zero value otherwise.
 
-### GetTypeOk
+### GetBalancesOk
 
-`func (o *Account) GetTypeOk() (*string, bool)`
+`func (o *Account) GetBalancesOk() (*map[string]int32, bool)`
 
-GetTypeOk returns a tuple with the Type field if it's non-nil, zero value otherwise
+GetBalancesOk returns a tuple with the Balances field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetType
+### SetBalances
 
-`func (o *Account) SetType(v string)`
+`func (o *Account) SetBalances(v map[string]int32)`
 
-SetType sets Type field to given value.
+SetBalances sets Balances field to given value.
 
-### HasType
+### HasBalances
 
-`func (o *Account) HasType() bool`
+`func (o *Account) HasBalances() bool`
 
-HasType returns a boolean if a field has been set.
+HasBalances returns a boolean if a field has been set.
 
 ### GetMetadata
 
@@ -96,6 +98,56 @@ SetMetadata sets Metadata field to given value.
 `func (o *Account) HasMetadata() bool`
 
 HasMetadata returns a boolean if a field has been set.
+
+### GetType
+
+`func (o *Account) GetType() string`
+
+GetType returns the Type field if non-nil, zero value otherwise.
+
+### GetTypeOk
+
+`func (o *Account) GetTypeOk() (*string, bool)`
+
+GetTypeOk returns a tuple with the Type field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetType
+
+`func (o *Account) SetType(v string)`
+
+SetType sets Type field to given value.
+
+### HasType
+
+`func (o *Account) HasType() bool`
+
+HasType returns a boolean if a field has been set.
+
+### GetVolumes
+
+`func (o *Account) GetVolumes() map[string]map[string]int32`
+
+GetVolumes returns the Volumes field if non-nil, zero value otherwise.
+
+### GetVolumesOk
+
+`func (o *Account) GetVolumesOk() (*map[string]map[string]int32, bool)`
+
+GetVolumesOk returns a tuple with the Volumes field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetVolumes
+
+`func (o *Account) SetVolumes(v map[string]map[string]int32)`
+
+SetVolumes sets Volumes field to given value.
+
+### HasVolumes
+
+`func (o *Account) HasVolumes() bool`
+
+HasVolumes returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
