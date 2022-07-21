@@ -7,7 +7,6 @@ Name | Type | Description | Notes
 **Postings** | [**[]Posting**](Posting.md) |  | 
 **Reference** | Pointer to **string** |  | [optional] 
 **Metadata** | Pointer to **map[string]interface{}** |  | [optional] 
-**Timestamp** | **time.Time** |  | 
 **Txid** | **int32** |  | 
 **PreCommitVolumes** | Pointer to [**map[string]map[string]Volume**](map.md) |  | [optional] 
 **PostCommitVolumes** | Pointer to [**map[string]map[string]Volume**](map.md) |  | [optional] 
@@ -16,7 +15,7 @@ Name | Type | Description | Notes
 
 ### NewTransaction
 
-`func NewTransaction(postings []Posting, timestamp time.Time, txid int32, ) *Transaction`
+`func NewTransaction(postings []Posting, txid int32, ) *Transaction`
 
 NewTransaction instantiates a new Transaction object
 This constructor will assign default values to properties that have it defined,
@@ -111,26 +110,6 @@ HasMetadata returns a boolean if a field has been set.
 `func (o *Transaction) UnsetMetadata()`
 
 UnsetMetadata ensures that no value is present for Metadata, not even an explicit nil
-### GetTimestamp
-
-`func (o *Transaction) GetTimestamp() time.Time`
-
-GetTimestamp returns the Timestamp field if non-nil, zero value otherwise.
-
-### GetTimestampOk
-
-`func (o *Transaction) GetTimestampOk() (*time.Time, bool)`
-
-GetTimestampOk returns a tuple with the Timestamp field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetTimestamp
-
-`func (o *Transaction) SetTimestamp(v time.Time)`
-
-SetTimestamp sets Timestamp field to given value.
-
-
 ### GetTxid
 
 `func (o *Transaction) GetTxid() int32`

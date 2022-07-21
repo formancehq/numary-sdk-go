@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Timestamp** | Pointer to **time.Time** |  | [optional] 
 **Postings** | [**[]Posting**](Posting.md) |  | 
 **Reference** | Pointer to **string** |  | [optional] 
 **Metadata** | Pointer to **map[string]interface{}** |  | [optional] 
@@ -26,6 +27,31 @@ will change when the set of required properties is changed
 NewTransactionDataWithDefaults instantiates a new TransactionData object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetTimestamp
+
+`func (o *TransactionData) GetTimestamp() time.Time`
+
+GetTimestamp returns the Timestamp field if non-nil, zero value otherwise.
+
+### GetTimestampOk
+
+`func (o *TransactionData) GetTimestampOk() (*time.Time, bool)`
+
+GetTimestampOk returns a tuple with the Timestamp field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTimestamp
+
+`func (o *TransactionData) SetTimestamp(v time.Time)`
+
+SetTimestamp sets Timestamp field to given value.
+
+### HasTimestamp
+
+`func (o *TransactionData) HasTimestamp() bool`
+
+HasTimestamp returns a boolean if a field has been set.
 
 ### GetPostings
 
