@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   contact: {}
   title: Ledger API
-  version: v1.7.4
+  version: v1.8.0-rc.1
 servers:
 - description: Production server
   url: "https://{organization}.o.numary.cloud/ledger"
