@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   contact: {}
   title: Ledger API
-  version: v1.7.4
+  version: v1.8.0-rc.2
 servers:
 - description: Production server
   url: "https://{organization}.o.numary.cloud/ledger"
@@ -460,19 +460,20 @@ paths:
           example: users:001
           type: string
         style: form
-      - description: "Filter transactions that occurred after this timestamp.\nThe\
-          \ format is RFC3339 and is inclusive (for example, 12:00:01 includes the\
-          \ first second of the minute).\n"
+      - description: |
+          Filter transactions that occurred after this timestamp.
+          The format is RFC3339 and is inclusive (for example, 12:00:01 includes the first second of the minute).
         explode: true
         in: query
         name: start_time
         required: false
         schema:
           type: string
+          example: null
         style: form
-      - description: "Filter transactions that occurred before this timestamp.\nThe\
-          \ format is RFC3339 and is exclusive (for example, 12:00:01 excludes the\
-          \ first second of the minute).\n"
+      - description: |
+          Filter transactions that occurred before this timestamp.
+          The format is RFC3339 and is exclusive (for example, 12:00:01 excludes the first second of the minute).
         explode: true
         in: query
         name: end_time
