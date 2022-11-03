@@ -106,4 +106,11 @@ model_transactions.go
 model_transactions_response.go
 model_volume.go
 response.go
+test/api_accounts_test.go
+test/api_balances_test.go
+test/api_mapping_test.go
+test/api_script_test.go
+test/api_server_test.go
+test/api_stats_test.go
+test/api_transactions_test.go
 utils.go
