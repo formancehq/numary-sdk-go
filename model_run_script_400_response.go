@@ -14,32 +14,32 @@ import (
 	"encoding/json"
 )
 
-// GetBalancesAggregated400Response struct for GetBalancesAggregated400Response
-type GetBalancesAggregated400Response struct {
+// RunScript400Response struct for RunScript400Response
+type RunScript400Response struct {
 	ErrorCode string `json:"error_code"`
 	ErrorMessage *string `json:"error_message,omitempty"`
 }
 
-// NewGetBalancesAggregated400Response instantiates a new GetBalancesAggregated400Response object
+// NewRunScript400Response instantiates a new RunScript400Response object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetBalancesAggregated400Response(errorCode string) *GetBalancesAggregated400Response {
-	this := GetBalancesAggregated400Response{}
+func NewRunScript400Response(errorCode string) *RunScript400Response {
+	this := RunScript400Response{}
 	this.ErrorCode = errorCode
 	return &this
 }
 
-// NewGetBalancesAggregated400ResponseWithDefaults instantiates a new GetBalancesAggregated400Response object
+// NewRunScript400ResponseWithDefaults instantiates a new RunScript400Response object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewGetBalancesAggregated400ResponseWithDefaults() *GetBalancesAggregated400Response {
-	this := GetBalancesAggregated400Response{}
+func NewRunScript400ResponseWithDefaults() *RunScript400Response {
+	this := RunScript400Response{}
 	return &this
 }
 
 // GetErrorCode returns the ErrorCode field value
-func (o *GetBalancesAggregated400Response) GetErrorCode() string {
+func (o *RunScript400Response) GetErrorCode() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -50,7 +50,7 @@ func (o *GetBalancesAggregated400Response) GetErrorCode() string {
 
 // GetErrorCodeOk returns a tuple with the ErrorCode field value
 // and a boolean to check if the value has been set.
-func (o *GetBalancesAggregated400Response) GetErrorCodeOk() (*string, bool) {
+func (o *RunScript400Response) GetErrorCodeOk() (*string, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -58,12 +58,12 @@ func (o *GetBalancesAggregated400Response) GetErrorCodeOk() (*string, bool) {
 }
 
 // SetErrorCode sets field value
-func (o *GetBalancesAggregated400Response) SetErrorCode(v string) {
+func (o *RunScript400Response) SetErrorCode(v string) {
 	o.ErrorCode = v
 }
 
 // GetErrorMessage returns the ErrorMessage field value if set, zero value otherwise.
-func (o *GetBalancesAggregated400Response) GetErrorMessage() string {
+func (o *RunScript400Response) GetErrorMessage() string {
 	if o == nil || o.ErrorMessage == nil {
 		var ret string
 		return ret
@@ -73,7 +73,7 @@ func (o *GetBalancesAggregated400Response) GetErrorMessage() string {
 
 // GetErrorMessageOk returns a tuple with the ErrorMessage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *GetBalancesAggregated400Response) GetErrorMessageOk() (*string, bool) {
+func (o *RunScript400Response) GetErrorMessageOk() (*string, bool) {
 	if o == nil || o.ErrorMessage == nil {
 		return nil, false
 	}
@@ -81,7 +81,7 @@ func (o *GetBalancesAggregated400Response) GetErrorMessageOk() (*string, bool) {
 }
 
 // HasErrorMessage returns a boolean if a field has been set.
-func (o *GetBalancesAggregated400Response) HasErrorMessage() bool {
+func (o *RunScript400Response) HasErrorMessage() bool {
 	if o != nil && o.ErrorMessage != nil {
 		return true
 	}
@@ -90,11 +90,11 @@ func (o *GetBalancesAggregated400Response) HasErrorMessage() bool {
 }
 
 // SetErrorMessage gets a reference to the given string and assigns it to the ErrorMessage field.
-func (o *GetBalancesAggregated400Response) SetErrorMessage(v string) {
+func (o *RunScript400Response) SetErrorMessage(v string) {
 	o.ErrorMessage = &v
 }
 
-func (o GetBalancesAggregated400Response) MarshalJSON() ([]byte, error) {
+func (o RunScript400Response) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
 		toSerialize["error_code"] = o.ErrorCode
@@ -105,38 +105,38 @@ func (o GetBalancesAggregated400Response) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-type NullableGetBalancesAggregated400Response struct {
-	value *GetBalancesAggregated400Response
+type NullableRunScript400Response struct {
+	value *RunScript400Response
 	isSet bool
 }
 
-func (v NullableGetBalancesAggregated400Response) Get() *GetBalancesAggregated400Response {
+func (v NullableRunScript400Response) Get() *RunScript400Response {
 	return v.value
 }
 
-func (v *NullableGetBalancesAggregated400Response) Set(val *GetBalancesAggregated400Response) {
+func (v *NullableRunScript400Response) Set(val *RunScript400Response) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableGetBalancesAggregated400Response) IsSet() bool {
+func (v NullableRunScript400Response) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableGetBalancesAggregated400Response) Unset() {
+func (v *NullableRunScript400Response) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableGetBalancesAggregated400Response(val *GetBalancesAggregated400Response) *NullableGetBalancesAggregated400Response {
-	return &NullableGetBalancesAggregated400Response{value: val, isSet: true}
+func NewNullableRunScript400Response(val *RunScript400Response) *NullableRunScript400Response {
+	return &NullableRunScript400Response{value: val, isSet: true}
 }
 
-func (v NullableGetBalancesAggregated400Response) MarshalJSON() ([]byte, error) {
+func (v NullableRunScript400Response) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableGetBalancesAggregated400Response) UnmarshalJSON(src []byte) error {
+func (v *NullableRunScript400Response) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

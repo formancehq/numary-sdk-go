@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   contact: {}
   title: Ledger API
-  version: v1.7.4
+  version: v1.7.7
 servers:
 - description: Production server
   url: "https://{organization}.o.numary.cloud/ledger"
@@ -267,6 +267,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/getAccount_400_response'
           description: Bad Request
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/addMetadataToAccount_409_response'
+          description: Conflict
       summary: Add metadata to an account.
       tags:
       - accounts
@@ -357,6 +363,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ScriptResult'
           description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/runScript_400_response'
+          description: Bad Request
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/addMetadataToAccount_409_response'
+          description: Conflict
       summary: Execute a Numscript.
       tags:
       - script
@@ -460,19 +478,20 @@ paths:
           example: users:001
           type: string
         style: form
-      - description: "Filter transactions that occurred after this timestamp.\nThe\
-          \ format is RFC3339 and is inclusive (for example, 12:00:01 includes the\
-          \ first second of the minute).\n"
+      - description: |
+          Filter transactions that occurred after this timestamp.
+          The format is RFC3339 and is inclusive (for example, 12:00:01 includes the first second of the minute).
         explode: true
         in: query
         name: start_time
         required: false
         schema:
           type: string
+          example: null
         style: form
-      - description: "Filter transactions that occurred before this timestamp.\nThe\
-          \ format is RFC3339 and is exclusive (for example, 12:00:01 excludes the\
-          \ first second of the minute).\n"
+      - description: |
+          Filter transactions that occurred before this timestamp.
+          The format is RFC3339 and is exclusive (for example, 12:00:01 excludes the first second of the minute).
         explode: true
         in: query
         name: end_time
@@ -737,6 +756,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/getTransaction_404_response'
           description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/addMetadataToAccount_409_response'
+          description: Conflict
       summary: Set the metadata of a transaction by its ID.
       tags:
       - transactions
@@ -781,6 +806,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/getTransaction_404_response'
           description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/addMetadataToAccount_409_response'
+          description: Conflict
       summary: Revert a ledger transaction by its ID.
       tags:
       - transactions
@@ -1739,6 +1770,27 @@ components:
           type: string
         error_message:
           example: invalid account address format
+          type: string
+      required:
+      - error_code
+      type: object
+    addMetadataToAccount_409_response:
+      properties:
+        error_code:
+          example: CONFLICT
+          type: string
+        error_message:
+          type: string
+      required:
+      - error_code
+      type: object
+    runScript_400_response:
+      properties:
+        error_code:
+          example: VALIDATION
+          type: string
+        error_message:
+          example: invalid payload
           type: string
       required:
       - error_code
