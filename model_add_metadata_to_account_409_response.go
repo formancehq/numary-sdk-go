@@ -14,32 +14,32 @@ import (
 	"encoding/json"
 )
 
-// GetAccount400Response struct for GetAccount400Response
-type GetAccount400Response struct {
+// AddMetadataToAccount409Response struct for AddMetadataToAccount409Response
+type AddMetadataToAccount409Response struct {
 	ErrorCode string `json:"error_code"`
 	ErrorMessage *string `json:"error_message,omitempty"`
 }
 
-// NewGetAccount400Response instantiates a new GetAccount400Response object
+// NewAddMetadataToAccount409Response instantiates a new AddMetadataToAccount409Response object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetAccount400Response(errorCode string) *GetAccount400Response {
-	this := GetAccount400Response{}
+func NewAddMetadataToAccount409Response(errorCode string) *AddMetadataToAccount409Response {
+	this := AddMetadataToAccount409Response{}
 	this.ErrorCode = errorCode
 	return &this
 }
 
-// NewGetAccount400ResponseWithDefaults instantiates a new GetAccount400Response object
+// NewAddMetadataToAccount409ResponseWithDefaults instantiates a new AddMetadataToAccount409Response object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewGetAccount400ResponseWithDefaults() *GetAccount400Response {
-	this := GetAccount400Response{}
+func NewAddMetadataToAccount409ResponseWithDefaults() *AddMetadataToAccount409Response {
+	this := AddMetadataToAccount409Response{}
 	return &this
 }
 
 // GetErrorCode returns the ErrorCode field value
-func (o *GetAccount400Response) GetErrorCode() string {
+func (o *AddMetadataToAccount409Response) GetErrorCode() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -50,7 +50,7 @@ func (o *GetAccount400Response) GetErrorCode() string {
 
 // GetErrorCodeOk returns a tuple with the ErrorCode field value
 // and a boolean to check if the value has been set.
-func (o *GetAccount400Response) GetErrorCodeOk() (*string, bool) {
+func (o *AddMetadataToAccount409Response) GetErrorCodeOk() (*string, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -58,12 +58,12 @@ func (o *GetAccount400Response) GetErrorCodeOk() (*string, bool) {
 }
 
 // SetErrorCode sets field value
-func (o *GetAccount400Response) SetErrorCode(v string) {
+func (o *AddMetadataToAccount409Response) SetErrorCode(v string) {
 	o.ErrorCode = v
 }
 
 // GetErrorMessage returns the ErrorMessage field value if set, zero value otherwise.
-func (o *GetAccount400Response) GetErrorMessage() string {
+func (o *AddMetadataToAccount409Response) GetErrorMessage() string {
 	if o == nil || o.ErrorMessage == nil {
 		var ret string
 		return ret
@@ -73,7 +73,7 @@ func (o *GetAccount400Response) GetErrorMessage() string {
 
 // GetErrorMessageOk returns a tuple with the ErrorMessage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *GetAccount400Response) GetErrorMessageOk() (*string, bool) {
+func (o *AddMetadataToAccount409Response) GetErrorMessageOk() (*string, bool) {
 	if o == nil || o.ErrorMessage == nil {
 		return nil, false
 	}
@@ -81,7 +81,7 @@ func (o *GetAccount400Response) GetErrorMessageOk() (*string, bool) {
 }
 
 // HasErrorMessage returns a boolean if a field has been set.
-func (o *GetAccount400Response) HasErrorMessage() bool {
+func (o *AddMetadataToAccount409Response) HasErrorMessage() bool {
 	if o != nil && o.ErrorMessage != nil {
 		return true
 	}
@@ -90,11 +90,11 @@ func (o *GetAccount400Response) HasErrorMessage() bool {
 }
 
 // SetErrorMessage gets a reference to the given string and assigns it to the ErrorMessage field.
-func (o *GetAccount400Response) SetErrorMessage(v string) {
+func (o *AddMetadataToAccount409Response) SetErrorMessage(v string) {
 	o.ErrorMessage = &v
 }
 
-func (o GetAccount400Response) MarshalJSON() ([]byte, error) {
+func (o AddMetadataToAccount409Response) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
 		toSerialize["error_code"] = o.ErrorCode
@@ -105,38 +105,38 @@ func (o GetAccount400Response) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-type NullableGetAccount400Response struct {
-	value *GetAccount400Response
+type NullableAddMetadataToAccount409Response struct {
+	value *AddMetadataToAccount409Response
 	isSet bool
 }
 
-func (v NullableGetAccount400Response) Get() *GetAccount400Response {
+func (v NullableAddMetadataToAccount409Response) Get() *AddMetadataToAccount409Response {
 	return v.value
 }
 
-func (v *NullableGetAccount400Response) Set(val *GetAccount400Response) {
+func (v *NullableAddMetadataToAccount409Response) Set(val *AddMetadataToAccount409Response) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableGetAccount400Response) IsSet() bool {
+func (v NullableAddMetadataToAccount409Response) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableGetAccount400Response) Unset() {
+func (v *NullableAddMetadataToAccount409Response) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableGetAccount400Response(val *GetAccount400Response) *NullableGetAccount400Response {
-	return &NullableGetAccount400Response{value: val, isSet: true}
+func NewNullableAddMetadataToAccount409Response(val *AddMetadataToAccount409Response) *NullableAddMetadataToAccount409Response {
+	return &NullableAddMetadataToAccount409Response{value: val, isSet: true}
 }
 
-func (v NullableGetAccount400Response) MarshalJSON() ([]byte, error) {
+func (v NullableAddMetadataToAccount409Response) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableGetAccount400Response) UnmarshalJSON(src []byte) error {
+func (v *NullableAddMetadataToAccount409Response) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
