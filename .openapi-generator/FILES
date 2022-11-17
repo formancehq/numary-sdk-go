@@ -15,6 +15,7 @@ configuration.go
 docs/Account.md
 docs/AccountWithVolumesAndBalances.md
 docs/AccountsApi.md
+docs/AddMetadataToAccount409Response.md
 docs/BalancesApi.md
 docs/Config.md
 docs/ConfigInfo.md
@@ -47,6 +48,7 @@ docs/Mapping.md
 docs/MappingApi.md
 docs/MappingResponse.md
 docs/Posting.md
+docs/RunScript400Response.md
 docs/Script.md
 docs/ScriptApi.md
 docs/ScriptResult.md
@@ -65,6 +67,7 @@ go.mod
 go.sum
 model_account.go
 model_account_with_volumes_and_balances.go
+model_add_metadata_to_account_409_response.go
 model_config.go
 model_config_info.go
 model_config_info_response.go
@@ -95,6 +98,7 @@ model_list_transactions_200_response_cursor_all_of.go
 model_mapping.go
 model_mapping_response.go
 model_posting.go
+model_run_script_400_response.go
 model_script.go
 model_script_result.go
 model_stats.go
@@ -106,4 +110,11 @@ model_transactions.go
 model_transactions_response.go
 model_volume.go
 response.go
+test/api_accounts_test.go
+test/api_balances_test.go
+test/api_mapping_test.go
+test/api_script_test.go
+test/api_server_test.go
+test/api_stats_test.go
+test/api_transactions_test.go
 utils.go
