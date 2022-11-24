@@ -14,34 +14,34 @@ import (
 	"encoding/json"
 )
 
-// ErrorResponse struct for ErrorResponse
-type ErrorResponse struct {
-	ErrorCode ErrorCode `json:"error_code"`
+// RunScript400Response struct for RunScript400Response
+type RunScript400Response struct {
+	ErrorCode string `json:"error_code"`
 	ErrorMessage *string `json:"error_message,omitempty"`
 }
 
-// NewErrorResponse instantiates a new ErrorResponse object
+// NewRunScript400Response instantiates a new RunScript400Response object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewErrorResponse(errorCode ErrorCode) *ErrorResponse {
-	this := ErrorResponse{}
+func NewRunScript400Response(errorCode string) *RunScript400Response {
+	this := RunScript400Response{}
 	this.ErrorCode = errorCode
 	return &this
 }
 
-// NewErrorResponseWithDefaults instantiates a new ErrorResponse object
+// NewRunScript400ResponseWithDefaults instantiates a new RunScript400Response object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewErrorResponseWithDefaults() *ErrorResponse {
-	this := ErrorResponse{}
+func NewRunScript400ResponseWithDefaults() *RunScript400Response {
+	this := RunScript400Response{}
 	return &this
 }
 
 // GetErrorCode returns the ErrorCode field value
-func (o *ErrorResponse) GetErrorCode() ErrorCode {
+func (o *RunScript400Response) GetErrorCode() string {
 	if o == nil {
-		var ret ErrorCode
+		var ret string
 		return ret
 	}
 
@@ -50,7 +50,7 @@ func (o *ErrorResponse) GetErrorCode() ErrorCode {
 
 // GetErrorCodeOk returns a tuple with the ErrorCode field value
 // and a boolean to check if the value has been set.
-func (o *ErrorResponse) GetErrorCodeOk() (*ErrorCode, bool) {
+func (o *RunScript400Response) GetErrorCodeOk() (*string, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -58,12 +58,12 @@ func (o *ErrorResponse) GetErrorCodeOk() (*ErrorCode, bool) {
 }
 
 // SetErrorCode sets field value
-func (o *ErrorResponse) SetErrorCode(v ErrorCode) {
+func (o *RunScript400Response) SetErrorCode(v string) {
 	o.ErrorCode = v
 }
 
 // GetErrorMessage returns the ErrorMessage field value if set, zero value otherwise.
-func (o *ErrorResponse) GetErrorMessage() string {
+func (o *RunScript400Response) GetErrorMessage() string {
 	if o == nil || o.ErrorMessage == nil {
 		var ret string
 		return ret
@@ -73,7 +73,7 @@ func (o *ErrorResponse) GetErrorMessage() string {
 
 // GetErrorMessageOk returns a tuple with the ErrorMessage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ErrorResponse) GetErrorMessageOk() (*string, bool) {
+func (o *RunScript400Response) GetErrorMessageOk() (*string, bool) {
 	if o == nil || o.ErrorMessage == nil {
 		return nil, false
 	}
@@ -81,7 +81,7 @@ func (o *ErrorResponse) GetErrorMessageOk() (*string, bool) {
 }
 
 // HasErrorMessage returns a boolean if a field has been set.
-func (o *ErrorResponse) HasErrorMessage() bool {
+func (o *RunScript400Response) HasErrorMessage() bool {
 	if o != nil && o.ErrorMessage != nil {
 		return true
 	}
@@ -90,11 +90,11 @@ func (o *ErrorResponse) HasErrorMessage() bool {
 }
 
 // SetErrorMessage gets a reference to the given string and assigns it to the ErrorMessage field.
-func (o *ErrorResponse) SetErrorMessage(v string) {
+func (o *RunScript400Response) SetErrorMessage(v string) {
 	o.ErrorMessage = &v
 }
 
-func (o ErrorResponse) MarshalJSON() ([]byte, error) {
+func (o RunScript400Response) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
 		toSerialize["error_code"] = o.ErrorCode
@@ -105,38 +105,38 @@ func (o ErrorResponse) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-type NullableErrorResponse struct {
-	value *ErrorResponse
+type NullableRunScript400Response struct {
+	value *RunScript400Response
 	isSet bool
 }
 
-func (v NullableErrorResponse) Get() *ErrorResponse {
+func (v NullableRunScript400Response) Get() *RunScript400Response {
 	return v.value
 }
 
-func (v *NullableErrorResponse) Set(val *ErrorResponse) {
+func (v *NullableRunScript400Response) Set(val *RunScript400Response) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableErrorResponse) IsSet() bool {
+func (v NullableRunScript400Response) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableErrorResponse) Unset() {
+func (v *NullableRunScript400Response) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableErrorResponse(val *ErrorResponse) *NullableErrorResponse {
-	return &NullableErrorResponse{value: val, isSet: true}
+func NewNullableRunScript400Response(val *RunScript400Response) *NullableRunScript400Response {
+	return &NullableRunScript400Response{value: val, isSet: true}
 }
 
-func (v NullableErrorResponse) MarshalJSON() ([]byte, error) {
+func (v NullableRunScript400Response) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableErrorResponse) UnmarshalJSON(src []byte) error {
+func (v *NullableRunScript400Response) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
