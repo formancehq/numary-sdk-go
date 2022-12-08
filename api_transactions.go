@@ -335,7 +335,7 @@ func (a *TransactionsApiService) CountTransactionsExecute(r ApiCountTransactions
 		localVarQueryParams.Add("destination", parameterToString(*r.destination, ""))
 	}
 	if r.metadata != nil {
-		localVarQueryParams.Add("metadata", parameterToString(*r.metadata, ""))
+		addMetadataParams(localVarQueryParams, *r.metadata)
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -926,7 +926,7 @@ func (a *TransactionsApiService) ListTransactionsExecute(r ApiListTransactionsRe
 		localVarQueryParams.Add("pagination_token", parameterToString(*r.paginationToken, ""))
 	}
 	if r.metadata != nil {
-		localVarQueryParams.Add("metadata", parameterToString(*r.metadata, ""))
+		addMetadataParams(localVarQueryParams, *r.metadata)
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

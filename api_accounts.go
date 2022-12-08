@@ -261,7 +261,7 @@ func (a *AccountsApiService) CountAccountsExecute(r ApiCountAccountsRequest) (*_
 		localVarQueryParams.Add("address", parameterToString(*r.address, ""))
 	}
 	if r.metadata != nil {
-		localVarQueryParams.Add("metadata", parameterToString(*r.metadata, ""))
+		addMetadataParams(localVarQueryParams, *r.metadata)
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -525,7 +525,7 @@ func (a *AccountsApiService) ListAccountsExecute(r ApiListAccountsRequest) (List
 		localVarQueryParams.Add("address", parameterToString(*r.address, ""))
 	}
 	if r.metadata != nil {
-		localVarQueryParams.Add("metadata", parameterToString(*r.metadata, ""))
+		addMetadataParams(localVarQueryParams, *r.metadata)
 	}
 	if r.balance != nil {
 		localVarQueryParams.Add("balance", parameterToString(*r.balance, ""))
