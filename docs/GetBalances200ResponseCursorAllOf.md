@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**[]map[string]map[string]int32**](map[string]map[string]int32.md) |  | 
+**Data** | [**[]map[string]map[string]int64**](map[string]map[string]int64.md) |  | 
 
 ## Methods
 
 ### NewGetBalances200ResponseCursorAllOf
 
-`func NewGetBalances200ResponseCursorAllOf(data []map[string]map[string]int32, ) *GetBalances200ResponseCursorAllOf`
+`func NewGetBalances200ResponseCursorAllOf(data []map[string]map[string]int64, ) *GetBalances200ResponseCursorAllOf`
 
 NewGetBalances200ResponseCursorAllOf instantiates a new GetBalances200ResponseCursorAllOf object
 This constructor will assign default values to properties that have it defined,
@@ -27,20 +27,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetData
 
-`func (o *GetBalances200ResponseCursorAllOf) GetData() []map[string]map[string]int32`
+`func (o *GetBalances200ResponseCursorAllOf) GetData() []map[string]map[string]int64`
 
 GetData returns the Data field if non-nil, zero value otherwise.
 
 ### GetDataOk
 
-`func (o *GetBalances200ResponseCursorAllOf) GetDataOk() (*[]map[string]map[string]int32, bool)`
+`func (o *GetBalances200ResponseCursorAllOf) GetDataOk() (*[]map[string]map[string]int64, bool)`
 
 GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetData
 
-`func (o *GetBalances200ResponseCursorAllOf) SetData(v []map[string]map[string]int32)`
+`func (o *GetBalances200ResponseCursorAllOf) SetData(v []map[string]map[string]int64)`
 
 SetData sets Data field to given value.
 

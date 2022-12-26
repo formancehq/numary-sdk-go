@@ -4,17 +4,17 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**PageSize** | **int32** |  | 
+**PageSize** | **int64** |  | 
 **HasMore** | Pointer to **bool** |  | [optional] 
 **Previous** | Pointer to **string** |  | [optional] 
 **Next** | Pointer to **string** |  | [optional] 
-**Data** | [**[]map[string]map[string]int32**](map[string]map[string]int32.md) |  | 
+**Data** | [**[]map[string]map[string]int64**](map[string]map[string]int64.md) |  | 
 
 ## Methods
 
 ### NewGetBalances200ResponseCursor
 
-`func NewGetBalances200ResponseCursor(pageSize int32, data []map[string]map[string]int32, ) *GetBalances200ResponseCursor`
+`func NewGetBalances200ResponseCursor(pageSize int64, data []map[string]map[string]int64, ) *GetBalances200ResponseCursor`
 
 NewGetBalances200ResponseCursor instantiates a new GetBalances200ResponseCursor object
 This constructor will assign default values to properties that have it defined,
@@ -31,20 +31,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetPageSize
 
-`func (o *GetBalances200ResponseCursor) GetPageSize() int32`
+`func (o *GetBalances200ResponseCursor) GetPageSize() int64`
 
 GetPageSize returns the PageSize field if non-nil, zero value otherwise.
 
 ### GetPageSizeOk
 
-`func (o *GetBalances200ResponseCursor) GetPageSizeOk() (*int32, bool)`
+`func (o *GetBalances200ResponseCursor) GetPageSizeOk() (*int64, bool)`
 
 GetPageSizeOk returns a tuple with the PageSize field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetPageSize
 
-`func (o *GetBalances200ResponseCursor) SetPageSize(v int32)`
+`func (o *GetBalances200ResponseCursor) SetPageSize(v int64)`
 
 SetPageSize sets PageSize field to given value.
 
@@ -126,20 +126,20 @@ HasNext returns a boolean if a field has been set.
 
 ### GetData
 
-`func (o *GetBalances200ResponseCursor) GetData() []map[string]map[string]int32`
+`func (o *GetBalances200ResponseCursor) GetData() []map[string]map[string]int64`
 
 GetData returns the Data field if non-nil, zero value otherwise.
 
 ### GetDataOk
 
-`func (o *GetBalances200ResponseCursor) GetDataOk() (*[]map[string]map[string]int32, bool)`
+`func (o *GetBalances200ResponseCursor) GetDataOk() (*[]map[string]map[string]int64, bool)`
 
 GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetData
 
-`func (o *GetBalances200ResponseCursor) SetData(v []map[string]map[string]int32)`
+`func (o *GetBalances200ResponseCursor) SetData(v []map[string]map[string]int64)`
 
 SetData sets Data field to given value.
 

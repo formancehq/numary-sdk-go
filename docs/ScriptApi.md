@@ -1,6 +1,6 @@
 # \ScriptApi
 
-All URIs are relative to *https://.o.numary.cloud/ledger*
+All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -13,6 +13,8 @@ Method | HTTP request | Description
 > ScriptResult RunScript(ctx, ledger).Script(script).Preview(preview).Execute()
 
 Execute a Numscript.
+
+
 
 ### Example
 
@@ -75,7 +77,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth)
+No authorization required
 
 ### HTTP request headers
 

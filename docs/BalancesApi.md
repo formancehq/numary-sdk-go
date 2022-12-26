@@ -1,6 +1,6 @@
 # \BalancesApi
 
-All URIs are relative to *https://.o.numary.cloud/ledger*
+All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -31,7 +31,7 @@ func main() {
     ledger := "ledger001" // string | Name of the ledger.
     address := "users:001" // string | Filter balances involving given account, either as source or destination. (optional)
     after := "users:003" // string | Pagination cursor, will return accounts after given address, in descending order. (optional)
-    paginationToken := "aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==" // string | Parameter used in pagination requests.  Set to the value of next for the next page of results.  Set to the value of previous for the previous page of results. (optional)
+    paginationToken := "aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==" // string | Parameter used in pagination requests. Set to the value of next for the next page of results. Set to the value of previous for the previous page of results. (optional)
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
@@ -63,7 +63,7 @@ Name | Type | Description  | Notes
 
  **address** | **string** | Filter balances involving given account, either as source or destination. | 
  **after** | **string** | Pagination cursor, will return accounts after given address, in descending order. | 
- **paginationToken** | **string** | Parameter used in pagination requests.  Set to the value of next for the next page of results.  Set to the value of previous for the previous page of results. | 
+ **paginationToken** | **string** | Parameter used in pagination requests. Set to the value of next for the next page of results. Set to the value of previous for the previous page of results. | 
 
 ### Return type
 
@@ -71,7 +71,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth)
+No authorization required
 
 ### HTTP request headers
 
@@ -141,7 +141,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth)
+No authorization required
 
 ### HTTP request headers
 

@@ -1,6 +1,6 @@
 # \AccountsApi
 
-All URIs are relative to *https://.o.numary.cloud/ledger*
+All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -70,7 +70,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth)
+No authorization required
 
 ### HTTP request headers
 
@@ -140,7 +140,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth)
+No authorization required
 
 ### HTTP request headers
 
@@ -211,7 +211,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth)
+No authorization required
 
 ### HTTP request headers
 
@@ -245,13 +245,13 @@ import (
 
 func main() {
     ledger := "ledger001" // string | Name of the ledger.
-    pageSize := int32(100) // int32 | The maximum number of results to return per page (optional) (default to 15)
+    pageSize := int64(100) // int64 | The maximum number of results to return per page (optional) (default to 15)
     after := "users:003" // string | Pagination cursor, will return accounts after given address, in descending order. (optional)
     address := "users:.+" // string | Filter accounts by address pattern (regular expression placed between ^ and $). (optional)
     metadata := map[string]interface{}{"key": map[string]interface{}(123)} // map[string]interface{} | Filter accounts by metadata key value pairs. Nested objects can be used as seen in the example below. (optional)
     balance := int64(2400) // int64 | Filter accounts by their balance (default operator is gte) (optional)
     balanceOperator := "gte" // string | Operator used for the filtering of balances can be greater than/equal, less than/equal, greater than, less than, or equal (optional)
-    paginationToken := "aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==" // string | Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results.  Set to the value of previous for the previous page of results. No other parameters can be set when the pagination token is set.  (optional)
+    paginationToken := "aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==" // string | Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results. Set to the value of previous for the previous page of results. No other parameters can be set when the pagination token is set.  (optional)
 
     configuration := client.NewConfiguration()
     api_client := client.NewAPIClient(configuration)
@@ -281,13 +281,13 @@ Other parameters are passed through a pointer to a apiListAccountsRequest struct
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **pageSize** | **int32** | The maximum number of results to return per page | [default to 15]
+ **pageSize** | **int64** | The maximum number of results to return per page | [default to 15]
  **after** | **string** | Pagination cursor, will return accounts after given address, in descending order. | 
  **address** | **string** | Filter accounts by address pattern (regular expression placed between ^ and $). | 
  **metadata** | [**map[string]interface{}**](map[string]interface{}.md) | Filter accounts by metadata key value pairs. Nested objects can be used as seen in the example below. | 
  **balance** | **int64** | Filter accounts by their balance (default operator is gte) | 
  **balanceOperator** | **string** | Operator used for the filtering of balances can be greater than/equal, less than/equal, greater than, less than, or equal | 
- **paginationToken** | **string** | Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results.  Set to the value of previous for the previous page of results. No other parameters can be set when the pagination token is set.  | 
+ **paginationToken** | **string** | Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results. Set to the value of previous for the previous page of results. No other parameters can be set when the pagination token is set.  | 
 
 ### Return type
 
@@ -295,7 +295,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth)
+No authorization required
 
 ### HTTP request headers
 
