@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**PageSize** | **int32** |  | 
+**PageSize** | **int64** |  | 
 **HasMore** | Pointer to **bool** |  | [optional] 
 **Previous** | Pointer to **string** |  | [optional] 
 **Next** | Pointer to **string** |  | [optional] 
@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 
 ### NewCursor
 
-`func NewCursor(pageSize int32, ) *Cursor`
+`func NewCursor(pageSize int64, ) *Cursor`
 
 NewCursor instantiates a new Cursor object
 This constructor will assign default values to properties that have it defined,
@@ -30,20 +30,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetPageSize
 
-`func (o *Cursor) GetPageSize() int32`
+`func (o *Cursor) GetPageSize() int64`
 
 GetPageSize returns the PageSize field if non-nil, zero value otherwise.
 
 ### GetPageSizeOk
 
-`func (o *Cursor) GetPageSizeOk() (*int32, bool)`
+`func (o *Cursor) GetPageSizeOk() (*int64, bool)`
 
 GetPageSizeOk returns a tuple with the PageSize field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetPageSize
 
-`func (o *Cursor) SetPageSize(v int32)`
+`func (o *Cursor) SetPageSize(v int64)`
 
 SetPageSize sets PageSize field to given value.
 

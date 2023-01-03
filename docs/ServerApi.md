@@ -1,6 +1,6 @@
 # \ServerApi
 
-All URIs are relative to *https://.o.numary.cloud/ledger*
+All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -55,7 +55,7 @@ Other parameters are passed through a pointer to a apiGetInfoRequest struct via 
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth)
+No authorization required
 
 ### HTTP request headers
 

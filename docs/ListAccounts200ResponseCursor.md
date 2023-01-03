@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**PageSize** | **int32** |  | 
+**PageSize** | **int64** |  | 
 **HasMore** | Pointer to **bool** |  | [optional] 
 **Previous** | Pointer to **string** |  | [optional] 
 **Next** | Pointer to **string** |  | [optional] 
@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 
 ### NewListAccounts200ResponseCursor
 
-`func NewListAccounts200ResponseCursor(pageSize int32, data []Account, ) *ListAccounts200ResponseCursor`
+`func NewListAccounts200ResponseCursor(pageSize int64, data []Account, ) *ListAccounts200ResponseCursor`
 
 NewListAccounts200ResponseCursor instantiates a new ListAccounts200ResponseCursor object
 This constructor will assign default values to properties that have it defined,
@@ -31,20 +31,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetPageSize
 
-`func (o *ListAccounts200ResponseCursor) GetPageSize() int32`
+`func (o *ListAccounts200ResponseCursor) GetPageSize() int64`
 
 GetPageSize returns the PageSize field if non-nil, zero value otherwise.
 
 ### GetPageSizeOk
 
-`func (o *ListAccounts200ResponseCursor) GetPageSizeOk() (*int32, bool)`
+`func (o *ListAccounts200ResponseCursor) GetPageSizeOk() (*int64, bool)`
 
 GetPageSizeOk returns a tuple with the PageSize field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetPageSize
 
-`func (o *ListAccounts200ResponseCursor) SetPageSize(v int32)`
+`func (o *ListAccounts200ResponseCursor) SetPageSize(v int64)`
 
 SetPageSize sets PageSize field to given value.
 
