@@ -1,0 +1,89 @@
+# \LogsApi
+
+All URIs are relative to *http://localhost*
+
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**ListLogs**](LogsApi.md#ListLogs) | **Get** /{ledger}/log | List the logs from a ledger.
+
+
+
+## ListLogs
+
+> LogsCursorResponse ListLogs(ctx, ledger).PageSize(pageSize).After(after).StartTime(startTime).EndTime(endTime).PaginationToken(paginationToken).Execute()
+
+List the logs from a ledger.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    client "github.com/numary/numary-go"
+)
+
+func main() {
+    ledger := "ledger001" // string | Name of the ledger.
+    pageSize := int64(789) // int64 | The maximum number of results to return per page (optional) (default to 15)
+    after := "1234" // string | Pagination cursor, will return the logs after a given ID. (in descending order). (optional)
+    startTime := "startTime_example" // string | Filter logs that occurred after this timestamp. The format is RFC3339 and is inclusive (for example, 12:00:01 includes the first second of the minute).  (optional)
+    endTime := "endTime_example" // string | Filter logs that occurred before this timestamp. The format is RFC3339 and is exclusive (for example, 12:00:01 excludes the first second of the minute).  (optional)
+    paginationToken := "aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==" // string | Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results. Set to the value of previous for the previous page of results. No other parameters can be set when the pagination token is set.  (optional)
+
+    configuration := client.NewConfiguration()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.LogsApi.ListLogs(context.Background(), ledger).PageSize(pageSize).After(after).StartTime(startTime).EndTime(endTime).PaginationToken(paginationToken).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `LogsApi.ListLogs``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `ListLogs`: LogsCursorResponse
+    fmt.Fprintf(os.Stdout, "Response from `LogsApi.ListLogs`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**ledger** | **string** | Name of the ledger. | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListLogsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **pageSize** | **int64** | The maximum number of results to return per page | [default to 15]
+ **after** | **string** | Pagination cursor, will return the logs after a given ID. (in descending order). | 
+ **startTime** | **string** | Filter logs that occurred after this timestamp. The format is RFC3339 and is inclusive (for example, 12:00:01 includes the first second of the minute).  | 
+ **endTime** | **string** | Filter logs that occurred before this timestamp. The format is RFC3339 and is exclusive (for example, 12:00:01 excludes the first second of the minute).  | 
+ **paginationToken** | **string** | Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results. Set to the value of previous for the previous page of results. No other parameters can be set when the pagination token is set.  | 
+
+### Return type
+
+[**LogsCursorResponse**](LogsCursorResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+

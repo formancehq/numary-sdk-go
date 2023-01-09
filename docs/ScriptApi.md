@@ -1,6 +1,6 @@
 # \ScriptApi
 
-All URIs are relative to *https://.o.numary.cloud/ledger*
+All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -10,9 +10,11 @@ Method | HTTP request | Description
 
 ## RunScript
 
-> ScriptResult RunScript(ctx, ledger).Script(script).Preview(preview).Execute()
+> ScriptResponse RunScript(ctx, ledger).Script(script).Preview(preview).Execute()
 
 Execute a Numscript.
+
+
 
 ### Example
 
@@ -45,7 +47,7 @@ send [COIN 10] (
         fmt.Fprintf(os.Stderr, "Error when calling `ScriptApi.RunScript``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `RunScript`: ScriptResult
+    // response from `RunScript`: ScriptResponse
     fmt.Fprintf(os.Stdout, "Response from `ScriptApi.RunScript`: %v\n", resp)
 }
 ```
@@ -71,11 +73,11 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**ScriptResult**](ScriptResult.md)
+[**ScriptResponse**](ScriptResponse.md)
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth)
+No authorization required
 
 ### HTTP request headers
 
