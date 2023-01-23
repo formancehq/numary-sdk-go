@@ -1,10 +1,10 @@
 # \StatsApi
 
-All URIs are relative to *https://.o.numary.cloud/ledger*
+All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**ReadStats**](StatsApi.md#ReadStats) | **Get** /{ledger}/stats | Get Stats
+[**ReadStats**](StatsApi.md#ReadStats) | **Get** /{ledger}/stats | Get statistics from a ledger.
 
 
 
@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 > StatsResponse ReadStats(ctx, ledger).Execute()
 
-Get Stats
+Get statistics from a ledger.
 
 
 
@@ -66,7 +66,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth)
+No authorization required
 
 ### HTTP request headers
 

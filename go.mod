@@ -1,4 +1,4 @@
-module github.com/numary/numary-sdk-go
+module github.com/formancehq/numary-sdk-go
 
 go 1.13
 
