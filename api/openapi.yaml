@@ -2,16 +2,9 @@ openapi: 3.0.3
 info:
   contact: {}
   title: Ledger API
-  version: v1.7.4
+  version: v1.9.0-rc.3
 servers:
-- description: Production server
-  url: "https://{organization}.o.numary.cloud/ledger"
-  variables:
-    organization:
-      default: ""
-      description: The organization on which the ledger is located
-security:
-- basicAuth: []
+- url: /
 paths:
   /_info:
     get:
@@ -23,9 +16,44 @@ paths:
               schema:
                 $ref: '#/components/schemas/ConfigInfoResponse'
           description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
       summary: Show server information.
       tags:
-      - server
+      - Server
+  /{ledger}/_info:
+    get:
+      operationId: getLedgerInfo
+      parameters:
+      - description: Name of the ledger.
+        explode: false
+        in: path
+        name: ledger
+        required: true
+        schema:
+          example: ledger001
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LedgerInfoResponse'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
+      summary: Get information about a ledger.
+      tags:
+      - Ledger
   /{ledger}/accounts:
     get:
       description: "List accounts from a ledger, sorted by address in descending order."
@@ -48,6 +76,7 @@ paths:
         required: false
         schema:
           default: 15
+          format: int64
           maximum: 1000
           minimum: 1
           type: integer
@@ -91,6 +120,7 @@ paths:
         schema:
           example: 2400
           format: int64
+          minimum: 0
           type: integer
         style: form
       - description: "Operator used for the filtering of balances can be greater than/equal,\
@@ -106,13 +136,15 @@ paths:
           - gt
           - lt
           - e
+          - ne
           example: gte
           type: string
         style: form
-      - description: "Parameter used in pagination requests. Maximum page size is\
-          \ set to 15.\nSet to the value of next for the next page of results. \n\
-          Set to the value of previous for the previous page of results.\nNo other\
-          \ parameters can be set when the pagination token is set.\n"
+      - description: |
+          Parameter used in pagination requests. Maximum page size is set to 15.
+          Set to the value of next for the next page of results.
+          Set to the value of previous for the previous page of results.
+          No other parameters can be set when the pagination token is set.
         explode: true
         in: query
         name: pagination_token
@@ -126,17 +158,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/listAccounts_200_response'
+                $ref: '#/components/schemas/AccountsCursorResponse'
           description: OK
-        "400":
+        default:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/listAccounts_400_response'
-          description: Bad Request
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
       summary: List accounts from a ledger.
       tags:
-      - accounts
+      - Accounts
     head:
       operationId: countAccounts
       parameters:
@@ -177,11 +209,19 @@ paths:
             Count:
               explode: false
               schema:
+                format: int64
+                minimum: 0
                 type: integer
               style: simple
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
       summary: Count the accounts from a ledger.
       tags:
-      - accounts
+      - Accounts
   /{ledger}/accounts/{address}:
     get:
       operationId: getAccount
@@ -213,17 +253,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getAccount_200_response'
+                $ref: '#/components/schemas/AccountResponse'
           description: OK
-        "400":
+        default:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getAccount_400_response'
-          description: Bad Request
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
       summary: Get account by its address.
       tags:
-      - accounts
+      - Accounts
   /{ledger}/accounts/{address}/metadata:
     post:
       operationId: addMetadataToAccount
@@ -261,15 +301,15 @@ paths:
         "204":
           content: {}
           description: No Content
-        "400":
+        default:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getAccount_400_response'
-          description: Bad Request
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
       summary: Add metadata to an account.
       tags:
-      - accounts
+      - Accounts
   /{ledger}/mapping:
     get:
       operationId: getMapping
@@ -290,9 +330,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/MappingResponse'
           description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
       summary: Get the mapping of a ledger.
       tags:
-      - mapping
+      - Mapping
     put:
       operationId: updateMapping
       parameters:
@@ -318,11 +364,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/MappingResponse'
           description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
       summary: Update the mapping of a ledger.
       tags:
-      - mapping
+      - Mapping
   /{ledger}/script:
     post:
+      deprecated: true
+      description: |
+        This route is deprecated, and has been merged into `POST /{ledger}/transactions`.
       operationId: runScript
       parameters:
       - description: Name of the ledger.
@@ -355,16 +410,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ScriptResult'
-          description: OK
+                $ref: '#/components/schemas/ScriptResponse'
+          description: |
+            On success, it will return a 200 status code, and the resulting transaction under the `transaction` field.
+
+            On failure, it will also return a 200 status code, and the following fields:
+              - `details`: contains a URL. When there is an error parsing Numscript, the result can be difficult to read—the provided URL will render the error in an easy-to-read format.
+              - `errorCode` and `error_code` (deprecated): contains the string code of the error
+              - `errorMessage` and `error_message` (deprecated): contains a human-readable indication of what went wrong, for example that an account had insufficient funds, or that there was an error in the provided Numscript.
       summary: Execute a Numscript.
       tags:
-      - script
+      - Script
   /{ledger}/stats:
     get:
       description: |
-        Get ledger stats (aggregate metrics on accounts and transactions)
-        The stats for account
+        Get statistics from a ledger. (aggregate metrics on accounts and transactions)
       operationId: readStats
       parameters:
       - description: name of the ledger
@@ -383,9 +443,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/StatsResponse'
           description: OK
-      summary: Get Stats
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
+      summary: Get statistics from a ledger.
       tags:
-      - stats
+      - Stats
   /{ledger}/transactions:
     get:
       description: "List transactions from a ledger, sorted by txid in descending\
@@ -402,13 +468,13 @@ paths:
           type: string
         style: simple
       - description: The maximum number of results to return per page
-        example: 100
         explode: true
         in: query
         name: page_size
         required: false
         schema:
           default: 15
+          format: int64
           maximum: 1000
           minimum: 1
           type: integer
@@ -432,8 +498,8 @@ paths:
           example: ref:001
           type: string
         style: form
-      - description: "Find transactions with postings involving given account, either\
-          \ as source or destination."
+      - description: "Filter transactions with postings involving given account, either\
+          \ as source or destination (regular expression placed between ^ and $)."
         explode: true
         in: query
         name: account
@@ -442,7 +508,8 @@ paths:
           example: users:001
           type: string
         style: form
-      - description: Find transactions with postings involving given account at source.
+      - description: Filter transactions with postings involving given account at
+          source (regular expression placed between ^ and $).
         explode: true
         in: query
         name: source
@@ -451,7 +518,8 @@ paths:
           example: users:001
           type: string
         style: form
-      - description: Find transactions with postings involving given account at destination.
+      - description: Filter transactions with postings involving given account at
+          destination (regular expression placed between ^ and $).
         explode: true
         in: query
         name: destination
@@ -460,19 +528,20 @@ paths:
           example: users:001
           type: string
         style: form
-      - description: "Filter transactions that occurred after this timestamp.\nThe\
-          \ format is RFC3339 and is inclusive (for example, 12:00:01 includes the\
-          \ first second of the minute).\n"
+      - description: |
+          Filter transactions that occurred after this timestamp.
+          The format is RFC3339 and is inclusive (for example, 12:00:01 includes the first second of the minute).
         explode: true
         in: query
         name: start_time
         required: false
         schema:
           type: string
+          example: null
         style: form
-      - description: "Filter transactions that occurred before this timestamp.\nThe\
-          \ format is RFC3339 and is exclusive (for example, 12:00:01 excludes the\
-          \ first second of the minute).\n"
+      - description: |
+          Filter transactions that occurred before this timestamp.
+          The format is RFC3339 and is exclusive (for example, 12:00:01 excludes the first second of the minute).
         explode: true
         in: query
         name: end_time
@@ -480,10 +549,11 @@ paths:
         schema:
           type: string
         style: form
-      - description: "Parameter used in pagination requests. Maximum page size is\
-          \ set to 15.\nSet to the value of next for the next page of results. \n\
-          Set to the value of previous for the previous page of results.\nNo other\
-          \ parameters can be set when the pagination token is set.\n"
+      - description: |
+          Parameter used in pagination requests. Maximum page size is set to 15.
+          Set to the value of next for the next page of results.
+          Set to the value of previous for the previous page of results.
+          No other parameters can be set when the pagination token is set.
         explode: true
         in: query
         name: pagination_token
@@ -508,17 +578,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/listTransactions_200_response'
+                $ref: '#/components/schemas/TransactionsCursorResponse'
           description: OK
-        "400":
+        default:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/listAccounts_400_response'
-          description: Bad Request
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
       summary: List transactions from a ledger.
       tags:
-      - transactions
+      - Transactions
     head:
       operationId: countTransactions
       parameters:
@@ -570,6 +640,27 @@ paths:
           example: users:001
           type: string
         style: form
+      - description: |
+          Filter transactions that occurred after this timestamp.
+          The format is RFC3339 and is inclusive (for example, 12:00:01 includes the first second of the minute).
+        explode: true
+        in: query
+        name: start_time
+        required: false
+        schema:
+          type: string
+          example: null
+        style: form
+      - description: |
+          Filter transactions that occurred before this timestamp.
+          The format is RFC3339 and is exclusive (for example, 12:00:01 excludes the first second of the minute).
+        explode: true
+        in: query
+        name: end_time
+        required: false
+        schema:
+          type: string
+        style: form
       - description: Filter transactions by metadata key value pairs. Nested objects
           can be used as seen in the example below.
         example: "metadata[key]=value1&metadata[a.nested.key]=value2"
@@ -588,11 +679,19 @@ paths:
             Count:
               explode: false
               schema:
+                format: int64
+                minimum: 0
                 type: integer
               style: simple
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
       summary: Count the transactions from a ledger.
       tags:
-      - transactions
+      - Transactions
     post:
       operationId: createTransaction
       parameters:
@@ -619,7 +718,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransactionData'
+              $ref: '#/components/schemas/PostTransaction'
+        description: |
+          The request body must contain at least one of the following objects:
+            - `postings`: suitable for simple transactions
+            - `script`: enabling more complex transactions with Numscript
         required: true
       responses:
         "200":
@@ -628,27 +731,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/TransactionsResponse'
           description: OK
-        "304":
+        default:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransactionsResponse'
-          description: Not modified (when preview is enabled)
-        "400":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/createTransaction_400_response'
-          description: Bad Request
-        "409":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/createTransaction_409_response'
-          description: Conflict
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
       summary: Create a new transaction to a ledger.
       tags:
-      - transactions
+      - Transactions
   /{ledger}/transactions/{txid}:
     get:
       operationId: getTransaction
@@ -669,6 +760,8 @@ paths:
         required: true
         schema:
           example: 1234
+          format: int64
+          minimum: 0
           type: integer
         style: simple
       responses:
@@ -678,21 +771,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/TransactionResponse'
           description: OK
-        "400":
+        default:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getTransaction_400_response'
-          description: Bad Request
-        "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/getTransaction_404_response'
-          description: Not Found
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
       summary: Get transaction from a ledger by its ID.
       tags:
-      - transactions
+      - Transactions
   /{ledger}/transactions/{txid}/metadata:
     post:
       operationId: addMetadataOnTransaction
@@ -713,6 +800,8 @@ paths:
         required: true
         schema:
           example: 1234
+          format: int64
+          minimum: 0
           type: integer
         style: simple
       requestBody:
@@ -725,21 +814,15 @@ paths:
         "204":
           content: {}
           description: No Content
-        "400":
+        default:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getTransaction_400_response'
-          description: Bad Request
-        "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/getTransaction_404_response'
-          description: Not Found
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
       summary: Set the metadata of a transaction by its ID.
       tags:
-      - transactions
+      - Transactions
   /{ledger}/transactions/{txid}/revert:
     post:
       operationId: revertTransaction
@@ -760,6 +843,8 @@ paths:
         required: true
         schema:
           example: 1234
+          format: int64
+          minimum: 0
           type: integer
         style: simple
       responses:
@@ -769,21 +854,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/TransactionResponse'
           description: OK
-        "400":
+        default:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getTransaction_400_response'
-          description: Bad Request
-        "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/getTransaction_404_response'
-          description: Not Found
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
       summary: Revert a ledger transaction by its ID.
       tags:
-      - transactions
+      - Transactions
   /{ledger}/transactions/batch:
     post:
       operationId: CreateTransactions
@@ -810,21 +889,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/TransactionsResponse'
           description: OK
-        "400":
+        default:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateTransactions_400_response'
-          description: Bad Request
-        "409":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/createTransaction_409_response'
-          description: Conflict
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
       summary: Create a new batch of transactions to a ledger.
       tags:
-      - transactions
+      - Transactions
   /{ledger}/balances:
     get:
       operationId: getBalances
@@ -858,9 +931,10 @@ paths:
           example: users:003
           type: string
         style: form
-      - description: "Parameter used in pagination requests. \nSet to the value of\
-          \ next for the next page of results. \nSet to the value of previous for\
-          \ the previous page of results."
+      - description: |-
+          Parameter used in pagination requests.
+          Set to the value of next for the next page of results.
+          Set to the value of previous for the previous page of results.
         explode: true
         in: query
         name: pagination_token
@@ -874,17 +948,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getBalances_200_response'
+                $ref: '#/components/schemas/BalancesCursorResponse'
           description: OK
-        "400":
+        default:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/listAccounts_400_response'
-          description: Bad Request
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
       summary: Get the balances from a ledger's account
       tags:
-      - balances
+      - Balances
   /{ledger}/aggregate/balances:
     get:
       operationId: getBalancesAggregated
@@ -913,19 +987,315 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getBalancesAggregated_200_response'
+                $ref: '#/components/schemas/AggregateBalancesResponse'
           description: OK
-        "400":
+        default:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getBalancesAggregated_400_response'
-          description: Bad Request
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
       summary: Get the aggregated balances from selected accounts
       tags:
-      - balances
+      - Balances
+  /{ledger}/log:
+    get:
+      description: "List the logs from a ledger, sorted by ID in descending order."
+      operationId: listLogs
+      parameters:
+      - description: Name of the ledger.
+        explode: false
+        in: path
+        name: ledger
+        required: true
+        schema:
+          example: ledger001
+          type: string
+        style: simple
+      - description: The maximum number of results to return per page
+        explode: true
+        in: query
+        name: page_size
+        required: false
+        schema:
+          default: 15
+          format: int64
+          maximum: 1000
+          minimum: 1
+          type: integer
+        style: form
+      - description: "Pagination cursor, will return the logs after a given ID. (in\
+          \ descending order)."
+        explode: true
+        in: query
+        name: after
+        required: false
+        schema:
+          example: "1234"
+          type: string
+        style: form
+      - description: |
+          Filter logs that occurred after this timestamp.
+          The format is RFC3339 and is inclusive (for example, 12:00:01 includes the first second of the minute).
+        explode: true
+        in: query
+        name: start_time
+        required: false
+        schema:
+          type: string
+          example: null
+        style: form
+      - description: |
+          Filter logs that occurred before this timestamp.
+          The format is RFC3339 and is exclusive (for example, 12:00:01 excludes the first second of the minute).
+        explode: true
+        in: query
+        name: end_time
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: |
+          Parameter used in pagination requests. Maximum page size is set to 15.
+          Set to the value of next for the next page of results.
+          Set to the value of previous for the previous page of results.
+          No other parameters can be set when the pagination token is set.
+        explode: true
+        in: query
+        name: pagination_token
+        required: false
+        schema:
+          example: aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogsCursorResponse'
+          description: OK
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Error
+      summary: List the logs from a ledger.
+      tags:
+      - Logs
 components:
   schemas:
+    AccountsCursorResponse:
+      example:
+        cursor:
+          next: ""
+          previous: YXVsdCBhbmQgYSBtYXhpbXVtIG1heF9yZXN1bHRzLol=
+          data:
+          - metadata:
+              admin: true
+              a:
+                nested:
+                  key: value
+            address: users:001
+            type: virtual
+          - metadata:
+              admin: true
+              a:
+                nested:
+                  key: value
+            address: users:001
+            type: virtual
+          hasMore: false
+          pageSize: 15
+      properties:
+        cursor:
+          $ref: '#/components/schemas/AccountsCursorResponse_cursor'
+      required:
+      - cursor
+      type: object
+    BalancesCursorResponse:
+      example:
+        cursor:
+          next: ""
+          previous: YXVsdCBhbmQgYSBtYXhpbXVtIG1heF9yZXN1bHRzLol=
+          data:
+          - account1:
+              USD: 100
+              EUR: 23
+            account2:
+              CAD: 20
+              JPY: 21
+          - account1:
+              USD: 100
+              EUR: 23
+            account2:
+              CAD: 20
+              JPY: 21
+          hasMore: false
+          pageSize: 15
+      properties:
+        cursor:
+          $ref: '#/components/schemas/BalancesCursorResponse_cursor'
+      required:
+      - cursor
+      type: object
+    TransactionsCursorResponse:
+      example:
+        cursor:
+          next: ""
+          previous: YXVsdCBhbmQgYSBtYXhpbXVtIG1heF9yZXN1bHRzLol=
+          data:
+          - reference: ref:001
+            metadata:
+              admin: true
+              a:
+                nested:
+                  key: value
+            postings:
+            - amount: 100
+              destination: users:002
+              source: users:001
+              asset: COIN
+            - amount: 100
+              destination: users:002
+              source: users:001
+              asset: COIN
+            txid: 0
+            postCommitVolumes:
+              orders:1:
+                USD:
+                  input: 100
+                  output: 10
+                  balance: 90
+              orders:2:
+                USD:
+                  input: 100
+                  output: 10
+                  balance: 90
+            preCommitVolumes:
+              orders:1:
+                USD:
+                  input: 100
+                  output: 10
+                  balance: 90
+              orders:2:
+                USD:
+                  input: 100
+                  output: 10
+                  balance: 90
+            timestamp: 2000-01-23T04:56:07.000+00:00
+          - reference: ref:001
+            metadata:
+              admin: true
+              a:
+                nested:
+                  key: value
+            postings:
+            - amount: 100
+              destination: users:002
+              source: users:001
+              asset: COIN
+            - amount: 100
+              destination: users:002
+              source: users:001
+              asset: COIN
+            txid: 0
+            postCommitVolumes:
+              orders:1:
+                USD:
+                  input: 100
+                  output: 10
+                  balance: 90
+              orders:2:
+                USD:
+                  input: 100
+                  output: 10
+                  balance: 90
+            preCommitVolumes:
+              orders:1:
+                USD:
+                  input: 100
+                  output: 10
+                  balance: 90
+              orders:2:
+                USD:
+                  input: 100
+                  output: 10
+                  balance: 90
+            timestamp: 2000-01-23T04:56:07.000+00:00
+          hasMore: false
+          pageSize: 15
+      properties:
+        cursor:
+          $ref: '#/components/schemas/TransactionsCursorResponse_cursor'
+      required:
+      - cursor
+      type: object
+    LogsCursorResponse:
+      example:
+        cursor:
+          next: ""
+          previous: YXVsdCBhbmQgYSBtYXhpbXVtIG1heF9yZXN1bHRzLol=
+          data:
+          - date: 2000-01-23T04:56:07.000+00:00
+            data: "{}"
+            id: 1234
+            type: NEW_TRANSACTION
+            hash: 9ee060170400f556b7e1575cb13f9db004f150a08355c7431c62bc639166431e
+          - date: 2000-01-23T04:56:07.000+00:00
+            data: "{}"
+            id: 1234
+            type: NEW_TRANSACTION
+            hash: 9ee060170400f556b7e1575cb13f9db004f150a08355c7431c62bc639166431e
+          hasMore: false
+          pageSize: 15
+      properties:
+        cursor:
+          $ref: '#/components/schemas/LogsCursorResponse_cursor'
+      required:
+      - cursor
+      type: object
+    AccountResponse:
+      example:
+        data:
+          metadata:
+            admin: true
+            a:
+              nested:
+                key: value
+          balances:
+            COIN: 100
+          address: users:001
+          volumes:
+            COIN:
+              input: 100
+              output: 0
+          type: virtual
+      properties:
+        data:
+          $ref: '#/components/schemas/AccountWithVolumesAndBalances'
+      required:
+      - data
+      type: object
+    AggregateBalancesResponse:
+      example:
+        data:
+          USD: 100
+          EUR: 12
+      properties:
+        data:
+          additionalProperties:
+            format: int64
+            minimum: 0
+            type: integer
+          example:
+            USD: 100
+            EUR: 12
+          type: object
+      required:
+      - data
+      type: object
     Config:
       example:
         storage:
@@ -938,6 +1308,23 @@ components:
           $ref: '#/components/schemas/LedgerStorage'
       required:
       - storage
+      type: object
+    LedgerStorage:
+      example:
+        driver: driver
+        ledgers:
+        - ledgers
+        - ledgers
+      properties:
+        driver:
+          type: string
+        ledgers:
+          items:
+            type: string
+          type: array
+      required:
+      - driver
+      - ledgers
       type: object
     Metadata:
       additionalProperties: {}
@@ -970,28 +1357,13 @@ components:
       - server
       - version
       type: object
-    LedgerStorage:
+    ScriptResponse:
       example:
-        driver: driver
-        ledgers:
-        - ledgers
-        - ledgers
-      properties:
-        driver:
-          type: string
-        ledgers:
-          items:
-            type: string
-          type: array
-      required:
-      - driver
-      - ledgers
-      type: object
-    ScriptResult:
-      example:
-        error_message: error_message
-        details: details
-        error_code: INTERNAL
+        error_message: "[INSUFFICIENT_FUND] account had insufficient funds"
+        errorMessage: account had insufficient funds
+        errorCode: INSUFFICIENT_FUND
+        details: https://play.numscript.org/?payload=eyJlcnJvciI6ImFjY291bnQgaGFkIGluc3VmZmljaWVudCBmdW5kcyJ9
+        error_code: INSUFFICIENT_FUND
         transaction:
           reference: ref:001
           metadata:
@@ -1033,21 +1405,42 @@ components:
                 balance: 90
           timestamp: 2000-01-23T04:56:07.000+00:00
       properties:
+        errorCode:
+          $ref: '#/components/schemas/ErrorsEnum'
+        errorMessage:
+          example: account had insufficient funds
+          type: string
         details:
+          example: https://play.numscript.org/?payload=eyJlcnJvciI6ImFjY291bnQgaGFkIGluc3VmZmljaWVudCBmdW5kcyJ9
           type: string
         error_code:
+          deprecated: true
           enum:
           - INTERNAL
           - INSUFFICIENT_FUND
-          - COMPILATION_FAILED
+          - VALIDATION
+          - CONFLICT
           - NO_SCRIPT
+          - COMPILATION_FAILED
+          - METADATA_OVERRIDE
+          example: INSUFFICIENT_FUND
           type: string
         error_message:
+          deprecated: true
+          example: "[INSUFFICIENT_FUND] account had insufficient funds"
           type: string
         transaction:
           $ref: '#/components/schemas/Transaction'
       type: object
     Account:
+      example:
+        metadata:
+          admin: true
+          a:
+            nested:
+              key: value
+        address: users:001
+        type: virtual
       properties:
         address:
           example: users:001
@@ -1099,6 +1492,8 @@ components:
         volumes:
           additionalProperties:
             additionalProperties:
+              format: int64
+              minimum: 0
               type: integer
             type: object
           example:
@@ -1108,6 +1503,8 @@ components:
           type: object
         balances:
           additionalProperties:
+            format: int64
+            minimum: 0
             type: integer
           example:
             COIN: 100
@@ -1128,6 +1525,8 @@ components:
       type: object
     AssetsBalances:
       additionalProperties:
+        format: int64
+        minimum: 0
         type: integer
       example:
         USD: 100
@@ -1172,6 +1571,8 @@ components:
       properties:
         amount:
           example: 100
+          format: int64
+          minimum: 0
           type: integer
         asset:
           example: COIN
@@ -1202,6 +1603,16 @@ components:
           vars:
             user: users:042
       properties:
+        plain:
+          example: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\
+            \tdestination = $user\n)\n"
+          type: string
+        vars:
+          example:
+            vars:
+              user: users:042
+          properties: {}
+          type: object
         reference:
           description: Reference to attach to the generated transaction
           example: order_1234
@@ -1214,16 +1625,6 @@ components:
               nested:
                 key: value
           nullable: true
-          type: object
-        plain:
-          example: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\
-            \tdestination = $user\n)\n"
-          type: string
-        vars:
-          example:
-            vars:
-              user: users:042
-          properties: {}
           type: object
       required:
       - plain
@@ -1290,6 +1691,8 @@ components:
           nullable: true
           type: object
         txid:
+          format: int64
+          minimum: 0
           type: integer
         preCommitVolumes:
           additionalProperties:
@@ -1345,9 +1748,6 @@ components:
           asset: COIN
         timestamp: 2000-01-23T04:56:07.000+00:00
       properties:
-        timestamp:
-          format: date-time
-          type: string
         postings:
           items:
             $ref: '#/components/schemas/Posting'
@@ -1364,6 +1764,9 @@ components:
                 key: value
           nullable: true
           type: object
+        timestamp:
+          format: date-time
+          type: string
       required:
       - postings
       type: object
@@ -1410,35 +1813,103 @@ components:
       required:
       - transactions
       type: object
+    PostTransaction:
+      example:
+        reference: ref:001
+        metadata:
+          admin: true
+          a:
+            nested:
+              key: value
+        postings:
+        - amount: 100
+          destination: users:002
+          source: users:001
+          asset: COIN
+        - amount: 100
+          destination: users:002
+          source: users:001
+          asset: COIN
+        script:
+          plain: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\t\
+            destination = $user\n)\n"
+          vars:
+            vars:
+              user: users:042
+        timestamp: 2000-01-23T04:56:07.000+00:00
+      properties:
+        timestamp:
+          format: date-time
+          type: string
+        postings:
+          items:
+            $ref: '#/components/schemas/Posting'
+          type: array
+        script:
+          $ref: '#/components/schemas/PostTransaction_script'
+        reference:
+          example: ref:001
+          type: string
+        metadata:
+          additionalProperties: {}
+          example:
+            admin: true
+            a:
+              nested:
+                key: value
+          nullable: true
+          type: object
+      type: object
     Stats:
       example:
         accounts: 0
-        transactions: 6
+        transactions: 0
       properties:
         accounts:
+          format: int64
+          minimum: 0
           type: integer
         transactions:
+          format: int64
+          minimum: 0
           type: integer
       required:
       - accounts
       - transactions
       type: object
-    Cursor:
+    Log:
+      example:
+        date: 2000-01-23T04:56:07.000+00:00
+        data: "{}"
+        id: 1234
+        type: NEW_TRANSACTION
+        hash: 9ee060170400f556b7e1575cb13f9db004f150a08355c7431c62bc639166431e
       properties:
-        page_size:
-          example: 1
+        id:
+          example: 1234
+          format: int64
+          minimum: 0
           type: integer
-        has_more:
-          example: false
-          type: boolean
-        previous:
-          example: YXVsdCBhbmQgYSBtYXhpbXVtIG1heF9yZXN1bHRzLol=
+        type:
+          enum:
+          - NEW_TRANSACTION
+          - SET_METADATA
           type: string
-        next:
-          example: aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==
+        data:
+          properties: {}
+          type: object
+        hash:
+          example: 9ee060170400f556b7e1575cb13f9db004f150a08355c7431c62bc639166431e
+          type: string
+        date:
+          format: date-time
           type: string
       required:
-      - page_size
+      - data
+      - date
+      - hash
+      - id
+      - type
       type: object
     TransactionsResponse:
       example:
@@ -1581,7 +2052,7 @@ components:
       example:
         data:
           accounts: 0
-          transactions: 6
+          transactions: 0
       properties:
         data:
           $ref: '#/components/schemas/Stats'
@@ -1624,11 +2095,14 @@ components:
         balance: 80
       properties:
         input:
-          type: number
+          format: int64
+          type: integer
         output:
-          type: number
+          format: int64
+          type: integer
         balance:
-          type: number
+          format: int64
+          type: integer
       required:
       - input
       - output
@@ -1661,215 +2135,369 @@ components:
             output: 10
             balance: 90
       type: object
-    ErrorCode:
+    ErrorResponse:
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/ErrorsEnum'
+        errorMessage:
+          example: "[INSUFFICIENT_FUND] account had insufficient funds"
+          type: string
+        details:
+          example: https://play.numscript.org/?payload=eyJlcnJvciI6ImFjY291bnQgaGFkIGluc3VmZmljaWVudCBmdW5kcyJ9
+          type: string
+      required:
+      - error_code
+      type: object
+    ErrorsEnum:
       enum:
       - INTERNAL
       - INSUFFICIENT_FUND
       - VALIDATION
       - CONFLICT
+      - NO_SCRIPT
+      - COMPILATION_FAILED
+      - METADATA_OVERRIDE
+      example: INSUFFICIENT_FUND
       type: string
-    ErrorResponse:
+    LedgerInfoResponse:
+      example:
+        data:
+          name: ledger001
+          storage:
+            driver: postgres
+            migrations:
+            - date: 2000-01-23T04:56:07.000+00:00
+              state: to do
+              version: 11
+            - date: 2000-01-23T04:56:07.000+00:00
+              state: to do
+              version: 11
+          version: v1.8.1
       properties:
-        error_code:
-          $ref: '#/components/schemas/ErrorCode'
-        error_message:
-          example: internal error
+        data:
+          $ref: '#/components/schemas/LedgerInfo'
+    LedgerInfo:
+      example:
+        name: ledger001
+        storage:
+          driver: postgres
+          migrations:
+          - date: 2000-01-23T04:56:07.000+00:00
+            state: to do
+            version: 11
+          - date: 2000-01-23T04:56:07.000+00:00
+            state: to do
+            version: 11
+        version: v1.8.1
+      properties:
+        name:
+          example: ledger001
           type: string
-      required:
-      - error_code
+        version:
+          example: v1.8.1
+          type: string
+        storage:
+          $ref: '#/components/schemas/LedgerInfo_storage'
       type: object
-    listAccounts_200_response_cursor_allOf:
+    MigrationInfo:
+      example:
+        date: 2000-01-23T04:56:07.000+00:00
+        state: to do
+        version: 11
       properties:
+        version:
+          example: 11
+          format: int64
+          minimum: 0
+          type: integer
+        date:
+          format: date-time
+          type: string
+        state:
+          enum:
+          - to do
+          - done
+          type: string
+      type: object
+    AccountsCursorResponse_cursor:
+      example:
+        next: ""
+        previous: YXVsdCBhbmQgYSBtYXhpbXVtIG1heF9yZXN1bHRzLol=
+        data:
+        - metadata:
+            admin: true
+            a:
+              nested:
+                key: value
+          address: users:001
+          type: virtual
+        - metadata:
+            admin: true
+            a:
+              nested:
+                key: value
+          address: users:001
+          type: virtual
+        hasMore: false
+        pageSize: 15
+      properties:
+        pageSize:
+          example: 15
+          format: int64
+          maximum: 1000
+          minimum: 1
+          type: integer
+        hasMore:
+          example: false
+          type: boolean
+        previous:
+          example: YXVsdCBhbmQgYSBtYXhpbXVtIG1heF9yZXN1bHRzLol=
+          type: string
+        next:
+          example: ""
+          type: string
         data:
           items:
             $ref: '#/components/schemas/Account'
           type: array
       required:
       - data
+      - hasMore
+      - pageSize
       type: object
-    listAccounts_200_response_cursor:
-      allOf:
-      - $ref: '#/components/schemas/Cursor'
-      - $ref: '#/components/schemas/listAccounts_200_response_cursor_allOf'
-    listAccounts_200_response:
+    BalancesCursorResponse_cursor:
       example:
-        cursor: null
-      properties:
-        cursor:
-          $ref: '#/components/schemas/listAccounts_200_response_cursor'
-      required:
-      - cursor
-    listAccounts_400_response:
-      properties:
-        error_code:
-          example: VALIDATION
-          type: string
-        error_message:
-          example: no other query params can be set with 'pagination_token'
-          type: string
-      required:
-      - error_code
-      type: object
-    getAccount_200_response:
-      example:
+        next: ""
+        previous: YXVsdCBhbmQgYSBtYXhpbXVtIG1heF9yZXN1bHRzLol=
         data:
-          metadata:
-            admin: true
-            a:
-              nested:
-                key: value
-          balances:
-            COIN: 100
-          address: users:001
-          volumes:
-            COIN:
-              input: 100
-              output: 0
-          type: virtual
+        - account1:
+            USD: 100
+            EUR: 23
+          account2:
+            CAD: 20
+            JPY: 21
+        - account1:
+            USD: 100
+            EUR: 23
+          account2:
+            CAD: 20
+            JPY: 21
+        hasMore: false
+        pageSize: 15
       properties:
-        data:
-          $ref: '#/components/schemas/AccountWithVolumesAndBalances'
-      required:
-      - data
-      type: object
-    getAccount_400_response:
-      properties:
-        error_code:
-          example: VALIDATION
+        pageSize:
+          example: 15
+          format: int64
+          maximum: 1000
+          minimum: 1
+          type: integer
+        hasMore:
+          example: false
+          type: boolean
+        previous:
+          example: YXVsdCBhbmQgYSBtYXhpbXVtIG1heF9yZXN1bHRzLol=
           type: string
-        error_message:
-          example: invalid account address format
+        next:
+          example: ""
           type: string
-      required:
-      - error_code
-      type: object
-    listTransactions_200_response_cursor_allOf:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/Transaction'
-          type: array
-      required:
-      - data
-      type: object
-    listTransactions_200_response_cursor:
-      allOf:
-      - $ref: '#/components/schemas/Cursor'
-      - $ref: '#/components/schemas/listTransactions_200_response_cursor_allOf'
-    listTransactions_200_response:
-      example:
-        cursor: null
-      properties:
-        cursor:
-          $ref: '#/components/schemas/listTransactions_200_response_cursor'
-      required:
-      - cursor
-      type: object
-    createTransaction_400_response:
-      properties:
-        error_code:
-          example: VALIDATION
-          type: string
-        error_message:
-          example: transaction has no postings
-          type: string
-      required:
-      - error_code
-      type: object
-    createTransaction_409_response:
-      properties:
-        error_code:
-          example: CONFLICT
-          type: string
-        error_message:
-          example: conflict error on reference
-          type: string
-      required:
-      - error_code
-      type: object
-    getTransaction_400_response:
-      properties:
-        error_code:
-          example: VALIDATION
-          type: string
-        error_message:
-          example: invalid transaction ID
-          type: string
-      required:
-      - error_code
-      type: object
-    getTransaction_404_response:
-      properties:
-        error_code:
-          example: NOT_FOUND
-          type: string
-        error_message:
-          example: transaction not found
-          type: string
-      required:
-      - error_code
-      type: object
-    CreateTransactions_400_response:
-      properties:
-        error_code:
-          example: VALIDATION
-          type: string
-        error_message:
-          example: invalid transactions format
-          type: string
-      required:
-      - error_code
-      type: object
-    getBalances_200_response_cursor_allOf:
-      properties:
         data:
           items:
             $ref: '#/components/schemas/AccountsBalances'
           type: array
       required:
       - data
+      - hasMore
+      - pageSize
       type: object
-    getBalances_200_response_cursor:
-      allOf:
-      - $ref: '#/components/schemas/Cursor'
-      - $ref: '#/components/schemas/getBalances_200_response_cursor_allOf'
-    getBalances_200_response:
+    TransactionsCursorResponse_cursor:
       example:
-        cursor: null
-      properties:
-        cursor:
-          $ref: '#/components/schemas/getBalances_200_response_cursor'
-      required:
-      - cursor
-      type: object
-    getBalancesAggregated_200_response:
-      example:
+        next: ""
+        previous: YXVsdCBhbmQgYSBtYXhpbXVtIG1heF9yZXN1bHRzLol=
         data:
-          USD: 100
-          EUR: 12
+        - reference: ref:001
+          metadata:
+            admin: true
+            a:
+              nested:
+                key: value
+          postings:
+          - amount: 100
+            destination: users:002
+            source: users:001
+            asset: COIN
+          - amount: 100
+            destination: users:002
+            source: users:001
+            asset: COIN
+          txid: 0
+          postCommitVolumes:
+            orders:1:
+              USD:
+                input: 100
+                output: 10
+                balance: 90
+            orders:2:
+              USD:
+                input: 100
+                output: 10
+                balance: 90
+          preCommitVolumes:
+            orders:1:
+              USD:
+                input: 100
+                output: 10
+                balance: 90
+            orders:2:
+              USD:
+                input: 100
+                output: 10
+                balance: 90
+          timestamp: 2000-01-23T04:56:07.000+00:00
+        - reference: ref:001
+          metadata:
+            admin: true
+            a:
+              nested:
+                key: value
+          postings:
+          - amount: 100
+            destination: users:002
+            source: users:001
+            asset: COIN
+          - amount: 100
+            destination: users:002
+            source: users:001
+            asset: COIN
+          txid: 0
+          postCommitVolumes:
+            orders:1:
+              USD:
+                input: 100
+                output: 10
+                balance: 90
+            orders:2:
+              USD:
+                input: 100
+                output: 10
+                balance: 90
+          preCommitVolumes:
+            orders:1:
+              USD:
+                input: 100
+                output: 10
+                balance: 90
+            orders:2:
+              USD:
+                input: 100
+                output: 10
+                balance: 90
+          timestamp: 2000-01-23T04:56:07.000+00:00
+        hasMore: false
+        pageSize: 15
       properties:
+        pageSize:
+          example: 15
+          format: int64
+          maximum: 1000
+          minimum: 1
+          type: integer
+        hasMore:
+          example: false
+          type: boolean
+        previous:
+          example: YXVsdCBhbmQgYSBtYXhpbXVtIG1heF9yZXN1bHRzLol=
+          type: string
+        next:
+          example: ""
+          type: string
         data:
-          additionalProperties:
-            type: integer
-          example:
-            USD: 100
-            EUR: 12
-          type: object
+          items:
+            $ref: '#/components/schemas/Transaction'
+          type: array
       required:
       - data
+      - hasMore
+      - pageSize
       type: object
-    getBalancesAggregated_400_response:
+    LogsCursorResponse_cursor:
+      example:
+        next: ""
+        previous: YXVsdCBhbmQgYSBtYXhpbXVtIG1heF9yZXN1bHRzLol=
+        data:
+        - date: 2000-01-23T04:56:07.000+00:00
+          data: "{}"
+          id: 1234
+          type: NEW_TRANSACTION
+          hash: 9ee060170400f556b7e1575cb13f9db004f150a08355c7431c62bc639166431e
+        - date: 2000-01-23T04:56:07.000+00:00
+          data: "{}"
+          id: 1234
+          type: NEW_TRANSACTION
+          hash: 9ee060170400f556b7e1575cb13f9db004f150a08355c7431c62bc639166431e
+        hasMore: false
+        pageSize: 15
       properties:
-        error_code:
-          example: VALIDATION
+        pageSize:
+          example: 15
+          format: int64
+          maximum: 1000
+          minimum: 1
+          type: integer
+        hasMore:
+          example: false
+          type: boolean
+        previous:
+          example: YXVsdCBhbmQgYSBtYXhpbXVtIG1heF9yZXN1bHRzLol=
           type: string
-        error_message:
-          example: invalid address
+        next:
+          example: ""
           type: string
+        data:
+          items:
+            $ref: '#/components/schemas/Log'
+          type: array
       required:
-      - error_code
+      - data
+      - hasMore
+      - pageSize
       type: object
-  securitySchemes:
-    basicAuth:
-      scheme: basic
-      type: http
+    PostTransaction_script:
+      example:
+        plain: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\t\
+          destination = $user\n)\n"
+        vars:
+          vars:
+            user: users:042
+      properties:
+        plain:
+          example: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\
+            \tdestination = $user\n)\n"
+          type: string
+        vars:
+          example:
+            vars:
+              user: users:042
+          properties: {}
+          type: object
+      required:
+      - plain
+      type: object
+    LedgerInfo_storage:
+      example:
+        driver: postgres
+        migrations:
+        - date: 2000-01-23T04:56:07.000+00:00
+          state: to do
+          version: 11
+        - date: 2000-01-23T04:56:07.000+00:00
+          state: to do
+          version: 11
+      properties:
+        driver:
+          example: postgres
+          type: string
+        migrations:
+          items:
+            $ref: '#/components/schemas/MigrationInfo'
+          type: array
+      type: object
