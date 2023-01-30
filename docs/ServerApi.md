@@ -1,10 +1,10 @@
 # \ServerApi
 
-All URIs are relative to *https://.o.numary.cloud/ledger*
+All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**GetInfo**](ServerApi.md#GetInfo) | **Get** /_info | Show server information.
+[**GetInfo**](ServerApi.md#GetInfo) | **Get** /_info | Show server information
 
 
 
@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 > ConfigInfoResponse GetInfo(ctx).Execute()
 
-Show server information.
+Show server information
 
 ### Example
 
@@ -55,7 +55,7 @@ Other parameters are passed through a pointer to a apiGetInfoRequest struct via 
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth)
+No authorization required
 
 ### HTTP request headers
 
