@@ -1,11 +1,11 @@
 # \MappingApi
 
-All URIs are relative to *https://.o.numary.cloud/ledger*
+All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**GetMapping**](MappingApi.md#GetMapping) | **Get** /{ledger}/mapping | Get the mapping of a ledger.
-[**UpdateMapping**](MappingApi.md#UpdateMapping) | **Put** /{ledger}/mapping | Update the mapping of a ledger.
+[**GetMapping**](MappingApi.md#GetMapping) | **Get** /{ledger}/mapping | Get the mapping of a ledger
+[**UpdateMapping**](MappingApi.md#UpdateMapping) | **Put** /{ledger}/mapping | Update the mapping of a ledger
 
 
 
@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 > MappingResponse GetMapping(ctx, ledger).Execute()
 
-Get the mapping of a ledger.
+Get the mapping of a ledger
 
 ### Example
 
@@ -65,7 +65,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth)
+No authorization required
 
 ### HTTP request headers
 
@@ -81,7 +81,7 @@ Name | Type | Description  | Notes
 
 > MappingResponse UpdateMapping(ctx, ledger).Mapping(mapping).Execute()
 
-Update the mapping of a ledger.
+Update the mapping of a ledger
 
 ### Example
 
@@ -135,7 +135,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[basicAuth](../README.md#basicAuth)
+No authorization required
 
 ### HTTP request headers
 
