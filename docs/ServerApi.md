@@ -23,14 +23,14 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/numary/numary-go"
+    client "github.com/formancehq/numary-sdk-go"
 )
 
 func main() {
 
     configuration := client.NewConfiguration()
-    api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.ServerApi.GetInfo(context.Background()).Execute()
+    apiClient := client.NewAPIClient(configuration)
+    resp, r, err := apiClient.ServerApi.GetInfo(context.Background()).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `ServerApi.GetInfo``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)

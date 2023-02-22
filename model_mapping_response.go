@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the MappingResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MappingResponse{}
+
 // MappingResponse struct for MappingResponse
 type MappingResponse struct {
 	Data NullableMapping `json:"data,omitempty"`
@@ -38,7 +41,7 @@ func NewMappingResponseWithDefaults() *MappingResponse {
 
 // GetData returns the Data field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *MappingResponse) GetData() Mapping {
-	if o == nil || o.Data.Get() == nil {
+	if o == nil || IsNil(o.Data.Get()) {
 		var ret Mapping
 		return ret
 	}
@@ -49,7 +52,7 @@ func (o *MappingResponse) GetData() Mapping {
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *MappingResponse) GetDataOk() (*Mapping, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return o.Data.Get(), o.Data.IsSet()
@@ -79,11 +82,19 @@ func (o *MappingResponse) UnsetData() {
 }
 
 func (o MappingResponse) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o MappingResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	if o.Data.IsSet() {
 		toSerialize["data"] = o.Data.Get()
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableMappingResponse struct {

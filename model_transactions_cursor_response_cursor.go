@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the TransactionsCursorResponseCursor type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TransactionsCursorResponseCursor{}
+
 // TransactionsCursorResponseCursor struct for TransactionsCursorResponseCursor
 type TransactionsCursorResponseCursor struct {
 	PageSize int64 `json:"pageSize"`
@@ -56,7 +59,7 @@ func (o *TransactionsCursorResponseCursor) GetPageSize() int64 {
 // GetPageSizeOk returns a tuple with the PageSize field value
 // and a boolean to check if the value has been set.
 func (o *TransactionsCursorResponseCursor) GetPageSizeOk() (*int64, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.PageSize, true
@@ -80,7 +83,7 @@ func (o *TransactionsCursorResponseCursor) GetHasMore() bool {
 // GetHasMoreOk returns a tuple with the HasMore field value
 // and a boolean to check if the value has been set.
 func (o *TransactionsCursorResponseCursor) GetHasMoreOk() (*bool, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.HasMore, true
@@ -93,7 +96,7 @@ func (o *TransactionsCursorResponseCursor) SetHasMore(v bool) {
 
 // GetPrevious returns the Previous field value if set, zero value otherwise.
 func (o *TransactionsCursorResponseCursor) GetPrevious() string {
-	if o == nil || o.Previous == nil {
+	if o == nil || IsNil(o.Previous) {
 		var ret string
 		return ret
 	}
@@ -103,7 +106,7 @@ func (o *TransactionsCursorResponseCursor) GetPrevious() string {
 // GetPreviousOk returns a tuple with the Previous field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TransactionsCursorResponseCursor) GetPreviousOk() (*string, bool) {
-	if o == nil || o.Previous == nil {
+	if o == nil || IsNil(o.Previous) {
 		return nil, false
 	}
 	return o.Previous, true
@@ -111,7 +114,7 @@ func (o *TransactionsCursorResponseCursor) GetPreviousOk() (*string, bool) {
 
 // HasPrevious returns a boolean if a field has been set.
 func (o *TransactionsCursorResponseCursor) HasPrevious() bool {
-	if o != nil && o.Previous != nil {
+	if o != nil && !IsNil(o.Previous) {
 		return true
 	}
 
@@ -125,7 +128,7 @@ func (o *TransactionsCursorResponseCursor) SetPrevious(v string) {
 
 // GetNext returns the Next field value if set, zero value otherwise.
 func (o *TransactionsCursorResponseCursor) GetNext() string {
-	if o == nil || o.Next == nil {
+	if o == nil || IsNil(o.Next) {
 		var ret string
 		return ret
 	}
@@ -135,7 +138,7 @@ func (o *TransactionsCursorResponseCursor) GetNext() string {
 // GetNextOk returns a tuple with the Next field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TransactionsCursorResponseCursor) GetNextOk() (*string, bool) {
-	if o == nil || o.Next == nil {
+	if o == nil || IsNil(o.Next) {
 		return nil, false
 	}
 	return o.Next, true
@@ -143,7 +146,7 @@ func (o *TransactionsCursorResponseCursor) GetNextOk() (*string, bool) {
 
 // HasNext returns a boolean if a field has been set.
 func (o *TransactionsCursorResponseCursor) HasNext() bool {
-	if o != nil && o.Next != nil {
+	if o != nil && !IsNil(o.Next) {
 		return true
 	}
 
@@ -167,11 +170,11 @@ func (o *TransactionsCursorResponseCursor) GetData() []Transaction {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *TransactionsCursorResponseCursor) GetDataOk() (*[]Transaction, bool) {
-	if o == nil  {
+func (o *TransactionsCursorResponseCursor) GetDataOk() ([]Transaction, bool) {
+	if o == nil {
 		return nil, false
 	}
-	return &o.Data, true
+	return o.Data, true
 }
 
 // SetData sets field value
@@ -180,23 +183,25 @@ func (o *TransactionsCursorResponseCursor) SetData(v []Transaction) {
 }
 
 func (o TransactionsCursorResponseCursor) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["pageSize"] = o.PageSize
-	}
-	if true {
-		toSerialize["hasMore"] = o.HasMore
-	}
-	if o.Previous != nil {
-		toSerialize["previous"] = o.Previous
-	}
-	if o.Next != nil {
-		toSerialize["next"] = o.Next
-	}
-	if true {
-		toSerialize["data"] = o.Data
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TransactionsCursorResponseCursor) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["pageSize"] = o.PageSize
+	toSerialize["hasMore"] = o.HasMore
+	if !IsNil(o.Previous) {
+		toSerialize["previous"] = o.Previous
+	}
+	if !IsNil(o.Next) {
+		toSerialize["next"] = o.Next
+	}
+	toSerialize["data"] = o.Data
+	return toSerialize, nil
 }
 
 type NullableTransactionsCursorResponseCursor struct {

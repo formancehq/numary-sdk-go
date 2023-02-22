@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the AggregateBalancesResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AggregateBalancesResponse{}
+
 // AggregateBalancesResponse struct for AggregateBalancesResponse
 type AggregateBalancesResponse struct {
 	Data map[string]int64 `json:"data"`
@@ -50,7 +53,7 @@ func (o *AggregateBalancesResponse) GetData() map[string]int64 {
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
 func (o *AggregateBalancesResponse) GetDataOk() (*map[string]int64, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Data, true
@@ -62,11 +65,17 @@ func (o *AggregateBalancesResponse) SetData(v map[string]int64) {
 }
 
 func (o AggregateBalancesResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["data"] = o.Data
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AggregateBalancesResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["data"] = o.Data
+	return toSerialize, nil
 }
 
 type NullableAggregateBalancesResponse struct {

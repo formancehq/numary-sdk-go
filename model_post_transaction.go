@@ -15,10 +15,13 @@ import (
 	"time"
 )
 
+// checks if the PostTransaction type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PostTransaction{}
+
 // PostTransaction struct for PostTransaction
 type PostTransaction struct {
 	Timestamp *time.Time `json:"timestamp,omitempty"`
-	Postings *[]Posting `json:"postings,omitempty"`
+	Postings []Posting `json:"postings,omitempty"`
 	Script *PostTransactionScript `json:"script,omitempty"`
 	Reference *string `json:"reference,omitempty"`
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
@@ -43,7 +46,7 @@ func NewPostTransactionWithDefaults() *PostTransaction {
 
 // GetTimestamp returns the Timestamp field value if set, zero value otherwise.
 func (o *PostTransaction) GetTimestamp() time.Time {
-	if o == nil || o.Timestamp == nil {
+	if o == nil || IsNil(o.Timestamp) {
 		var ret time.Time
 		return ret
 	}
@@ -53,7 +56,7 @@ func (o *PostTransaction) GetTimestamp() time.Time {
 // GetTimestampOk returns a tuple with the Timestamp field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PostTransaction) GetTimestampOk() (*time.Time, bool) {
-	if o == nil || o.Timestamp == nil {
+	if o == nil || IsNil(o.Timestamp) {
 		return nil, false
 	}
 	return o.Timestamp, true
@@ -61,7 +64,7 @@ func (o *PostTransaction) GetTimestampOk() (*time.Time, bool) {
 
 // HasTimestamp returns a boolean if a field has been set.
 func (o *PostTransaction) HasTimestamp() bool {
-	if o != nil && o.Timestamp != nil {
+	if o != nil && !IsNil(o.Timestamp) {
 		return true
 	}
 
@@ -75,17 +78,17 @@ func (o *PostTransaction) SetTimestamp(v time.Time) {
 
 // GetPostings returns the Postings field value if set, zero value otherwise.
 func (o *PostTransaction) GetPostings() []Posting {
-	if o == nil || o.Postings == nil {
+	if o == nil || IsNil(o.Postings) {
 		var ret []Posting
 		return ret
 	}
-	return *o.Postings
+	return o.Postings
 }
 
 // GetPostingsOk returns a tuple with the Postings field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PostTransaction) GetPostingsOk() (*[]Posting, bool) {
-	if o == nil || o.Postings == nil {
+func (o *PostTransaction) GetPostingsOk() ([]Posting, bool) {
+	if o == nil || IsNil(o.Postings) {
 		return nil, false
 	}
 	return o.Postings, true
@@ -93,7 +96,7 @@ func (o *PostTransaction) GetPostingsOk() (*[]Posting, bool) {
 
 // HasPostings returns a boolean if a field has been set.
 func (o *PostTransaction) HasPostings() bool {
-	if o != nil && o.Postings != nil {
+	if o != nil && !IsNil(o.Postings) {
 		return true
 	}
 
@@ -102,12 +105,12 @@ func (o *PostTransaction) HasPostings() bool {
 
 // SetPostings gets a reference to the given []Posting and assigns it to the Postings field.
 func (o *PostTransaction) SetPostings(v []Posting) {
-	o.Postings = &v
+	o.Postings = v
 }
 
 // GetScript returns the Script field value if set, zero value otherwise.
 func (o *PostTransaction) GetScript() PostTransactionScript {
-	if o == nil || o.Script == nil {
+	if o == nil || IsNil(o.Script) {
 		var ret PostTransactionScript
 		return ret
 	}
@@ -117,7 +120,7 @@ func (o *PostTransaction) GetScript() PostTransactionScript {
 // GetScriptOk returns a tuple with the Script field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PostTransaction) GetScriptOk() (*PostTransactionScript, bool) {
-	if o == nil || o.Script == nil {
+	if o == nil || IsNil(o.Script) {
 		return nil, false
 	}
 	return o.Script, true
@@ -125,7 +128,7 @@ func (o *PostTransaction) GetScriptOk() (*PostTransactionScript, bool) {
 
 // HasScript returns a boolean if a field has been set.
 func (o *PostTransaction) HasScript() bool {
-	if o != nil && o.Script != nil {
+	if o != nil && !IsNil(o.Script) {
 		return true
 	}
 
@@ -139,7 +142,7 @@ func (o *PostTransaction) SetScript(v PostTransactionScript) {
 
 // GetReference returns the Reference field value if set, zero value otherwise.
 func (o *PostTransaction) GetReference() string {
-	if o == nil || o.Reference == nil {
+	if o == nil || IsNil(o.Reference) {
 		var ret string
 		return ret
 	}
@@ -149,7 +152,7 @@ func (o *PostTransaction) GetReference() string {
 // GetReferenceOk returns a tuple with the Reference field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PostTransaction) GetReferenceOk() (*string, bool) {
-	if o == nil || o.Reference == nil {
+	if o == nil || IsNil(o.Reference) {
 		return nil, false
 	}
 	return o.Reference, true
@@ -157,7 +160,7 @@ func (o *PostTransaction) GetReferenceOk() (*string, bool) {
 
 // HasReference returns a boolean if a field has been set.
 func (o *PostTransaction) HasReference() bool {
-	if o != nil && o.Reference != nil {
+	if o != nil && !IsNil(o.Reference) {
 		return true
 	}
 
@@ -171,7 +174,7 @@ func (o *PostTransaction) SetReference(v string) {
 
 // GetMetadata returns the Metadata field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PostTransaction) GetMetadata() map[string]interface{} {
-	if o == nil  {
+	if o == nil {
 		var ret map[string]interface{}
 		return ret
 	}
@@ -181,16 +184,16 @@ func (o *PostTransaction) GetMetadata() map[string]interface{} {
 // GetMetadataOk returns a tuple with the Metadata field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PostTransaction) GetMetadataOk() (*map[string]interface{}, bool) {
-	if o == nil || o.Metadata == nil {
-		return nil, false
+func (o *PostTransaction) GetMetadataOk() (map[string]interface{}, bool) {
+	if o == nil || IsNil(o.Metadata) {
+		return map[string]interface{}{}, false
 	}
-	return &o.Metadata, true
+	return o.Metadata, true
 }
 
 // HasMetadata returns a boolean if a field has been set.
 func (o *PostTransaction) HasMetadata() bool {
-	if o != nil && o.Metadata != nil {
+	if o != nil && IsNil(o.Metadata) {
 		return true
 	}
 
@@ -203,23 +206,31 @@ func (o *PostTransaction) SetMetadata(v map[string]interface{}) {
 }
 
 func (o PostTransaction) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o PostTransaction) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Timestamp != nil {
+	if !IsNil(o.Timestamp) {
 		toSerialize["timestamp"] = o.Timestamp
 	}
-	if o.Postings != nil {
+	if !IsNil(o.Postings) {
 		toSerialize["postings"] = o.Postings
 	}
-	if o.Script != nil {
+	if !IsNil(o.Script) {
 		toSerialize["script"] = o.Script
 	}
-	if o.Reference != nil {
+	if !IsNil(o.Reference) {
 		toSerialize["reference"] = o.Reference
 	}
 	if o.Metadata != nil {
 		toSerialize["metadata"] = o.Metadata
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullablePostTransaction struct {

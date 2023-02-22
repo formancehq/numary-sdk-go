@@ -23,15 +23,15 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/numary/numary-go"
+    client "github.com/formancehq/numary-sdk-go"
 )
 
 func main() {
     ledger := "ledger001" // string | Name of the ledger.
 
     configuration := client.NewConfiguration()
-    api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.LedgerApi.GetLedgerInfo(context.Background(), ledger).Execute()
+    apiClient := client.NewAPIClient(configuration)
+    resp, r, err := apiClient.LedgerApi.GetLedgerInfo(context.Background(), ledger).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `LedgerApi.GetLedgerInfo``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)

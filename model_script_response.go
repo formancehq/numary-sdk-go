@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the ScriptResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ScriptResponse{}
+
 // ScriptResponse struct for ScriptResponse
 type ScriptResponse struct {
 	ErrorCode *ErrorsEnum `json:"errorCode,omitempty"`
@@ -41,7 +44,7 @@ func NewScriptResponseWithDefaults() *ScriptResponse {
 
 // GetErrorCode returns the ErrorCode field value if set, zero value otherwise.
 func (o *ScriptResponse) GetErrorCode() ErrorsEnum {
-	if o == nil || o.ErrorCode == nil {
+	if o == nil || IsNil(o.ErrorCode) {
 		var ret ErrorsEnum
 		return ret
 	}
@@ -51,7 +54,7 @@ func (o *ScriptResponse) GetErrorCode() ErrorsEnum {
 // GetErrorCodeOk returns a tuple with the ErrorCode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScriptResponse) GetErrorCodeOk() (*ErrorsEnum, bool) {
-	if o == nil || o.ErrorCode == nil {
+	if o == nil || IsNil(o.ErrorCode) {
 		return nil, false
 	}
 	return o.ErrorCode, true
@@ -59,7 +62,7 @@ func (o *ScriptResponse) GetErrorCodeOk() (*ErrorsEnum, bool) {
 
 // HasErrorCode returns a boolean if a field has been set.
 func (o *ScriptResponse) HasErrorCode() bool {
-	if o != nil && o.ErrorCode != nil {
+	if o != nil && !IsNil(o.ErrorCode) {
 		return true
 	}
 
@@ -73,7 +76,7 @@ func (o *ScriptResponse) SetErrorCode(v ErrorsEnum) {
 
 // GetErrorMessage returns the ErrorMessage field value if set, zero value otherwise.
 func (o *ScriptResponse) GetErrorMessage() string {
-	if o == nil || o.ErrorMessage == nil {
+	if o == nil || IsNil(o.ErrorMessage) {
 		var ret string
 		return ret
 	}
@@ -83,7 +86,7 @@ func (o *ScriptResponse) GetErrorMessage() string {
 // GetErrorMessageOk returns a tuple with the ErrorMessage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScriptResponse) GetErrorMessageOk() (*string, bool) {
-	if o == nil || o.ErrorMessage == nil {
+	if o == nil || IsNil(o.ErrorMessage) {
 		return nil, false
 	}
 	return o.ErrorMessage, true
@@ -91,7 +94,7 @@ func (o *ScriptResponse) GetErrorMessageOk() (*string, bool) {
 
 // HasErrorMessage returns a boolean if a field has been set.
 func (o *ScriptResponse) HasErrorMessage() bool {
-	if o != nil && o.ErrorMessage != nil {
+	if o != nil && !IsNil(o.ErrorMessage) {
 		return true
 	}
 
@@ -105,7 +108,7 @@ func (o *ScriptResponse) SetErrorMessage(v string) {
 
 // GetDetails returns the Details field value if set, zero value otherwise.
 func (o *ScriptResponse) GetDetails() string {
-	if o == nil || o.Details == nil {
+	if o == nil || IsNil(o.Details) {
 		var ret string
 		return ret
 	}
@@ -115,7 +118,7 @@ func (o *ScriptResponse) GetDetails() string {
 // GetDetailsOk returns a tuple with the Details field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScriptResponse) GetDetailsOk() (*string, bool) {
-	if o == nil || o.Details == nil {
+	if o == nil || IsNil(o.Details) {
 		return nil, false
 	}
 	return o.Details, true
@@ -123,7 +126,7 @@ func (o *ScriptResponse) GetDetailsOk() (*string, bool) {
 
 // HasDetails returns a boolean if a field has been set.
 func (o *ScriptResponse) HasDetails() bool {
-	if o != nil && o.Details != nil {
+	if o != nil && !IsNil(o.Details) {
 		return true
 	}
 
@@ -137,7 +140,7 @@ func (o *ScriptResponse) SetDetails(v string) {
 
 // GetTransaction returns the Transaction field value if set, zero value otherwise.
 func (o *ScriptResponse) GetTransaction() Transaction {
-	if o == nil || o.Transaction == nil {
+	if o == nil || IsNil(o.Transaction) {
 		var ret Transaction
 		return ret
 	}
@@ -147,7 +150,7 @@ func (o *ScriptResponse) GetTransaction() Transaction {
 // GetTransactionOk returns a tuple with the Transaction field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScriptResponse) GetTransactionOk() (*Transaction, bool) {
-	if o == nil || o.Transaction == nil {
+	if o == nil || IsNil(o.Transaction) {
 		return nil, false
 	}
 	return o.Transaction, true
@@ -155,7 +158,7 @@ func (o *ScriptResponse) GetTransactionOk() (*Transaction, bool) {
 
 // HasTransaction returns a boolean if a field has been set.
 func (o *ScriptResponse) HasTransaction() bool {
-	if o != nil && o.Transaction != nil {
+	if o != nil && !IsNil(o.Transaction) {
 		return true
 	}
 
@@ -168,20 +171,28 @@ func (o *ScriptResponse) SetTransaction(v Transaction) {
 }
 
 func (o ScriptResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.ErrorCode != nil {
-		toSerialize["errorCode"] = o.ErrorCode
-	}
-	if o.ErrorMessage != nil {
-		toSerialize["errorMessage"] = o.ErrorMessage
-	}
-	if o.Details != nil {
-		toSerialize["details"] = o.Details
-	}
-	if o.Transaction != nil {
-		toSerialize["transaction"] = o.Transaction
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ScriptResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.ErrorCode) {
+		toSerialize["errorCode"] = o.ErrorCode
+	}
+	if !IsNil(o.ErrorMessage) {
+		toSerialize["errorMessage"] = o.ErrorMessage
+	}
+	if !IsNil(o.Details) {
+		toSerialize["details"] = o.Details
+	}
+	if !IsNil(o.Transaction) {
+		toSerialize["transaction"] = o.Transaction
+	}
+	return toSerialize, nil
 }
 
 type NullableScriptResponse struct {

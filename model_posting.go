@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the Posting type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Posting{}
+
 // Posting struct for Posting
 type Posting struct {
 	Amount int64 `json:"amount"`
@@ -56,7 +59,7 @@ func (o *Posting) GetAmount() int64 {
 // GetAmountOk returns a tuple with the Amount field value
 // and a boolean to check if the value has been set.
 func (o *Posting) GetAmountOk() (*int64, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Amount, true
@@ -80,7 +83,7 @@ func (o *Posting) GetAsset() string {
 // GetAssetOk returns a tuple with the Asset field value
 // and a boolean to check if the value has been set.
 func (o *Posting) GetAssetOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Asset, true
@@ -104,7 +107,7 @@ func (o *Posting) GetDestination() string {
 // GetDestinationOk returns a tuple with the Destination field value
 // and a boolean to check if the value has been set.
 func (o *Posting) GetDestinationOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Destination, true
@@ -128,7 +131,7 @@ func (o *Posting) GetSource() string {
 // GetSourceOk returns a tuple with the Source field value
 // and a boolean to check if the value has been set.
 func (o *Posting) GetSourceOk() (*string, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Source, true
@@ -140,20 +143,20 @@ func (o *Posting) SetSource(v string) {
 }
 
 func (o Posting) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["amount"] = o.Amount
-	}
-	if true {
-		toSerialize["asset"] = o.Asset
-	}
-	if true {
-		toSerialize["destination"] = o.Destination
-	}
-	if true {
-		toSerialize["source"] = o.Source
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Posting) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["amount"] = o.Amount
+	toSerialize["asset"] = o.Asset
+	toSerialize["destination"] = o.Destination
+	toSerialize["source"] = o.Source
+	return toSerialize, nil
 }
 
 type NullablePosting struct {

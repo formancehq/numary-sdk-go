@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the ConfigInfoResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ConfigInfoResponse{}
+
 // ConfigInfoResponse struct for ConfigInfoResponse
 type ConfigInfoResponse struct {
 	Data ConfigInfo `json:"data"`
@@ -50,7 +53,7 @@ func (o *ConfigInfoResponse) GetData() ConfigInfo {
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
 func (o *ConfigInfoResponse) GetDataOk() (*ConfigInfo, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Data, true
@@ -62,11 +65,17 @@ func (o *ConfigInfoResponse) SetData(v ConfigInfo) {
 }
 
 func (o ConfigInfoResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["data"] = o.Data
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ConfigInfoResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["data"] = o.Data
+	return toSerialize, nil
 }
 
 type NullableConfigInfoResponse struct {

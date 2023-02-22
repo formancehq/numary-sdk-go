@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the Mapping type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Mapping{}
+
 // Mapping struct for Mapping
 type Mapping struct {
 	Contracts []Contract `json:"contracts"`
@@ -49,11 +52,11 @@ func (o *Mapping) GetContracts() []Contract {
 
 // GetContractsOk returns a tuple with the Contracts field value
 // and a boolean to check if the value has been set.
-func (o *Mapping) GetContractsOk() (*[]Contract, bool) {
-	if o == nil  {
+func (o *Mapping) GetContractsOk() ([]Contract, bool) {
+	if o == nil {
 		return nil, false
 	}
-	return &o.Contracts, true
+	return o.Contracts, true
 }
 
 // SetContracts sets field value
@@ -62,11 +65,17 @@ func (o *Mapping) SetContracts(v []Contract) {
 }
 
 func (o Mapping) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["contracts"] = o.Contracts
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Mapping) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["contracts"] = o.Contracts
+	return toSerialize, nil
 }
 
 type NullableMapping struct {

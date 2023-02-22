@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the AccountsCursorResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AccountsCursorResponse{}
+
 // AccountsCursorResponse struct for AccountsCursorResponse
 type AccountsCursorResponse struct {
 	Cursor AccountsCursorResponseCursor `json:"cursor"`
@@ -50,7 +53,7 @@ func (o *AccountsCursorResponse) GetCursor() AccountsCursorResponseCursor {
 // GetCursorOk returns a tuple with the Cursor field value
 // and a boolean to check if the value has been set.
 func (o *AccountsCursorResponse) GetCursorOk() (*AccountsCursorResponseCursor, bool) {
-	if o == nil  {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Cursor, true
@@ -62,11 +65,17 @@ func (o *AccountsCursorResponse) SetCursor(v AccountsCursorResponseCursor) {
 }
 
 func (o AccountsCursorResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["cursor"] = o.Cursor
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AccountsCursorResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["cursor"] = o.Cursor
+	return toSerialize, nil
 }
 
 type NullableAccountsCursorResponse struct {

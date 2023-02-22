@@ -15,6 +15,9 @@ import (
 	"time"
 )
 
+// checks if the TransactionData type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TransactionData{}
+
 // TransactionData struct for TransactionData
 type TransactionData struct {
 	Postings []Posting `json:"postings"`
@@ -53,11 +56,11 @@ func (o *TransactionData) GetPostings() []Posting {
 
 // GetPostingsOk returns a tuple with the Postings field value
 // and a boolean to check if the value has been set.
-func (o *TransactionData) GetPostingsOk() (*[]Posting, bool) {
-	if o == nil  {
+func (o *TransactionData) GetPostingsOk() ([]Posting, bool) {
+	if o == nil {
 		return nil, false
 	}
-	return &o.Postings, true
+	return o.Postings, true
 }
 
 // SetPostings sets field value
@@ -67,7 +70,7 @@ func (o *TransactionData) SetPostings(v []Posting) {
 
 // GetReference returns the Reference field value if set, zero value otherwise.
 func (o *TransactionData) GetReference() string {
-	if o == nil || o.Reference == nil {
+	if o == nil || IsNil(o.Reference) {
 		var ret string
 		return ret
 	}
@@ -77,7 +80,7 @@ func (o *TransactionData) GetReference() string {
 // GetReferenceOk returns a tuple with the Reference field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TransactionData) GetReferenceOk() (*string, bool) {
-	if o == nil || o.Reference == nil {
+	if o == nil || IsNil(o.Reference) {
 		return nil, false
 	}
 	return o.Reference, true
@@ -85,7 +88,7 @@ func (o *TransactionData) GetReferenceOk() (*string, bool) {
 
 // HasReference returns a boolean if a field has been set.
 func (o *TransactionData) HasReference() bool {
-	if o != nil && o.Reference != nil {
+	if o != nil && !IsNil(o.Reference) {
 		return true
 	}
 
@@ -99,7 +102,7 @@ func (o *TransactionData) SetReference(v string) {
 
 // GetMetadata returns the Metadata field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *TransactionData) GetMetadata() map[string]interface{} {
-	if o == nil  {
+	if o == nil {
 		var ret map[string]interface{}
 		return ret
 	}
@@ -109,16 +112,16 @@ func (o *TransactionData) GetMetadata() map[string]interface{} {
 // GetMetadataOk returns a tuple with the Metadata field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *TransactionData) GetMetadataOk() (*map[string]interface{}, bool) {
-	if o == nil || o.Metadata == nil {
-		return nil, false
+func (o *TransactionData) GetMetadataOk() (map[string]interface{}, bool) {
+	if o == nil || IsNil(o.Metadata) {
+		return map[string]interface{}{}, false
 	}
-	return &o.Metadata, true
+	return o.Metadata, true
 }
 
 // HasMetadata returns a boolean if a field has been set.
 func (o *TransactionData) HasMetadata() bool {
-	if o != nil && o.Metadata != nil {
+	if o != nil && IsNil(o.Metadata) {
 		return true
 	}
 
@@ -132,7 +135,7 @@ func (o *TransactionData) SetMetadata(v map[string]interface{}) {
 
 // GetTimestamp returns the Timestamp field value if set, zero value otherwise.
 func (o *TransactionData) GetTimestamp() time.Time {
-	if o == nil || o.Timestamp == nil {
+	if o == nil || IsNil(o.Timestamp) {
 		var ret time.Time
 		return ret
 	}
@@ -142,7 +145,7 @@ func (o *TransactionData) GetTimestamp() time.Time {
 // GetTimestampOk returns a tuple with the Timestamp field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TransactionData) GetTimestampOk() (*time.Time, bool) {
-	if o == nil || o.Timestamp == nil {
+	if o == nil || IsNil(o.Timestamp) {
 		return nil, false
 	}
 	return o.Timestamp, true
@@ -150,7 +153,7 @@ func (o *TransactionData) GetTimestampOk() (*time.Time, bool) {
 
 // HasTimestamp returns a boolean if a field has been set.
 func (o *TransactionData) HasTimestamp() bool {
-	if o != nil && o.Timestamp != nil {
+	if o != nil && !IsNil(o.Timestamp) {
 		return true
 	}
 
@@ -163,20 +166,26 @@ func (o *TransactionData) SetTimestamp(v time.Time) {
 }
 
 func (o TransactionData) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["postings"] = o.Postings
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
-	if o.Reference != nil {
+	return json.Marshal(toSerialize)
+}
+
+func (o TransactionData) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["postings"] = o.Postings
+	if !IsNil(o.Reference) {
 		toSerialize["reference"] = o.Reference
 	}
 	if o.Metadata != nil {
 		toSerialize["metadata"] = o.Metadata
 	}
-	if o.Timestamp != nil {
+	if !IsNil(o.Timestamp) {
 		toSerialize["timestamp"] = o.Timestamp
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableTransactionData struct {

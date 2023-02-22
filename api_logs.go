@@ -12,18 +12,14 @@ package ledgerclient
 
 import (
 	"bytes"
-	_context "context"
-	_ioutil "io/ioutil"
-	_nethttp "net/http"
-	_neturl "net/url"
+	"context"
+	"io"
+	"net/http"
+	"net/url"
 	"strings"
 	"time"
 )
 
-// Linger please
-var (
-	_ _context.Context
-)
 
 type LogsApi interface {
 
@@ -32,22 +28,22 @@ type LogsApi interface {
 
 	List the logs from a ledger, sorted by ID in descending order.
 
-	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger Name of the ledger.
-	 @return ApiListLogsRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param ledger Name of the ledger.
+	@return ApiListLogsRequest
 	*/
-	ListLogs(ctx _context.Context, ledger string) ApiListLogsRequest
+	ListLogs(ctx context.Context, ledger string) ApiListLogsRequest
 
 	// ListLogsExecute executes the request
 	//  @return LogsCursorResponse
-	ListLogsExecute(r ApiListLogsRequest) (LogsCursorResponse, *_nethttp.Response, error)
+	ListLogsExecute(r ApiListLogsRequest) (*LogsCursorResponse, *http.Response, error)
 }
 
 // LogsApiService LogsApi service
 type LogsApiService service
 
 type ApiListLogsRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService LogsApi
 	ledger string
 	pageSize *int64
@@ -66,44 +62,52 @@ func (r ApiListLogsRequest) PageSize(pageSize int64) ApiListLogsRequest {
 	r.pageSize = &pageSize
 	return r
 }
+
 // The maximum number of results to return per page. Deprecated, please use &#x60;pageSize&#x60; instead. 
 // Deprecated
 func (r ApiListLogsRequest) PageSize2(pageSize2 int64) ApiListLogsRequest {
 	r.pageSize2 = &pageSize2
 	return r
 }
+
 // Pagination cursor, will return the logs after a given ID. (in descending order).
 func (r ApiListLogsRequest) After(after string) ApiListLogsRequest {
 	r.after = &after
 	return r
 }
+
 // Filter transactions that occurred after this timestamp. The format is RFC3339 and is inclusive (for example, \&quot;2023-01-02T15:04:01Z\&quot; includes the first second of 4th minute). 
 func (r ApiListLogsRequest) StartTime(startTime time.Time) ApiListLogsRequest {
 	r.startTime = &startTime
 	return r
 }
+
 // Filter transactions that occurred after this timestamp. The format is RFC3339 and is inclusive (for example, \&quot;2023-01-02T15:04:01Z\&quot; includes the first second of 4th minute). Deprecated, please use &#x60;startTime&#x60; instead. 
 // Deprecated
 func (r ApiListLogsRequest) StartTime2(startTime2 time.Time) ApiListLogsRequest {
 	r.startTime2 = &startTime2
 	return r
 }
+
 // Filter transactions that occurred before this timestamp. The format is RFC3339 and is exclusive (for example, \&quot;2023-01-02T15:04:01Z\&quot; excludes the first second of 4th minute). 
 func (r ApiListLogsRequest) EndTime(endTime time.Time) ApiListLogsRequest {
 	r.endTime = &endTime
 	return r
 }
+
 // Filter transactions that occurred before this timestamp. The format is RFC3339 and is exclusive (for example, \&quot;2023-01-02T15:04:01Z\&quot; excludes the first second of 4th minute). Deprecated, please use &#x60;endTime&#x60; instead. 
 // Deprecated
 func (r ApiListLogsRequest) EndTime2(endTime2 time.Time) ApiListLogsRequest {
 	r.endTime2 = &endTime2
 	return r
 }
+
 // Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results. Set to the value of previous for the previous page of results. No other parameters can be set when this parameter is set. 
 func (r ApiListLogsRequest) Cursor(cursor string) ApiListLogsRequest {
 	r.cursor = &cursor
 	return r
 }
+
 // Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results. Set to the value of previous for the previous page of results. No other parameters can be set when this parameter is set. Deprecated, please use &#x60;cursor&#x60; instead. 
 // Deprecated
 func (r ApiListLogsRequest) PaginationToken(paginationToken string) ApiListLogsRequest {
@@ -111,7 +115,7 @@ func (r ApiListLogsRequest) PaginationToken(paginationToken string) ApiListLogsR
 	return r
 }
 
-func (r ApiListLogsRequest) Execute() (LogsCursorResponse, *_nethttp.Response, error) {
+func (r ApiListLogsRequest) Execute() (*LogsCursorResponse, *http.Response, error) {
 	return r.ApiService.ListLogsExecute(r)
 }
 
@@ -120,11 +124,11 @@ ListLogs List the logs from a ledger
 
 List the logs from a ledger, sorted by ID in descending order.
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param ledger Name of the ledger.
  @return ApiListLogsRequest
 */
-func (a *LogsApiService) ListLogs(ctx _context.Context, ledger string) ApiListLogsRequest {
+func (a *LogsApiService) ListLogs(ctx context.Context, ledger string) ApiListLogsRequest {
 	return ApiListLogsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -134,52 +138,52 @@ func (a *LogsApiService) ListLogs(ctx _context.Context, ledger string) ApiListLo
 
 // Execute executes the request
 //  @return LogsCursorResponse
-func (a *LogsApiService) ListLogsExecute(r ApiListLogsRequest) (LogsCursorResponse, *_nethttp.Response, error) {
+func (a *LogsApiService) ListLogsExecute(r ApiListLogsRequest) (*LogsCursorResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  LogsCursorResponse
+		localVarReturnValue  *LogsCursorResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogsApiService.ListLogs")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/{ledger}/logs"
-	localVarPath = strings.Replace(localVarPath, "{"+"ledger"+"}", _neturl.PathEscape(parameterToString(r.ledger, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"ledger"+"}", url.PathEscape(parameterValueToString(r.ledger, "ledger")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	if r.pageSize != nil {
-		localVarQueryParams.Add("pageSize", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "pageSize", r.pageSize, "")
 	}
 	if r.pageSize2 != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize2, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize2, "")
 	}
 	if r.after != nil {
-		localVarQueryParams.Add("after", parameterToString(*r.after, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "after", r.after, "")
 	}
 	if r.startTime != nil {
-		localVarQueryParams.Add("startTime", parameterToString(*r.startTime, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "startTime", r.startTime, "")
 	}
 	if r.startTime2 != nil {
-		localVarQueryParams.Add("start_time", parameterToString(*r.startTime2, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "start_time", r.startTime2, "")
 	}
 	if r.endTime != nil {
-		localVarQueryParams.Add("endTime", parameterToString(*r.endTime, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "endTime", r.endTime, "")
 	}
 	if r.endTime2 != nil {
-		localVarQueryParams.Add("end_time", parameterToString(*r.endTime2, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "end_time", r.endTime2, "")
 	}
 	if r.cursor != nil {
-		localVarQueryParams.Add("cursor", parameterToString(*r.cursor, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "cursor", r.cursor, "")
 	}
 	if r.paginationToken != nil {
-		localVarQueryParams.Add("pagination_token", parameterToString(*r.paginationToken, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "pagination_token", r.paginationToken, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -208,15 +212,15 @@ func (a *LogsApiService) ListLogsExecute(r ApiListLogsRequest) (LogsCursorRespon
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -226,13 +230,14 @@ func (a *LogsApiService) ListLogsExecute(r ApiListLogsRequest) (LogsCursorRespon
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}

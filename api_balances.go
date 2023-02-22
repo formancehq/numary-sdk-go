@@ -12,52 +12,48 @@ package ledgerclient
 
 import (
 	"bytes"
-	_context "context"
-	_ioutil "io/ioutil"
-	_nethttp "net/http"
-	_neturl "net/url"
+	"context"
+	"io"
+	"net/http"
+	"net/url"
 	"strings"
 )
 
-// Linger please
-var (
-	_ _context.Context
-)
 
 type BalancesApi interface {
 
 	/*
 	GetBalances Get the balances from a ledger's account
 
-	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger Name of the ledger.
-	 @return ApiGetBalancesRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param ledger Name of the ledger.
+	@return ApiGetBalancesRequest
 	*/
-	GetBalances(ctx _context.Context, ledger string) ApiGetBalancesRequest
+	GetBalances(ctx context.Context, ledger string) ApiGetBalancesRequest
 
 	// GetBalancesExecute executes the request
 	//  @return BalancesCursorResponse
-	GetBalancesExecute(r ApiGetBalancesRequest) (BalancesCursorResponse, *_nethttp.Response, error)
+	GetBalancesExecute(r ApiGetBalancesRequest) (*BalancesCursorResponse, *http.Response, error)
 
 	/*
 	GetBalancesAggregated Get the aggregated balances from selected accounts
 
-	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param ledger Name of the ledger.
-	 @return ApiGetBalancesAggregatedRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param ledger Name of the ledger.
+	@return ApiGetBalancesAggregatedRequest
 	*/
-	GetBalancesAggregated(ctx _context.Context, ledger string) ApiGetBalancesAggregatedRequest
+	GetBalancesAggregated(ctx context.Context, ledger string) ApiGetBalancesAggregatedRequest
 
 	// GetBalancesAggregatedExecute executes the request
 	//  @return AggregateBalancesResponse
-	GetBalancesAggregatedExecute(r ApiGetBalancesAggregatedRequest) (AggregateBalancesResponse, *_nethttp.Response, error)
+	GetBalancesAggregatedExecute(r ApiGetBalancesAggregatedRequest) (*AggregateBalancesResponse, *http.Response, error)
 }
 
 // BalancesApiService BalancesApi service
 type BalancesApiService service
 
 type ApiGetBalancesRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService BalancesApi
 	ledger string
 	address *string
@@ -71,16 +67,19 @@ func (r ApiGetBalancesRequest) Address(address string) ApiGetBalancesRequest {
 	r.address = &address
 	return r
 }
+
 // Pagination cursor, will return accounts after given address, in descending order.
 func (r ApiGetBalancesRequest) After(after string) ApiGetBalancesRequest {
 	r.after = &after
 	return r
 }
+
 // Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results. Set to the value of previous for the previous page of results. No other parameters can be set when this parameter is set. 
 func (r ApiGetBalancesRequest) Cursor(cursor string) ApiGetBalancesRequest {
 	r.cursor = &cursor
 	return r
 }
+
 // Parameter used in pagination requests. Set to the value of next for the next page of results. Set to the value of previous for the previous page of results. Deprecated, please use &#x60;cursor&#x60; instead.
 // Deprecated
 func (r ApiGetBalancesRequest) PaginationToken(paginationToken string) ApiGetBalancesRequest {
@@ -88,18 +87,18 @@ func (r ApiGetBalancesRequest) PaginationToken(paginationToken string) ApiGetBal
 	return r
 }
 
-func (r ApiGetBalancesRequest) Execute() (BalancesCursorResponse, *_nethttp.Response, error) {
+func (r ApiGetBalancesRequest) Execute() (*BalancesCursorResponse, *http.Response, error) {
 	return r.ApiService.GetBalancesExecute(r)
 }
 
 /*
 GetBalances Get the balances from a ledger's account
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param ledger Name of the ledger.
  @return ApiGetBalancesRequest
 */
-func (a *BalancesApiService) GetBalances(ctx _context.Context, ledger string) ApiGetBalancesRequest {
+func (a *BalancesApiService) GetBalances(ctx context.Context, ledger string) ApiGetBalancesRequest {
 	return ApiGetBalancesRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -109,37 +108,37 @@ func (a *BalancesApiService) GetBalances(ctx _context.Context, ledger string) Ap
 
 // Execute executes the request
 //  @return BalancesCursorResponse
-func (a *BalancesApiService) GetBalancesExecute(r ApiGetBalancesRequest) (BalancesCursorResponse, *_nethttp.Response, error) {
+func (a *BalancesApiService) GetBalancesExecute(r ApiGetBalancesRequest) (*BalancesCursorResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  BalancesCursorResponse
+		localVarReturnValue  *BalancesCursorResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BalancesApiService.GetBalances")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/{ledger}/balances"
-	localVarPath = strings.Replace(localVarPath, "{"+"ledger"+"}", _neturl.PathEscape(parameterToString(r.ledger, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"ledger"+"}", url.PathEscape(parameterValueToString(r.ledger, "ledger")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	if r.address != nil {
-		localVarQueryParams.Add("address", parameterToString(*r.address, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "address", r.address, "")
 	}
 	if r.after != nil {
-		localVarQueryParams.Add("after", parameterToString(*r.after, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "after", r.after, "")
 	}
 	if r.cursor != nil {
-		localVarQueryParams.Add("cursor", parameterToString(*r.cursor, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "cursor", r.cursor, "")
 	}
 	if r.paginationToken != nil {
-		localVarQueryParams.Add("pagination_token", parameterToString(*r.paginationToken, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "pagination_token", r.paginationToken, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -168,15 +167,15 @@ func (a *BalancesApiService) GetBalancesExecute(r ApiGetBalancesRequest) (Balanc
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -186,13 +185,14 @@ func (a *BalancesApiService) GetBalancesExecute(r ApiGetBalancesRequest) (Balanc
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
@@ -203,7 +203,7 @@ func (a *BalancesApiService) GetBalancesExecute(r ApiGetBalancesRequest) (Balanc
 }
 
 type ApiGetBalancesAggregatedRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService BalancesApi
 	ledger string
 	address *string
@@ -215,18 +215,18 @@ func (r ApiGetBalancesAggregatedRequest) Address(address string) ApiGetBalancesA
 	return r
 }
 
-func (r ApiGetBalancesAggregatedRequest) Execute() (AggregateBalancesResponse, *_nethttp.Response, error) {
+func (r ApiGetBalancesAggregatedRequest) Execute() (*AggregateBalancesResponse, *http.Response, error) {
 	return r.ApiService.GetBalancesAggregatedExecute(r)
 }
 
 /*
 GetBalancesAggregated Get the aggregated balances from selected accounts
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param ledger Name of the ledger.
  @return ApiGetBalancesAggregatedRequest
 */
-func (a *BalancesApiService) GetBalancesAggregated(ctx _context.Context, ledger string) ApiGetBalancesAggregatedRequest {
+func (a *BalancesApiService) GetBalancesAggregated(ctx context.Context, ledger string) ApiGetBalancesAggregatedRequest {
 	return ApiGetBalancesAggregatedRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -236,28 +236,28 @@ func (a *BalancesApiService) GetBalancesAggregated(ctx _context.Context, ledger 
 
 // Execute executes the request
 //  @return AggregateBalancesResponse
-func (a *BalancesApiService) GetBalancesAggregatedExecute(r ApiGetBalancesAggregatedRequest) (AggregateBalancesResponse, *_nethttp.Response, error) {
+func (a *BalancesApiService) GetBalancesAggregatedExecute(r ApiGetBalancesAggregatedRequest) (*AggregateBalancesResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  AggregateBalancesResponse
+		localVarReturnValue  *AggregateBalancesResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BalancesApiService.GetBalancesAggregated")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/{ledger}/aggregate/balances"
-	localVarPath = strings.Replace(localVarPath, "{"+"ledger"+"}", _neturl.PathEscape(parameterToString(r.ledger, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"ledger"+"}", url.PathEscape(parameterValueToString(r.ledger, "ledger")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	if r.address != nil {
-		localVarQueryParams.Add("address", parameterToString(*r.address, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "address", r.address, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -286,15 +286,15 @@ func (a *BalancesApiService) GetBalancesAggregatedExecute(r ApiGetBalancesAggreg
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -304,13 +304,14 @@ func (a *BalancesApiService) GetBalancesAggregatedExecute(r ApiGetBalancesAggreg
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}

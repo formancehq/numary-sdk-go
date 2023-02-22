@@ -24,7 +24,7 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/numary/numary-go"
+    client "github.com/formancehq/numary-sdk-go"
 )
 
 func main() {
@@ -35,8 +35,8 @@ func main() {
     paginationToken := "aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==" // string | Parameter used in pagination requests. Set to the value of next for the next page of results. Set to the value of previous for the previous page of results. Deprecated, please use `cursor` instead. (optional)
 
     configuration := client.NewConfiguration()
-    api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.BalancesApi.GetBalances(context.Background(), ledger).Address(address).After(after).Cursor(cursor).PaginationToken(paginationToken).Execute()
+    apiClient := client.NewAPIClient(configuration)
+    resp, r, err := apiClient.BalancesApi.GetBalances(context.Background(), ledger).Address(address).After(after).Cursor(cursor).PaginationToken(paginationToken).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `BalancesApi.GetBalances``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -100,7 +100,7 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/numary/numary-go"
+    client "github.com/formancehq/numary-sdk-go"
 )
 
 func main() {
@@ -108,8 +108,8 @@ func main() {
     address := "users:001" // string | Filter balances involving given account, either as source or destination. (optional)
 
     configuration := client.NewConfiguration()
-    api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.BalancesApi.GetBalancesAggregated(context.Background(), ledger).Address(address).Execute()
+    apiClient := client.NewAPIClient(configuration)
+    resp, r, err := apiClient.BalancesApi.GetBalancesAggregated(context.Background(), ledger).Address(address).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `BalancesApi.GetBalancesAggregated``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)

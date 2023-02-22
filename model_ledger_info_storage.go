@@ -14,9 +14,12 @@ import (
 	"encoding/json"
 )
 
+// checks if the LedgerInfoStorage type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LedgerInfoStorage{}
+
 // LedgerInfoStorage struct for LedgerInfoStorage
 type LedgerInfoStorage struct {
-	Migrations *[]MigrationInfo `json:"migrations,omitempty"`
+	Migrations []MigrationInfo `json:"migrations,omitempty"`
 }
 
 // NewLedgerInfoStorage instantiates a new LedgerInfoStorage object
@@ -38,17 +41,17 @@ func NewLedgerInfoStorageWithDefaults() *LedgerInfoStorage {
 
 // GetMigrations returns the Migrations field value if set, zero value otherwise.
 func (o *LedgerInfoStorage) GetMigrations() []MigrationInfo {
-	if o == nil || o.Migrations == nil {
+	if o == nil || IsNil(o.Migrations) {
 		var ret []MigrationInfo
 		return ret
 	}
-	return *o.Migrations
+	return o.Migrations
 }
 
 // GetMigrationsOk returns a tuple with the Migrations field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *LedgerInfoStorage) GetMigrationsOk() (*[]MigrationInfo, bool) {
-	if o == nil || o.Migrations == nil {
+func (o *LedgerInfoStorage) GetMigrationsOk() ([]MigrationInfo, bool) {
+	if o == nil || IsNil(o.Migrations) {
 		return nil, false
 	}
 	return o.Migrations, true
@@ -56,7 +59,7 @@ func (o *LedgerInfoStorage) GetMigrationsOk() (*[]MigrationInfo, bool) {
 
 // HasMigrations returns a boolean if a field has been set.
 func (o *LedgerInfoStorage) HasMigrations() bool {
-	if o != nil && o.Migrations != nil {
+	if o != nil && !IsNil(o.Migrations) {
 		return true
 	}
 
@@ -65,15 +68,23 @@ func (o *LedgerInfoStorage) HasMigrations() bool {
 
 // SetMigrations gets a reference to the given []MigrationInfo and assigns it to the Migrations field.
 func (o *LedgerInfoStorage) SetMigrations(v []MigrationInfo) {
-	o.Migrations = &v
+	o.Migrations = v
 }
 
 func (o LedgerInfoStorage) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Migrations != nil {
-		toSerialize["migrations"] = o.Migrations
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o LedgerInfoStorage) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Migrations) {
+		toSerialize["migrations"] = o.Migrations
+	}
+	return toSerialize, nil
 }
 
 type NullableLedgerInfoStorage struct {

@@ -14,6 +14,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the ErrorResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ErrorResponse{}
+
 // ErrorResponse struct for ErrorResponse
 type ErrorResponse struct {
 	ErrorCode *ErrorsEnum `json:"errorCode,omitempty"`
@@ -40,7 +43,7 @@ func NewErrorResponseWithDefaults() *ErrorResponse {
 
 // GetErrorCode returns the ErrorCode field value if set, zero value otherwise.
 func (o *ErrorResponse) GetErrorCode() ErrorsEnum {
-	if o == nil || o.ErrorCode == nil {
+	if o == nil || IsNil(o.ErrorCode) {
 		var ret ErrorsEnum
 		return ret
 	}
@@ -50,7 +53,7 @@ func (o *ErrorResponse) GetErrorCode() ErrorsEnum {
 // GetErrorCodeOk returns a tuple with the ErrorCode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ErrorResponse) GetErrorCodeOk() (*ErrorsEnum, bool) {
-	if o == nil || o.ErrorCode == nil {
+	if o == nil || IsNil(o.ErrorCode) {
 		return nil, false
 	}
 	return o.ErrorCode, true
@@ -58,7 +61,7 @@ func (o *ErrorResponse) GetErrorCodeOk() (*ErrorsEnum, bool) {
 
 // HasErrorCode returns a boolean if a field has been set.
 func (o *ErrorResponse) HasErrorCode() bool {
-	if o != nil && o.ErrorCode != nil {
+	if o != nil && !IsNil(o.ErrorCode) {
 		return true
 	}
 
@@ -72,7 +75,7 @@ func (o *ErrorResponse) SetErrorCode(v ErrorsEnum) {
 
 // GetErrorMessage returns the ErrorMessage field value if set, zero value otherwise.
 func (o *ErrorResponse) GetErrorMessage() string {
-	if o == nil || o.ErrorMessage == nil {
+	if o == nil || IsNil(o.ErrorMessage) {
 		var ret string
 		return ret
 	}
@@ -82,7 +85,7 @@ func (o *ErrorResponse) GetErrorMessage() string {
 // GetErrorMessageOk returns a tuple with the ErrorMessage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ErrorResponse) GetErrorMessageOk() (*string, bool) {
-	if o == nil || o.ErrorMessage == nil {
+	if o == nil || IsNil(o.ErrorMessage) {
 		return nil, false
 	}
 	return o.ErrorMessage, true
@@ -90,7 +93,7 @@ func (o *ErrorResponse) GetErrorMessageOk() (*string, bool) {
 
 // HasErrorMessage returns a boolean if a field has been set.
 func (o *ErrorResponse) HasErrorMessage() bool {
-	if o != nil && o.ErrorMessage != nil {
+	if o != nil && !IsNil(o.ErrorMessage) {
 		return true
 	}
 
@@ -104,7 +107,7 @@ func (o *ErrorResponse) SetErrorMessage(v string) {
 
 // GetDetails returns the Details field value if set, zero value otherwise.
 func (o *ErrorResponse) GetDetails() string {
-	if o == nil || o.Details == nil {
+	if o == nil || IsNil(o.Details) {
 		var ret string
 		return ret
 	}
@@ -114,7 +117,7 @@ func (o *ErrorResponse) GetDetails() string {
 // GetDetailsOk returns a tuple with the Details field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ErrorResponse) GetDetailsOk() (*string, bool) {
-	if o == nil || o.Details == nil {
+	if o == nil || IsNil(o.Details) {
 		return nil, false
 	}
 	return o.Details, true
@@ -122,7 +125,7 @@ func (o *ErrorResponse) GetDetailsOk() (*string, bool) {
 
 // HasDetails returns a boolean if a field has been set.
 func (o *ErrorResponse) HasDetails() bool {
-	if o != nil && o.Details != nil {
+	if o != nil && !IsNil(o.Details) {
 		return true
 	}
 
@@ -135,17 +138,25 @@ func (o *ErrorResponse) SetDetails(v string) {
 }
 
 func (o ErrorResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.ErrorCode != nil {
-		toSerialize["errorCode"] = o.ErrorCode
-	}
-	if o.ErrorMessage != nil {
-		toSerialize["errorMessage"] = o.ErrorMessage
-	}
-	if o.Details != nil {
-		toSerialize["details"] = o.Details
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ErrorResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.ErrorCode) {
+		toSerialize["errorCode"] = o.ErrorCode
+	}
+	if !IsNil(o.ErrorMessage) {
+		toSerialize["errorMessage"] = o.ErrorMessage
+	}
+	if !IsNil(o.Details) {
+		toSerialize["details"] = o.Details
+	}
+	return toSerialize, nil
 }
 
 type NullableErrorResponse struct {
