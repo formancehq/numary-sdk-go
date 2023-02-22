@@ -18,14 +18,6 @@ import (
 // ErrorCode the model 'ErrorCode'
 type ErrorCode string
 
-// List of ErrorCode
-const (
-	INTERNAL ErrorCode = "INTERNAL"
-	INSUFFICIENT_FUND ErrorCode = "INSUFFICIENT_FUND"
-	VALIDATION ErrorCode = "VALIDATION"
-	CONFLICT ErrorCode = "CONFLICT"
-)
-
 // All allowed values of ErrorCode enum
 var AllowedErrorCodeEnumValues = []ErrorCode{
 	"INTERNAL",
