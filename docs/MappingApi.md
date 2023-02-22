@@ -24,15 +24,15 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/numary/numary-go"
+    client "github.com/formancehq/numary-sdk-go"
 )
 
 func main() {
     ledger := "ledger001" // string | Name of the ledger.
 
     configuration := client.NewConfiguration()
-    api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.MappingApi.GetMapping(context.Background(), ledger).Execute()
+    apiClient := client.NewAPIClient(configuration)
+    resp, r, err := apiClient.MappingApi.GetMapping(context.Background(), ledger).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `MappingApi.GetMapping``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -92,7 +92,7 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/numary/numary-go"
+    client "github.com/formancehq/numary-sdk-go"
 )
 
 func main() {
@@ -100,8 +100,8 @@ func main() {
     mapping := *client.NewMapping([]client.Contract{*client.NewContract(map[string]interface{}(123))}) // Mapping | 
 
     configuration := client.NewConfiguration()
-    api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.MappingApi.UpdateMapping(context.Background(), ledger).Mapping(mapping).Execute()
+    apiClient := client.NewAPIClient(configuration)
+    resp, r, err := apiClient.MappingApi.UpdateMapping(context.Background(), ledger).Mapping(mapping).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `MappingApi.UpdateMapping``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)

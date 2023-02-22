@@ -26,7 +26,7 @@ import (
     "fmt"
     "os"
     "time"
-    client "github.com/numary/numary-go"
+    client "github.com/formancehq/numary-sdk-go"
 )
 
 func main() {
@@ -42,8 +42,8 @@ func main() {
     paginationToken := "aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==" // string | Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results. Set to the value of previous for the previous page of results. No other parameters can be set when this parameter is set. Deprecated, please use `cursor` instead.  (optional)
 
     configuration := client.NewConfiguration()
-    api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.LogsApi.ListLogs(context.Background(), ledger).PageSize(pageSize).PageSize2(pageSize2).After(after).StartTime(startTime).StartTime2(startTime2).EndTime(endTime).EndTime2(endTime2).Cursor(cursor).PaginationToken(paginationToken).Execute()
+    apiClient := client.NewAPIClient(configuration)
+    resp, r, err := apiClient.LogsApi.ListLogs(context.Background(), ledger).PageSize(pageSize).PageSize2(pageSize2).After(after).StartTime(startTime).StartTime2(startTime2).EndTime(endTime).EndTime2(endTime2).Cursor(cursor).PaginationToken(paginationToken).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `LogsApi.ListLogs``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)

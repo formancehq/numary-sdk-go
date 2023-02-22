@@ -26,7 +26,7 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/numary/numary-go"
+    client "github.com/formancehq/numary-sdk-go"
 )
 
 func main() {
@@ -35,8 +35,8 @@ func main() {
     requestBody := map[string]interface{}{"key": interface{}(123)} // map[string]interface{} | metadata
 
     configuration := client.NewConfiguration()
-    api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.AccountsApi.AddMetadataToAccount(context.Background(), ledger, address).RequestBody(requestBody).Execute()
+    apiClient := client.NewAPIClient(configuration)
+    r, err := apiClient.AccountsApi.AddMetadataToAccount(context.Background(), ledger, address).RequestBody(requestBody).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.AddMetadataToAccount``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -97,7 +97,7 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/numary/numary-go"
+    client "github.com/formancehq/numary-sdk-go"
 )
 
 func main() {
@@ -106,8 +106,8 @@ func main() {
     metadata := map[string]interface{}{"key": map[string]interface{}(123)} // map[string]interface{} | Filter accounts by metadata key value pairs. Nested objects can be used as seen in the example below. (optional)
 
     configuration := client.NewConfiguration()
-    api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.AccountsApi.CountAccounts(context.Background(), ledger).Address(address).Metadata(metadata).Execute()
+    apiClient := client.NewAPIClient(configuration)
+    r, err := apiClient.AccountsApi.CountAccounts(context.Background(), ledger).Address(address).Metadata(metadata).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.CountAccounts``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -167,7 +167,7 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/numary/numary-go"
+    client "github.com/formancehq/numary-sdk-go"
 )
 
 func main() {
@@ -175,8 +175,8 @@ func main() {
     address := "users:001" // string | Exact address of the account. It must match the following regular expressions pattern: ``` ^\\w+(:\\w+)*$ ``` 
 
     configuration := client.NewConfiguration()
-    api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.AccountsApi.GetAccount(context.Background(), ledger, address).Execute()
+    apiClient := client.NewAPIClient(configuration)
+    resp, r, err := apiClient.AccountsApi.GetAccount(context.Background(), ledger, address).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.GetAccount``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -240,7 +240,7 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/numary/numary-go"
+    client "github.com/formancehq/numary-sdk-go"
 )
 
 func main() {
@@ -257,8 +257,8 @@ func main() {
     paginationToken := "aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==" // string | Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results. Set to the value of previous for the previous page of results. No other parameters can be set when this parameter is set. Deprecated, please use `cursor` instead.  (optional)
 
     configuration := client.NewConfiguration()
-    api_client := client.NewAPIClient(configuration)
-    resp, r, err := api_client.AccountsApi.ListAccounts(context.Background(), ledger).PageSize(pageSize).PageSize2(pageSize2).After(after).Address(address).Metadata(metadata).Balance(balance).BalanceOperator(balanceOperator).BalanceOperator2(balanceOperator2).Cursor(cursor).PaginationToken(paginationToken).Execute()
+    apiClient := client.NewAPIClient(configuration)
+    resp, r, err := apiClient.AccountsApi.ListAccounts(context.Background(), ledger).PageSize(pageSize).PageSize2(pageSize2).After(after).Address(address).Metadata(metadata).Balance(balance).BalanceOperator(balanceOperator).BalanceOperator2(balanceOperator2).Cursor(cursor).PaginationToken(paginationToken).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.ListAccounts``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
