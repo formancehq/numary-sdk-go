@@ -1,6 +1,10 @@
 version: '3'
 
 tasks:
+  tidy:
+    cmds:
+      - go mod tidy
+
   vendor:
     cmds:
       - go mod vendor
@@ -13,7 +17,7 @@ tasks:
         --rm
         -e NUMARY_SERVER_HTTP_BIND_ADDRESS=0.0.0.0:3068
         -p 3068:3068
-        ghcr.io/formancehq/ledger:v1.9.0
+        ghcr.io/formancehq/ledger:v1.9.1
 
   stop-ledger:
     cmds:
@@ -22,9 +26,10 @@ tasks:
   test:
     desc: Test client code
     deps:
+      - tidy
       - vendor
     cmds:
       - task: start-ledger
       - defer:
           task: stop-ledger
-      - go test
+      - go test -v ./...
