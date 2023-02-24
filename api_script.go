@@ -118,7 +118,7 @@ func (a *ScriptApiService) RunScriptExecute(r ApiRunScriptRequest) (*ScriptRespo
 		parameterAddToHeaderOrQuery(localVarQueryParams, "preview", r.preview, "")
 	}
 	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
+	localVarHTTPContentTypes := []string{"application/json; charset=utf-8"}
 
 	// set Content-Type header
 	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
@@ -127,7 +127,7 @@ func (a *ScriptApiService) RunScriptExecute(r ApiRunScriptRequest) (*ScriptRespo
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
+	localVarHTTPHeaderAccepts := []string{"application/json; charset=utf-8"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
