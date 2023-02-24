@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   contact: {}
   title: Ledger API
-  version: v1.9.0
+  version: v1.9.1
 servers:
 - url: /
 paths:
@@ -12,13 +12,13 @@ paths:
       responses:
         "200":
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ConfigInfoResponse'
           description: OK
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -41,13 +41,13 @@ paths:
       responses:
         "200":
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/LedgerInfoResponse'
           description: OK
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -207,13 +207,13 @@ paths:
       responses:
         "200":
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/AccountsCursorResponse'
           description: OK
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -266,7 +266,7 @@ paths:
               style: simple
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -302,13 +302,13 @@ paths:
       responses:
         "200":
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/AccountResponse'
           description: OK
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -343,18 +343,17 @@ paths:
         style: simple
       requestBody:
         content:
-          application/json:
+          application/json; charset=utf-8:
             schema:
               $ref: '#/components/schemas/Metadata'
         description: metadata
         required: true
       responses:
         "204":
-          content: {}
           description: No Content
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -377,13 +376,13 @@ paths:
       responses:
         "200":
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/MappingResponse'
           description: OK
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -404,20 +403,20 @@ paths:
         style: simple
       requestBody:
         content:
-          application/json:
+          application/json; charset=utf-8:
             schema:
               $ref: '#/components/schemas/Mapping'
         required: true
       responses:
         "200":
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/MappingResponse'
           description: OK
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -452,14 +451,14 @@ paths:
         style: form
       requestBody:
         content:
-          application/json:
+          application/json; charset=utf-8:
             schema:
               $ref: '#/components/schemas/Script'
         required: true
       responses:
         "200":
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ScriptResponse'
           description: |
@@ -490,13 +489,13 @@ paths:
       responses:
         "200":
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/StatsResponse'
           description: OK
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -687,13 +686,13 @@ paths:
       responses:
         "200":
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/TransactionsCursorResponse'
           description: OK
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -823,7 +822,7 @@ paths:
               style: simple
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -854,7 +853,7 @@ paths:
         style: form
       requestBody:
         content:
-          application/json:
+          application/json; charset=utf-8:
             schema:
               $ref: '#/components/schemas/PostTransaction'
         description: |
@@ -865,13 +864,13 @@ paths:
       responses:
         "200":
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/TransactionsResponse'
           description: OK
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -905,13 +904,13 @@ paths:
       responses:
         "200":
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/TransactionResponse'
           description: OK
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -944,17 +943,16 @@ paths:
         style: simple
       requestBody:
         content:
-          application/json:
+          application/json; charset=utf-8:
             schema:
               $ref: '#/components/schemas/Metadata'
         description: metadata
       responses:
         "204":
-          content: {}
           description: No Content
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -988,13 +986,13 @@ paths:
       responses:
         "200":
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/TransactionResponse'
           description: OK
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -1016,20 +1014,20 @@ paths:
         style: simple
       requestBody:
         content:
-          application/json:
+          application/json; charset=utf-8:
             schema:
               $ref: '#/components/schemas/Transactions'
         required: true
       responses:
         "200":
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/TransactionsResponse'
           description: OK
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -1099,13 +1097,13 @@ paths:
       responses:
         "200":
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/BalancesCursorResponse'
           description: OK
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -1138,13 +1136,13 @@ paths:
       responses:
         "200":
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/AggregateBalancesResponse'
           description: OK
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -1284,13 +1282,13 @@ paths:
       responses:
         "200":
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/LogsCursorResponse'
           description: OK
         default:
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
