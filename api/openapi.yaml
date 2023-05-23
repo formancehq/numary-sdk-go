@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   contact: {}
   title: Ledger API
-  version: v1.9.3
+  version: v1.10.0
 servers:
 - url: /
 paths:
@@ -12,13 +12,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ConfigInfoResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -41,13 +41,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/LedgerInfoResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -83,9 +83,8 @@ paths:
           type: integer
         style: form
       - deprecated: true
-        description: |
-          The maximum number of results to return per page.
-          Deprecated, please use `pageSize` instead.
+        description: "The maximum number of results to return per page.\nDeprecated,\
+          \ please use `pageSize` instead.\n"
         example: 100
         explode: true
         in: query
@@ -137,11 +136,10 @@ paths:
         schema:
           example: 2400
           format: int64
-          minimum: 0
           type: integer
         style: form
-      - description: |
-          Operator used for the filtering of balances can be greater than/equal, less than/equal, greater than, less than, equal or not.
+      - description: "Operator used for the filtering of balances can be greater than/equal,\
+          \ less than/equal, greater than, less than, equal or not.\n"
         explode: true
         in: query
         name: balanceOperator
@@ -158,9 +156,9 @@ paths:
           type: string
         style: form
       - deprecated: true
-        description: |
-          Operator used for the filtering of balances can be greater than/equal, less than/equal, greater than, less than, equal or not.
-          Deprecated, please use `balanceOperator` instead.
+        description: "Operator used for the filtering of balances can be greater than/equal,\
+          \ less than/equal, greater than, less than, equal or not.\nDeprecated, please\
+          \ use `balanceOperator` instead.\n"
         explode: true
         in: query
         name: balance_operator
@@ -190,12 +188,11 @@ paths:
           type: string
         style: form
       - deprecated: true
-        description: |
-          Parameter used in pagination requests. Maximum page size is set to 15.
-          Set to the value of next for the next page of results.
-          Set to the value of previous for the previous page of results.
-          No other parameters can be set when this parameter is set.
-          Deprecated, please use `cursor` instead.
+        description: "Parameter used in pagination requests. Maximum page size is\
+          \ set to 15.\nSet to the value of next for the next page of results.\nSet\
+          \ to the value of previous for the previous page of results.\nNo other parameters\
+          \ can be set when this parameter is set.\nDeprecated, please use `cursor`\
+          \ instead.\n"
         explode: true
         in: query
         name: pagination_token
@@ -207,13 +204,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/AccountsCursorResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -242,8 +239,8 @@ paths:
           example: users:.+
           type: string
         style: form
-      - description: Filter accounts by metadata key value pairs. Nested objects can
-          be used as seen in the example below.
+      - description: "Filter accounts by metadata key value pairs. The filter can\
+          \ be used like this metadata[key]=value1&metadata[a.nested.key]=value2"
         example: "metadata[key]=value1&metadata[a.nested.key]=value2"
         explode: true
         in: query
@@ -266,7 +263,7 @@ paths:
               style: simple
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -302,13 +299,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/AccountResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -343,17 +340,18 @@ paths:
         style: simple
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/Metadata'
         description: metadata
         required: true
       responses:
         "204":
+          content: {}
           description: No Content
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -376,13 +374,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/MappingResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -403,20 +401,20 @@ paths:
         style: simple
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/Mapping'
         required: true
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/MappingResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -426,8 +424,7 @@ paths:
   /{ledger}/script:
     post:
       deprecated: true
-      description: |
-        This route is deprecated, and has been merged into `POST /{ledger}/transactions`.
+      description: "This route is deprecated, and has been merged into `POST /{ledger}/transactions`.\n"
       operationId: runScript
       parameters:
       - description: Name of the ledger.
@@ -451,23 +448,26 @@ paths:
         style: form
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/Script'
         required: true
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ScriptResponse'
-          description: |
-            On success, it will return a 200 status code, and the resulting transaction under the `transaction` field.
-
-            On failure, it will also return a 200 status code, and the following fields:
-              - `details`: contains a URL. When there is an error parsing Numscript, the result can be difficult to read—the provided URL will render the error in an easy-to-read format.
-              - `errorCode` and `error_code` (deprecated): contains the string code of the error
-              - `errorMessage` and `error_message` (deprecated): contains a human-readable indication of what went wrong, for example that an account had insufficient funds, or that there was an error in the provided Numscript.
+          description: "On success, it will return a 200 status code, and the resulting\
+            \ transaction under the `transaction` field.\n\nOn failure, it will also\
+            \ return a 200 status code, and the following fields:\n  - `details`:\
+            \ contains a URL. When there is an error parsing Numscript, the result\
+            \ can be difficult to read—the provided URL will render the error in an\
+            \ easy-to-read format.\n  - `errorCode` and `error_code` (deprecated):\
+            \ contains the string code of the error\n  - `errorMessage` and `error_message`\
+            \ (deprecated): contains a human-readable indication of what went wrong,\
+            \ for example that an account had insufficient funds, or that there was\
+            \ an error in the provided Numscript.\n"
       summary: Execute a Numscript
       tags:
       - Script
@@ -489,13 +489,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/StatsResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -532,9 +532,8 @@ paths:
           type: integer
         style: form
       - deprecated: true
-        description: |
-          The maximum number of results to return per page.
-          Deprecated, please use `pageSize` instead.
+        description: "The maximum number of results to return per page.\nDeprecated,\
+          \ please use `pageSize` instead.\n"
         example: 100
         explode: true
         in: query
@@ -596,9 +595,9 @@ paths:
           example: users:001
           type: string
         style: form
-      - description: |
-          Filter transactions that occurred after this timestamp.
-          The format is RFC3339 and is inclusive (for example, "2023-01-02T15:04:01Z" includes the first second of 4th minute).
+      - description: "Filter transactions that occurred after this timestamp.\nThe\
+          \ format is RFC3339 and is inclusive (for example, \"2023-01-02T15:04:01Z\"\
+          \ includes the first second of 4th minute).\n"
         explode: true
         in: query
         name: startTime
@@ -608,10 +607,10 @@ paths:
           type: string
         style: form
       - deprecated: true
-        description: |
-          Filter transactions that occurred after this timestamp.
-          The format is RFC3339 and is inclusive (for example, "2023-01-02T15:04:01Z" includes the first second of 4th minute).
-          Deprecated, please use `startTime` instead.
+        description: "Filter transactions that occurred after this timestamp.\nThe\
+          \ format is RFC3339 and is inclusive (for example, \"2023-01-02T15:04:01Z\"\
+          \ includes the first second of 4th minute).\nDeprecated, please use `startTime`\
+          \ instead.\n"
         explode: true
         in: query
         name: start_time
@@ -620,9 +619,9 @@ paths:
           format: date-time
           type: string
         style: form
-      - description: |
-          Filter transactions that occurred before this timestamp.
-          The format is RFC3339 and is exclusive (for example, "2023-01-02T15:04:01Z" excludes the first second of 4th minute).
+      - description: "Filter transactions that occurred before this timestamp.\nThe\
+          \ format is RFC3339 and is exclusive (for example, \"2023-01-02T15:04:01Z\"\
+          \ excludes the first second of 4th minute).\n"
         explode: true
         in: query
         name: endTime
@@ -632,10 +631,10 @@ paths:
           type: string
         style: form
       - deprecated: true
-        description: |
-          Filter transactions that occurred before this timestamp.
-          The format is RFC3339 and is exclusive (for example, "2023-01-02T15:04:01Z" excludes the first second of 4th minute).
-          Deprecated, please use `endTime` instead.
+        description: "Filter transactions that occurred before this timestamp.\nThe\
+          \ format is RFC3339 and is exclusive (for example, \"2023-01-02T15:04:01Z\"\
+          \ excludes the first second of 4th minute).\nDeprecated, please use `endTime`\
+          \ instead.\n"
         explode: true
         in: query
         name: end_time
@@ -658,12 +657,11 @@ paths:
           type: string
         style: form
       - deprecated: true
-        description: |
-          Parameter used in pagination requests. Maximum page size is set to 15.
-          Set to the value of next for the next page of results.
-          Set to the value of previous for the previous page of results.
-          No other parameters can be set when this parameter is set.
-          Deprecated, please use `cursor` instead.
+        description: "Parameter used in pagination requests. Maximum page size is\
+          \ set to 15.\nSet to the value of next for the next page of results.\nSet\
+          \ to the value of previous for the previous page of results.\nNo other parameters\
+          \ can be set when this parameter is set.\nDeprecated, please use `cursor`\
+          \ instead.\n"
         explode: true
         in: query
         name: pagination_token
@@ -686,13 +684,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/TransactionsCursorResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -750,9 +748,9 @@ paths:
           example: users:001
           type: string
         style: form
-      - description: |
-          Filter transactions that occurred after this timestamp.
-          The format is RFC3339 and is inclusive (for example, "2023-01-02T15:04:01Z" includes the first second of 4th minute).
+      - description: "Filter transactions that occurred after this timestamp.\nThe\
+          \ format is RFC3339 and is inclusive (for example, \"2023-01-02T15:04:01Z\"\
+          \ includes the first second of 4th minute).\n"
         explode: true
         in: query
         name: startTime
@@ -762,10 +760,10 @@ paths:
           type: string
         style: form
       - deprecated: true
-        description: |
-          Filter transactions that occurred after this timestamp.
-          The format is RFC3339 and is inclusive (for example, "2023-01-02T15:04:01Z" includes the first second of 4th minute).
-          Deprecated, please use `startTime` instead.
+        description: "Filter transactions that occurred after this timestamp.\nThe\
+          \ format is RFC3339 and is inclusive (for example, \"2023-01-02T15:04:01Z\"\
+          \ includes the first second of 4th minute).\nDeprecated, please use `startTime`\
+          \ instead.\n"
         explode: true
         in: query
         name: start_time
@@ -774,9 +772,9 @@ paths:
           format: date-time
           type: string
         style: form
-      - description: |
-          Filter transactions that occurred before this timestamp.
-          The format is RFC3339 and is exclusive (for example, "2023-01-02T15:04:01Z" excludes the first second of 4th minute).
+      - description: "Filter transactions that occurred before this timestamp.\nThe\
+          \ format is RFC3339 and is exclusive (for example, \"2023-01-02T15:04:01Z\"\
+          \ excludes the first second of 4th minute).\n"
         explode: true
         in: query
         name: endTime
@@ -786,10 +784,10 @@ paths:
           type: string
         style: form
       - deprecated: true
-        description: |
-          Filter transactions that occurred before this timestamp.
-          The format is RFC3339 and is exclusive (for example, "2023-01-02T15:04:01Z" excludes the first second of 4th minute).
-          Deprecated, please use `endTime` instead.
+        description: "Filter transactions that occurred before this timestamp.\nThe\
+          \ format is RFC3339 and is exclusive (for example, \"2023-01-02T15:04:01Z\"\
+          \ excludes the first second of 4th minute).\nDeprecated, please use `endTime`\
+          \ instead.\n"
         explode: true
         in: query
         name: end_time
@@ -822,7 +820,7 @@ paths:
               style: simple
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -853,24 +851,23 @@ paths:
         style: form
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/PostTransaction'
-        description: |
-          The request body must contain at least one of the following objects:
-            - `postings`: suitable for simple transactions
-            - `script`: enabling more complex transactions with Numscript
+        description: "The request body must contain at least one of the following\
+          \ objects:\n  - `postings`: suitable for simple transactions\n  - `script`:\
+          \ enabling more complex transactions with Numscript\n"
         required: true
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/TransactionsResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -904,13 +901,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/TransactionResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -943,16 +940,17 @@ paths:
         style: simple
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/Metadata'
         description: metadata
       responses:
         "204":
+          content: {}
           description: No Content
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -986,13 +984,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/TransactionResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -1014,20 +1012,20 @@ paths:
         style: simple
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/Transactions'
         required: true
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/TransactionsResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -1081,11 +1079,9 @@ paths:
           type: string
         style: form
       - deprecated: true
-        description: |-
-          Parameter used in pagination requests.
-          Set to the value of next for the next page of results.
-          Set to the value of previous for the previous page of results.
-          Deprecated, please use `cursor` instead.
+        description: "Parameter used in pagination requests.\nSet to the value of\
+          \ next for the next page of results.\nSet to the value of previous for the\
+          \ previous page of results.\nDeprecated, please use `cursor` instead."
         explode: true
         in: query
         name: pagination_token
@@ -1097,13 +1093,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/BalancesCursorResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -1136,13 +1132,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/AggregateBalancesResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -1178,9 +1174,8 @@ paths:
           type: integer
         style: form
       - deprecated: true
-        description: |
-          The maximum number of results to return per page.
-          Deprecated, please use `pageSize` instead.
+        description: "The maximum number of results to return per page.\nDeprecated,\
+          \ please use `pageSize` instead.\n"
         example: 100
         explode: true
         in: query
@@ -1203,9 +1198,9 @@ paths:
           example: "1234"
           type: string
         style: form
-      - description: |
-          Filter transactions that occurred after this timestamp.
-          The format is RFC3339 and is inclusive (for example, "2023-01-02T15:04:01Z" includes the first second of 4th minute).
+      - description: "Filter transactions that occurred after this timestamp.\nThe\
+          \ format is RFC3339 and is inclusive (for example, \"2023-01-02T15:04:01Z\"\
+          \ includes the first second of 4th minute).\n"
         explode: true
         in: query
         name: startTime
@@ -1215,10 +1210,10 @@ paths:
           type: string
         style: form
       - deprecated: true
-        description: |
-          Filter transactions that occurred after this timestamp.
-          The format is RFC3339 and is inclusive (for example, "2023-01-02T15:04:01Z" includes the first second of 4th minute).
-          Deprecated, please use `startTime` instead.
+        description: "Filter transactions that occurred after this timestamp.\nThe\
+          \ format is RFC3339 and is inclusive (for example, \"2023-01-02T15:04:01Z\"\
+          \ includes the first second of 4th minute).\nDeprecated, please use `startTime`\
+          \ instead.\n"
         explode: true
         in: query
         name: start_time
@@ -1227,9 +1222,9 @@ paths:
           format: date-time
           type: string
         style: form
-      - description: |
-          Filter transactions that occurred before this timestamp.
-          The format is RFC3339 and is exclusive (for example, "2023-01-02T15:04:01Z" excludes the first second of 4th minute).
+      - description: "Filter transactions that occurred before this timestamp.\nThe\
+          \ format is RFC3339 and is exclusive (for example, \"2023-01-02T15:04:01Z\"\
+          \ excludes the first second of 4th minute).\n"
         explode: true
         in: query
         name: endTime
@@ -1239,10 +1234,10 @@ paths:
           type: string
         style: form
       - deprecated: true
-        description: |
-          Filter transactions that occurred before this timestamp.
-          The format is RFC3339 and is exclusive (for example, "2023-01-02T15:04:01Z" excludes the first second of 4th minute).
-          Deprecated, please use `endTime` instead.
+        description: "Filter transactions that occurred before this timestamp.\nThe\
+          \ format is RFC3339 and is exclusive (for example, \"2023-01-02T15:04:01Z\"\
+          \ excludes the first second of 4th minute).\nDeprecated, please use `endTime`\
+          \ instead.\n"
         explode: true
         in: query
         name: end_time
@@ -1265,12 +1260,11 @@ paths:
           type: string
         style: form
       - deprecated: true
-        description: |
-          Parameter used in pagination requests. Maximum page size is set to 15.
-          Set to the value of next for the next page of results.
-          Set to the value of previous for the previous page of results.
-          No other parameters can be set when this parameter is set.
-          Deprecated, please use `cursor` instead.
+        description: "Parameter used in pagination requests. Maximum page size is\
+          \ set to 15.\nSet to the value of next for the next page of results.\nSet\
+          \ to the value of previous for the previous page of results.\nNo other parameters\
+          \ can be set when this parameter is set.\nDeprecated, please use `cursor`\
+          \ instead.\n"
         explode: true
         in: query
         name: pagination_token
@@ -1282,13 +1276,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/LogsCursorResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -1498,7 +1492,6 @@ components:
         data:
           additionalProperties:
             format: int64
-            minimum: 0
             type: integer
           example:
             USD: 100
@@ -1697,7 +1690,6 @@ components:
         balances:
           additionalProperties:
             format: int64
-            minimum: 0
             type: integer
           example:
             COIN: 100
@@ -1719,7 +1711,6 @@ components:
     AssetsBalances:
       additionalProperties:
         format: int64
-        minimum: 0
         type: integer
       example:
         USD: 100
@@ -1793,8 +1784,7 @@ components:
         plain: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\t\
           destination = $user\n)\n"
         vars:
-          vars:
-            user: users:042
+          user: users:042
       properties:
         plain:
           example: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\
@@ -1802,8 +1792,7 @@ components:
           type: string
         vars:
           example:
-            vars:
-              user: users:042
+            user: users:042
           properties: {}
           type: object
         reference:
@@ -2027,8 +2016,7 @@ components:
           plain: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\t\
             destination = $user\n)\n"
           vars:
-            vars:
-              user: users:042
+            user: users:042
         timestamp: 2000-01-23T04:56:07.000+00:00
       properties:
         timestamp:
@@ -2660,8 +2648,7 @@ components:
         plain: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\t\
           destination = $user\n)\n"
         vars:
-          vars:
-            user: users:042
+          user: users:042
       properties:
         plain:
           example: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\
@@ -2669,8 +2656,7 @@ components:
           type: string
         vars:
           example:
-            vars:
-              user: users:042
+            user: users:042
           properties: {}
           type: object
       required:
