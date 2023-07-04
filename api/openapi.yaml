@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   contact: {}
   title: Ledger API
-  version: v1.9.3
+  version: v1.10.3
 servers:
 - url: /
 paths:
@@ -12,13 +12,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ConfigInfoResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -41,13 +41,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/LedgerInfoResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -137,7 +137,6 @@ paths:
         schema:
           example: 2400
           format: int64
-          minimum: 0
           type: integer
         style: form
       - description: |
@@ -207,13 +206,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/AccountsCursorResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -242,8 +241,8 @@ paths:
           example: users:.+
           type: string
         style: form
-      - description: Filter accounts by metadata key value pairs. Nested objects can
-          be used as seen in the example below.
+      - description: "Filter accounts by metadata key value pairs. The filter can\
+          \ be used like this metadata[key]=value1&metadata[a.nested.key]=value2"
         example: "metadata[key]=value1&metadata[a.nested.key]=value2"
         explode: true
         in: query
@@ -266,7 +265,7 @@ paths:
               style: simple
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -302,13 +301,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/AccountResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -343,17 +342,18 @@ paths:
         style: simple
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/Metadata'
         description: metadata
         required: true
       responses:
         "204":
+          content: {}
           description: No Content
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -376,13 +376,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/MappingResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -403,20 +403,20 @@ paths:
         style: simple
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/Mapping'
         required: true
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/MappingResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -451,14 +451,14 @@ paths:
         style: form
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/Script'
         required: true
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ScriptResponse'
           description: |
@@ -489,13 +489,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/StatsResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -686,13 +686,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/TransactionsCursorResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -822,7 +822,7 @@ paths:
               style: simple
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -853,7 +853,7 @@ paths:
         style: form
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/PostTransaction'
         description: |
@@ -864,13 +864,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/TransactionsResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -904,13 +904,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/TransactionResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -943,16 +943,17 @@ paths:
         style: simple
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/Metadata'
         description: metadata
       responses:
         "204":
+          content: {}
           description: No Content
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -986,13 +987,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/TransactionResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -1014,20 +1015,20 @@ paths:
         style: simple
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/Transactions'
         required: true
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/TransactionsResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -1097,13 +1098,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/BalancesCursorResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -1136,13 +1137,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/AggregateBalancesResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -1282,13 +1283,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/LogsCursorResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -1498,7 +1499,6 @@ components:
         data:
           additionalProperties:
             format: int64
-            minimum: 0
             type: integer
           example:
             USD: 100
@@ -1697,7 +1697,6 @@ components:
         balances:
           additionalProperties:
             format: int64
-            minimum: 0
             type: integer
           example:
             COIN: 100
@@ -1719,7 +1718,6 @@ components:
     AssetsBalances:
       additionalProperties:
         format: int64
-        minimum: 0
         type: integer
       example:
         USD: 100
@@ -1793,8 +1791,7 @@ components:
         plain: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\t\
           destination = $user\n)\n"
         vars:
-          vars:
-            user: users:042
+          user: users:042
       properties:
         plain:
           example: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\
@@ -1802,8 +1799,7 @@ components:
           type: string
         vars:
           example:
-            vars:
-              user: users:042
+            user: users:042
           properties: {}
           type: object
         reference:
@@ -2027,8 +2023,7 @@ components:
           plain: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\t\
             destination = $user\n)\n"
           vars:
-            vars:
-              user: users:042
+            user: users:042
         timestamp: 2000-01-23T04:56:07.000+00:00
       properties:
         timestamp:
@@ -2660,8 +2655,7 @@ components:
         plain: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\t\
           destination = $user\n)\n"
         vars:
-          vars:
-            user: users:042
+          user: users:042
       properties:
         plain:
           example: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\
@@ -2669,8 +2663,7 @@ components:
           type: string
         vars:
           example:
-            vars:
-              user: users:042
+            user: users:042
           properties: {}
           type: object
       required:
