@@ -25,7 +25,7 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/formancehq/numary-sdk-go"
+    client "github.com/numary/numary-go"
 )
 
 func main() {
@@ -41,8 +41,8 @@ send [COIN 10] (
     preview := true // bool | Set the preview mode. Preview mode doesn't add the logs to the database or publish a message to the message broker. (optional)
 
     configuration := client.NewConfiguration()
-    apiClient := client.NewAPIClient(configuration)
-    resp, r, err := apiClient.ScriptApi.RunScript(context.Background(), ledger).Script(script).Preview(preview).Execute()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.ScriptApi.RunScript(context.Background(), ledger).Script(script).Preview(preview).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `ScriptApi.RunScript``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -81,8 +81,8 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=utf-8
-- **Accept**: application/json; charset=utf-8
+- **Content-Type**: application/json
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
