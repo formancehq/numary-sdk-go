@@ -29,7 +29,7 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/formancehq/numary-sdk-go"
+    client "github.com/numary/numary-go"
 )
 
 func main() {
@@ -38,8 +38,8 @@ func main() {
     requestBody := map[string]interface{}{"key": interface{}(123)} // map[string]interface{} | metadata (optional)
 
     configuration := client.NewConfiguration()
-    apiClient := client.NewAPIClient(configuration)
-    r, err := apiClient.TransactionsApi.AddMetadataOnTransaction(context.Background(), ledger, txid).RequestBody(requestBody).Execute()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.TransactionsApi.AddMetadataOnTransaction(context.Background(), ledger, txid).RequestBody(requestBody).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.AddMetadataOnTransaction``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -77,8 +77,8 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=utf-8
-- **Accept**: application/json; charset=utf-8
+- **Content-Type**: application/json
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -101,7 +101,7 @@ import (
     "fmt"
     "os"
     "time"
-    client "github.com/formancehq/numary-sdk-go"
+    client "github.com/numary/numary-go"
 )
 
 func main() {
@@ -117,8 +117,8 @@ func main() {
     metadata := map[string]interface{}{"key": map[string]interface{}(123)} // map[string]interface{} | Filter transactions by metadata key value pairs. Nested objects can be used as seen in the example below. (optional)
 
     configuration := client.NewConfiguration()
-    apiClient := client.NewAPIClient(configuration)
-    r, err := apiClient.TransactionsApi.CountTransactions(context.Background(), ledger).Reference(reference).Account(account).Source(source).Destination(destination).StartTime(startTime).StartTime2(startTime2).EndTime(endTime).EndTime2(endTime2).Metadata(metadata).Execute()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.TransactionsApi.CountTransactions(context.Background(), ledger).Reference(reference).Account(account).Source(source).Destination(destination).StartTime(startTime).StartTime2(startTime2).EndTime(endTime).EndTime2(endTime2).Metadata(metadata).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.CountTransactions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -163,7 +163,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json; charset=utf-8
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -185,7 +185,7 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/formancehq/numary-sdk-go"
+    client "github.com/numary/numary-go"
 )
 
 func main() {
@@ -194,8 +194,8 @@ func main() {
     preview := true // bool | Set the preview mode. Preview mode doesn't add the logs to the database or publish a message to the message broker. (optional)
 
     configuration := client.NewConfiguration()
-    apiClient := client.NewAPIClient(configuration)
-    resp, r, err := apiClient.TransactionsApi.CreateTransaction(context.Background(), ledger).PostTransaction(postTransaction).Preview(preview).Execute()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.TransactionsApi.CreateTransaction(context.Background(), ledger).PostTransaction(postTransaction).Preview(preview).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.CreateTransaction``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -234,8 +234,8 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=utf-8
-- **Accept**: application/json; charset=utf-8
+- **Content-Type**: application/json
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -257,7 +257,7 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/formancehq/numary-sdk-go"
+    client "github.com/numary/numary-go"
 )
 
 func main() {
@@ -265,8 +265,8 @@ func main() {
     transactions := *client.NewTransactions([]client.TransactionData{*client.NewTransactionData([]client.Posting{*client.NewPosting(int64(100), "COIN", "users:002", "users:001")})}) // Transactions | 
 
     configuration := client.NewConfiguration()
-    apiClient := client.NewAPIClient(configuration)
-    resp, r, err := apiClient.TransactionsApi.CreateTransactions(context.Background(), ledger).Transactions(transactions).Execute()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.TransactionsApi.CreateTransactions(context.Background(), ledger).Transactions(transactions).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.CreateTransactions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -304,8 +304,8 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=utf-8
-- **Accept**: application/json; charset=utf-8
+- **Content-Type**: application/json
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -327,7 +327,7 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/formancehq/numary-sdk-go"
+    client "github.com/numary/numary-go"
 )
 
 func main() {
@@ -335,8 +335,8 @@ func main() {
     txid := int64(1234) // int64 | Transaction ID.
 
     configuration := client.NewConfiguration()
-    apiClient := client.NewAPIClient(configuration)
-    resp, r, err := apiClient.TransactionsApi.GetTransaction(context.Background(), ledger, txid).Execute()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.TransactionsApi.GetTransaction(context.Background(), ledger, txid).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.GetTransaction``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -376,7 +376,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json; charset=utf-8
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -401,7 +401,7 @@ import (
     "fmt"
     "os"
     "time"
-    client "github.com/formancehq/numary-sdk-go"
+    client "github.com/numary/numary-go"
 )
 
 func main() {
@@ -422,8 +422,8 @@ func main() {
     metadata := map[string]interface{}{"key": map[string]interface{}(123)} // map[string]interface{} | Filter transactions by metadata key value pairs. Nested objects can be used as seen in the example below. (optional)
 
     configuration := client.NewConfiguration()
-    apiClient := client.NewAPIClient(configuration)
-    resp, r, err := apiClient.TransactionsApi.ListTransactions(context.Background(), ledger).PageSize(pageSize).PageSize2(pageSize2).After(after).Reference(reference).Account(account).Source(source).Destination(destination).StartTime(startTime).StartTime2(startTime2).EndTime(endTime).EndTime2(endTime2).Cursor(cursor).PaginationToken(paginationToken).Metadata(metadata).Execute()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.TransactionsApi.ListTransactions(context.Background(), ledger).PageSize(pageSize).PageSize2(pageSize2).After(after).Reference(reference).Account(account).Source(source).Destination(destination).StartTime(startTime).StartTime2(startTime2).EndTime(endTime).EndTime2(endTime2).Cursor(cursor).PaginationToken(paginationToken).Metadata(metadata).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.ListTransactions``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -475,7 +475,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json; charset=utf-8
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -484,7 +484,7 @@ No authorization required
 
 ## RevertTransaction
 
-> TransactionResponse RevertTransaction(ctx, ledger, txid).Execute()
+> TransactionResponse RevertTransaction(ctx, ledger, txid).DisableChecks(disableChecks).Execute()
 
 Revert a ledger transaction by its ID
 
@@ -497,16 +497,17 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/formancehq/numary-sdk-go"
+    client "github.com/numary/numary-go"
 )
 
 func main() {
     ledger := "ledger001" // string | Name of the ledger.
     txid := int64(1234) // int64 | Transaction ID.
+    disableChecks := true // bool | Allow to disable balances checks (optional)
 
     configuration := client.NewConfiguration()
-    apiClient := client.NewAPIClient(configuration)
-    resp, r, err := apiClient.TransactionsApi.RevertTransaction(context.Background(), ledger, txid).Execute()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.TransactionsApi.RevertTransaction(context.Background(), ledger, txid).DisableChecks(disableChecks).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `TransactionsApi.RevertTransaction``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -534,6 +535,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
 
+ **disableChecks** | **bool** | Allow to disable balances checks | 
 
 ### Return type
 
@@ -546,7 +548,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json; charset=utf-8
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
