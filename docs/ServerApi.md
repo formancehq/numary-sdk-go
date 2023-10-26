@@ -23,14 +23,14 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/formancehq/numary-sdk-go"
+    client "github.com/numary/numary-go"
 )
 
 func main() {
 
     configuration := client.NewConfiguration()
-    apiClient := client.NewAPIClient(configuration)
-    resp, r, err := apiClient.ServerApi.GetInfo(context.Background()).Execute()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.ServerApi.GetInfo(context.Background()).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `ServerApi.GetInfo``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -60,7 +60,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json; charset=utf-8
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
