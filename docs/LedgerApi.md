@@ -23,15 +23,15 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/formancehq/numary-sdk-go"
+    client "github.com/numary/numary-go"
 )
 
 func main() {
     ledger := "ledger001" // string | Name of the ledger.
 
     configuration := client.NewConfiguration()
-    apiClient := client.NewAPIClient(configuration)
-    resp, r, err := apiClient.LedgerApi.GetLedgerInfo(context.Background(), ledger).Execute()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.LedgerApi.GetLedgerInfo(context.Background(), ledger).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `LedgerApi.GetLedgerInfo``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -69,7 +69,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json; charset=utf-8
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
