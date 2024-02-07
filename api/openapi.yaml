@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   contact: {}
   title: Ledger API
-  version: v1.9.3
+  version: v1.10.15-alpha.1
 servers:
 - url: /
 paths:
@@ -12,18 +12,19 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ConfigInfoResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Show server information
       tags:
+      - Ledger
       - Server
   /{ledger}/_info:
     get:
@@ -41,13 +42,13 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/LedgerInfoResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
@@ -98,6 +99,7 @@ paths:
           minimum: 1
           type: integer
         style: form
+        x-speakeasy-ignore: true
       - description: "Pagination cursor, will return accounts after given address,\
           \ in descending order."
         explode: true
@@ -137,7 +139,6 @@ paths:
         schema:
           example: 2400
           format: int64
-          minimum: 0
           type: integer
         style: form
       - description: |
@@ -157,6 +158,7 @@ paths:
           example: gte
           type: string
         style: form
+        x-speakeasy-ignore: true
       - deprecated: true
         description: |
           Operator used for the filtering of balances can be greater than/equal, less than/equal, greater than, less than, equal or not.
@@ -176,6 +178,7 @@ paths:
           example: gte
           type: string
         style: form
+        x-speakeasy-ignore: true
       - description: |
           Parameter used in pagination requests. Maximum page size is set to 15.
           Set to the value of next for the next page of results.
@@ -207,18 +210,19 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/AccountsCursorResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: List accounts from a ledger
       tags:
+      - Ledger
       - Accounts
     head:
       operationId: countAccounts
@@ -242,8 +246,8 @@ paths:
           example: users:.+
           type: string
         style: form
-      - description: Filter accounts by metadata key value pairs. Nested objects can
-          be used as seen in the example below.
+      - description: "Filter accounts by metadata key value pairs. The filter can\
+          \ be used like this metadata[key]=value1&metadata[a.nested.key]=value2"
         example: "metadata[key]=value1&metadata[a.nested.key]=value2"
         explode: true
         in: query
@@ -266,12 +270,13 @@ paths:
               style: simple
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Count the accounts from a ledger
       tags:
+      - Ledger
       - Accounts
   /{ledger}/accounts/{address}:
     get:
@@ -302,18 +307,19 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/AccountResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Get account by its address
       tags:
+      - Ledger
       - Accounts
   /{ledger}/accounts/{address}/metadata:
     post:
@@ -343,22 +349,24 @@ paths:
         style: simple
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/Metadata'
         description: metadata
         required: true
       responses:
         "204":
+          content: {}
           description: No Content
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Add metadata to an account
       tags:
+      - Ledger
       - Accounts
   /{ledger}/mapping:
     get:
@@ -376,18 +384,19 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/MappingResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Get the mapping of a ledger
       tags:
+      - Ledger
       - Mapping
     put:
       operationId: updateMapping
@@ -403,25 +412,26 @@ paths:
         style: simple
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/Mapping'
         required: true
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/MappingResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Update the mapping of a ledger
       tags:
+      - Ledger
       - Mapping
   /{ledger}/script:
     post:
@@ -451,14 +461,14 @@ paths:
         style: form
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/Script'
         required: true
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ScriptResponse'
           description: |
@@ -470,6 +480,7 @@ paths:
               - `errorMessage` and `error_message` (deprecated): contains a human-readable indication of what went wrong, for example that an account had insufficient funds, or that there was an error in the provided Numscript.
       summary: Execute a Numscript
       tags:
+      - Ledger
       - Script
   /{ledger}/stats:
     get:
@@ -489,18 +500,19 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/StatsResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Get statistics from a ledger
       tags:
+      - Ledger
       - Stats
   /{ledger}/transactions:
     get:
@@ -547,6 +559,7 @@ paths:
           minimum: 1
           type: integer
         style: form
+        x-speakeasy-ignore: true
       - description: "Pagination cursor, will return transactions after given txid\
           \ (in descending order)."
         explode: true
@@ -620,6 +633,7 @@ paths:
           format: date-time
           type: string
         style: form
+        x-speakeasy-ignore: true
       - description: |
           Filter transactions that occurred before this timestamp.
           The format is RFC3339 and is exclusive (for example, "2023-01-02T15:04:01Z" excludes the first second of 4th minute).
@@ -644,6 +658,7 @@ paths:
           format: date-time
           type: string
         style: form
+        x-speakeasy-ignore: true
       - description: |
           Parameter used in pagination requests. Maximum page size is set to 15.
           Set to the value of next for the next page of results.
@@ -686,18 +701,19 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/TransactionsCursorResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: List transactions from a ledger
       tags:
+      - Ledger
       - Transactions
     head:
       operationId: countTransactions
@@ -774,6 +790,7 @@ paths:
           format: date-time
           type: string
         style: form
+        x-speakeasy-ignore: true
       - description: |
           Filter transactions that occurred before this timestamp.
           The format is RFC3339 and is exclusive (for example, "2023-01-02T15:04:01Z" excludes the first second of 4th minute).
@@ -798,6 +815,7 @@ paths:
           format: date-time
           type: string
         style: form
+        x-speakeasy-ignore: true
       - description: Filter transactions by metadata key value pairs. Nested objects
           can be used as seen in the example below.
         example: "metadata[key]=value1&metadata[a.nested.key]=value2"
@@ -822,12 +840,13 @@ paths:
               style: simple
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Count the transactions from a ledger
       tags:
+      - Ledger
       - Transactions
     post:
       operationId: createTransaction
@@ -853,7 +872,7 @@ paths:
         style: form
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/PostTransaction'
         description: |
@@ -864,18 +883,19 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/TransactionsResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Create a new transaction to a ledger
       tags:
+      - Ledger
       - Transactions
   /{ledger}/transactions/{txid}:
     get:
@@ -904,18 +924,19 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/TransactionResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Get transaction from a ledger by its ID
       tags:
+      - Ledger
       - Transactions
   /{ledger}/transactions/{txid}/metadata:
     post:
@@ -943,21 +964,23 @@ paths:
         style: simple
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/Metadata'
         description: metadata
       responses:
         "204":
+          content: {}
           description: No Content
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Set the metadata of a transaction by its ID
       tags:
+      - Ledger
       - Transactions
   /{ledger}/transactions/{txid}/revert:
     post:
@@ -983,21 +1006,30 @@ paths:
           minimum: 0
           type: integer
         style: simple
+      - description: Allow to disable balances checks
+        explode: true
+        in: query
+        name: disableChecks
+        required: false
+        schema:
+          type: boolean
+        style: form
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/TransactionResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Revert a ledger transaction by its ID
       tags:
+      - Ledger
       - Transactions
   /{ledger}/transactions/batch:
     post:
@@ -1014,25 +1046,26 @@ paths:
         style: simple
       requestBody:
         content:
-          application/json; charset=utf-8:
+          application/json:
             schema:
               $ref: '#/components/schemas/Transactions'
         required: true
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/TransactionsResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Create a new batch of transactions to a ledger
       tags:
+      - Ledger
       - Transactions
   /{ledger}/balances:
     get:
@@ -1097,18 +1130,19 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/BalancesCursorResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Get the balances from a ledger's account
       tags:
+      - Ledger
       - Balances
   /{ledger}/aggregate/balances:
     get:
@@ -1136,18 +1170,19 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/AggregateBalancesResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: Get the aggregated balances from selected accounts
       tags:
+      - Ledger
       - Balances
   /{ledger}/logs:
     get:
@@ -1193,6 +1228,7 @@ paths:
           minimum: 1
           type: integer
         style: form
+        x-speakeasy-ignore: true
       - description: "Pagination cursor, will return the logs after a given ID. (in\
           \ descending order)."
         explode: true
@@ -1227,6 +1263,7 @@ paths:
           format: date-time
           type: string
         style: form
+        x-speakeasy-ignore: true
       - description: |
           Filter transactions that occurred before this timestamp.
           The format is RFC3339 and is exclusive (for example, "2023-01-02T15:04:01Z" excludes the first second of 4th minute).
@@ -1251,6 +1288,7 @@ paths:
           format: date-time
           type: string
         style: form
+        x-speakeasy-ignore: true
       - description: |
           Parameter used in pagination requests. Maximum page size is set to 15.
           Set to the value of next for the next page of results.
@@ -1282,18 +1320,19 @@ paths:
       responses:
         "200":
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/LogsCursorResponse'
           description: OK
         default:
           content:
-            application/json; charset=utf-8:
+            application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
           description: Error
       summary: List the logs from a ledger
       tags:
+      - Ledger
       - Logs
 components:
   schemas:
@@ -1498,7 +1537,6 @@ components:
         data:
           additionalProperties:
             format: int64
-            minimum: 0
             type: integer
           example:
             USD: 100
@@ -1697,7 +1735,6 @@ components:
         balances:
           additionalProperties:
             format: int64
-            minimum: 0
             type: integer
           example:
             COIN: 100
@@ -1719,7 +1756,6 @@ components:
     AssetsBalances:
       additionalProperties:
         format: int64
-        minimum: 0
         type: integer
       example:
         USD: 100
@@ -1793,8 +1829,7 @@ components:
         plain: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\t\
           destination = $user\n)\n"
         vars:
-          vars:
-            user: users:042
+          user: users:042
       properties:
         plain:
           example: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\
@@ -1802,8 +1837,7 @@ components:
           type: string
         vars:
           example:
-            vars:
-              user: users:042
+            user: users:042
           properties: {}
           type: object
         reference:
@@ -2027,8 +2061,7 @@ components:
           plain: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\t\
             destination = $user\n)\n"
           vars:
-            vars:
-              user: users:042
+            user: users:042
         timestamp: 2000-01-23T04:56:07.000+00:00
       properties:
         timestamp:
@@ -2660,8 +2693,7 @@ components:
         plain: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\t\
           destination = $user\n)\n"
         vars:
-          vars:
-            user: users:042
+          user: users:042
       properties:
         plain:
           example: "vars {\naccount $user\n}\nsend [COIN 10] (\n\tsource = @world\n\
@@ -2669,8 +2701,7 @@ components:
           type: string
         vars:
           example:
-            vars:
-              user: users:042
+            user: users:042
           properties: {}
           type: object
       required:
