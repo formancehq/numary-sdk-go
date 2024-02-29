@@ -26,7 +26,7 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/formancehq/numary-sdk-go"
+    client "github.com/numary/numary-go"
 )
 
 func main() {
@@ -35,8 +35,8 @@ func main() {
     requestBody := map[string]interface{}{"key": interface{}(123)} // map[string]interface{} | metadata
 
     configuration := client.NewConfiguration()
-    apiClient := client.NewAPIClient(configuration)
-    r, err := apiClient.AccountsApi.AddMetadataToAccount(context.Background(), ledger, address).RequestBody(requestBody).Execute()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.AccountsApi.AddMetadataToAccount(context.Background(), ledger, address).RequestBody(requestBody).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.AddMetadataToAccount``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -74,8 +74,8 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: application/json; charset=utf-8
-- **Accept**: application/json; charset=utf-8
+- **Content-Type**: application/json
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -97,17 +97,17 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/formancehq/numary-sdk-go"
+    client "github.com/numary/numary-go"
 )
 
 func main() {
     ledger := "ledger001" // string | Name of the ledger.
     address := "users:.+" // string | Filter accounts by address pattern (regular expression placed between ^ and $). (optional)
-    metadata := map[string]interface{}{"key": map[string]interface{}(123)} // map[string]interface{} | Filter accounts by metadata key value pairs. Nested objects can be used as seen in the example below. (optional)
+    metadata := map[string]interface{}{"key": map[string]interface{}(123)} // map[string]interface{} | Filter accounts by metadata key value pairs. The filter can be used like this metadata[key]=value1&metadata[a.nested.key]=value2 (optional)
 
     configuration := client.NewConfiguration()
-    apiClient := client.NewAPIClient(configuration)
-    r, err := apiClient.AccountsApi.CountAccounts(context.Background(), ledger).Address(address).Metadata(metadata).Execute()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.AccountsApi.CountAccounts(context.Background(), ledger).Address(address).Metadata(metadata).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.CountAccounts``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -132,7 +132,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **address** | **string** | Filter accounts by address pattern (regular expression placed between ^ and $). | 
- **metadata** | [**map[string]interface{}**](map[string]interface{}.md) | Filter accounts by metadata key value pairs. Nested objects can be used as seen in the example below. | 
+ **metadata** | [**map[string]interface{}**](map[string]interface{}.md) | Filter accounts by metadata key value pairs. The filter can be used like this metadata[key]&#x3D;value1&amp;metadata[a.nested.key]&#x3D;value2 | 
 
 ### Return type
 
@@ -145,7 +145,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json; charset=utf-8
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -167,7 +167,7 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/formancehq/numary-sdk-go"
+    client "github.com/numary/numary-go"
 )
 
 func main() {
@@ -175,8 +175,8 @@ func main() {
     address := "users:001" // string | Exact address of the account. It must match the following regular expressions pattern: ``` ^\\w+(:\\w+)*$ ``` 
 
     configuration := client.NewConfiguration()
-    apiClient := client.NewAPIClient(configuration)
-    resp, r, err := apiClient.AccountsApi.GetAccount(context.Background(), ledger, address).Execute()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.AccountsApi.GetAccount(context.Background(), ledger, address).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.GetAccount``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -216,7 +216,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json; charset=utf-8
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -225,7 +225,7 @@ No authorization required
 
 ## ListAccounts
 
-> AccountsCursorResponse ListAccounts(ctx, ledger).PageSize(pageSize).PageSize2(pageSize2).After(after).Address(address).Metadata(metadata).Balance(balance).BalanceOperator(balanceOperator).BalanceOperator2(balanceOperator2).Cursor(cursor).PaginationToken(paginationToken).Execute()
+> AccountsCursorResponse ListAccounts(ctx, ledger).PageSize(pageSize).PageSize2(pageSize2).After(after).Address(address).Metadata(metadata).Balance(balance).BalanceAsset(balanceAsset).BalanceOperator(balanceOperator).BalanceOperator2(balanceOperator2).Cursor(cursor).PaginationToken(paginationToken).Execute()
 
 List accounts from a ledger
 
@@ -240,7 +240,7 @@ import (
     "context"
     "fmt"
     "os"
-    client "github.com/formancehq/numary-sdk-go"
+    client "github.com/numary/numary-go"
 )
 
 func main() {
@@ -251,14 +251,15 @@ func main() {
     address := "users:.+" // string | Filter accounts by address pattern (regular expression placed between ^ and $). (optional)
     metadata := map[string]interface{}{"key": map[string]interface{}(123)} // map[string]interface{} | Filter accounts by metadata key value pairs. Nested objects can be used as seen in the example below. (optional)
     balance := int64(2400) // int64 | Filter accounts by their balance (default operator is gte) (optional)
+    balanceAsset := "balanceAsset_example" // string | Filter accounts by their balance asset (optional)
     balanceOperator := "gte" // string | Operator used for the filtering of balances can be greater than/equal, less than/equal, greater than, less than, equal or not.  (optional)
     balanceOperator2 := "gte" // string | Operator used for the filtering of balances can be greater than/equal, less than/equal, greater than, less than, equal or not. Deprecated, please use `balanceOperator` instead.  (optional)
     cursor := "aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==" // string | Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results. Set to the value of previous for the previous page of results. No other parameters can be set when this parameter is set.  (optional)
     paginationToken := "aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==" // string | Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results. Set to the value of previous for the previous page of results. No other parameters can be set when this parameter is set. Deprecated, please use `cursor` instead.  (optional)
 
     configuration := client.NewConfiguration()
-    apiClient := client.NewAPIClient(configuration)
-    resp, r, err := apiClient.AccountsApi.ListAccounts(context.Background(), ledger).PageSize(pageSize).PageSize2(pageSize2).After(after).Address(address).Metadata(metadata).Balance(balance).BalanceOperator(balanceOperator).BalanceOperator2(balanceOperator2).Cursor(cursor).PaginationToken(paginationToken).Execute()
+    api_client := client.NewAPIClient(configuration)
+    resp, r, err := api_client.AccountsApi.ListAccounts(context.Background(), ledger).PageSize(pageSize).PageSize2(pageSize2).After(after).Address(address).Metadata(metadata).Balance(balance).BalanceAsset(balanceAsset).BalanceOperator(balanceOperator).BalanceOperator2(balanceOperator2).Cursor(cursor).PaginationToken(paginationToken).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `AccountsApi.ListAccounts``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -290,6 +291,7 @@ Name | Type | Description  | Notes
  **address** | **string** | Filter accounts by address pattern (regular expression placed between ^ and $). | 
  **metadata** | [**map[string]interface{}**](map[string]interface{}.md) | Filter accounts by metadata key value pairs. Nested objects can be used as seen in the example below. | 
  **balance** | **int64** | Filter accounts by their balance (default operator is gte) | 
+ **balanceAsset** | **string** | Filter accounts by their balance asset | 
  **balanceOperator** | **string** | Operator used for the filtering of balances can be greater than/equal, less than/equal, greater than, less than, equal or not.  | 
  **balanceOperator2** | **string** | Operator used for the filtering of balances can be greater than/equal, less than/equal, greater than, less than, equal or not. Deprecated, please use &#x60;balanceOperator&#x60; instead.  | 
  **cursor** | **string** | Parameter used in pagination requests. Maximum page size is set to 15. Set to the value of next for the next page of results. Set to the value of previous for the previous page of results. No other parameters can be set when this parameter is set.  | 
@@ -306,7 +308,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json; charset=utf-8
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
